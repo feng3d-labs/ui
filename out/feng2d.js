@@ -11,6 +11,12 @@ var __extends = (this && this.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
 var feng3d;
 (function (feng3d) {
     /**
@@ -50,8 +56,100 @@ var feng3d;
     var Transform2D = /** @class */ (function (_super) {
         __extends(Transform2D, _super);
         function Transform2D() {
-            return _super !== null && _super.apply(this, arguments) || this;
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            /**
+             * 旋转
+             */
+            _this.rotation = 0;
+            _this._position = new feng3d.Vector2();
+            _this._scale = new feng3d.Vector2(1, 1);
+            return _this;
+            // /**
+            //  * 本地变换矩阵
+            //  */
+            // get matrix()
+            // {
+            //     return this._updateMatrix();
+            // }
+            // set matrix(v)
+            // {
+            //     v.decompose(this._position, this._rotation, this._scale);
+            //     this._matrix.copyRawDataFrom(v.rawData);
+            //     this._matrixInvalid = false;
+            // }
         }
+        Object.defineProperty(Transform2D.prototype, "x", {
+            /**
+             * X轴坐标。
+             */
+            get: function () { return this._position.x; },
+            set: function (v) { this._position.x = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "y", {
+            /**
+             * Y轴坐标。
+             */
+            get: function () { return this._position.y; },
+            set: function (v) { this._position.y = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "sx", {
+            /**
+             * X轴缩放。
+             */
+            get: function () { return this._scale.x; },
+            set: function (v) { this._scale.x = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "sy", {
+            /**
+             * Y轴缩放。
+             */
+            get: function () { return this._scale.y; },
+            set: function (v) { this._scale.y = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "position", {
+            /**
+             * 本地位移
+             */
+            get: function () { return this._position; },
+            set: function (v) { this._position.copy(v); },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "scale", {
+            /**
+             * 本地缩放
+             */
+            get: function () { return this._scale; },
+            set: function (v) { this._scale.copy(v); },
+            enumerable: true,
+            configurable: true
+        });
+        __decorate([
+            feng3d.serialize
+        ], Transform2D.prototype, "x", null);
+        __decorate([
+            feng3d.serialize
+        ], Transform2D.prototype, "y", null);
+        __decorate([
+            feng3d.serialize
+        ], Transform2D.prototype, "sx", null);
+        __decorate([
+            feng3d.serialize
+        ], Transform2D.prototype, "sy", null);
+        __decorate([
+            feng3d.oav({ tooltip: "本地位移" })
+        ], Transform2D.prototype, "position", null);
+        __decorate([
+            feng3d.oav({ tooltip: "本地缩放" })
+        ], Transform2D.prototype, "scale", null);
         return Transform2D;
     }(feng3d.Component));
     feng3d.Transform2D = Transform2D;
