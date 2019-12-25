@@ -1,0 +1,30 @@
+{
+    "compilerOptions": {
+        "target": "ES5",
+        "noImplicitAny": false,
+        "sourceMap": true,
+        "declarationMap": true,
+        "declaration": true,
+        "composite": true,
+        // "strict": true,
+        "experimentalDecorators": true,
+        "outFile": "out/feng2d.js",
+        "lib": [
+            "ES2015",
+            "DOM",
+        ],
+    },
+    "references": [
+        {
+            "path": "../feng3d",
+        },
+    ],
+    "files": [
+        // 事件模块
+        "src/enums/UIRenderMode.ts",
+        //
+        "src/Transform2D.ts",
+        "src/Canvas.ts",
+        "src/Image.ts",
+    ],
+}
