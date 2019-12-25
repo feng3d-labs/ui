@@ -3,8 +3,14 @@ namespace feng3d
     /**
      * 图片组件
      */
-    export class UIImage extends Behaviour
+    export class Image extends Model
     {
+        @oav({ exclude: true })
+        geometry = Geometry.getDefault("Terrain-Geometry");
+
+        @oav({ exclude: true })
+        material = Material.getDefault("Terrain-Material");
+
         /**
          * The source texture of the Image element.
          * 

@@ -44,7 +44,9 @@ declare namespace feng3d {
     /**
      * 图片组件
      */
-    class UIImage extends Behaviour {
+    class Image extends Model {
+        geometry: TerrainGeometry;
+        material: Material;
         /**
          * The source texture of the Image element.
          *
@@ -57,6 +59,11 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
+    }
+}
+declare namespace feng3d {
+    interface PrimitiveGameObject {
+        Image: GameObject;
     }
 }
 //# sourceMappingURL=feng2d.d.ts.map
