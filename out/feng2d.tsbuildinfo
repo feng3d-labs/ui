@@ -17,20 +17,13 @@
         },
         {
           "pos": 599,
-          "end": 1175,
-          "kind": "emitHelpers",
-          "data": "typescript:decorate"
-        },
-        {
-          "pos": 1177,
-          "end": 7040,
+          "end": 10659,
           "kind": "text"
         }
       ],
       "sources": {
         "helpers": [
-          "typescript:extends",
-          "typescript:decorate"
+          "typescript:extends"
         ]
       }
     },
@@ -38,7 +31,7 @@
       "sections": [
         {
           "pos": 0,
-          "end": 2490,
+          "end": 1339,
           "kind": "text"
         }
       ]

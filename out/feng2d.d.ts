@@ -27,59 +27,6 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
-     * Position, size, anchor and pivot information for a rectangle.
-     *
-     * 矩形的位置、大小、锚点和枢轴信息。
-     */
-    class Transform2D extends Component {
-        /**
-         * X轴坐标。
-         */
-        get x(): number;
-        set x(v: number);
-        /**
-         * Y轴坐标。
-         */
-        get y(): number;
-        set y(v: number);
-        /**
-         * 旋转
-         */
-        rotation: number;
-        /**
-         * X轴缩放。
-         */
-        get sx(): number;
-        set sx(v: number);
-        /**
-         * Y轴缩放。
-         */
-        get sy(): number;
-        set sy(v: number);
-        /**
-         * 表示显示对象的宽度，以像素为单位。宽度是根据显示对象内容的范围来计算的。
-         */
-        width: number;
-        /**
-         * 表示显示对象的高度，以像素为单位。高度是根据显示对象内容的范围来计算的。
-         */
-        height: number;
-        /**
-         * 本地位移
-         */
-        get position(): Vector2;
-        set position(v: Vector2);
-        private readonly _position;
-        /**
-         * 本地缩放
-         */
-        get scale(): Vector2;
-        set scale(v: Vector2);
-        private readonly _scale;
-    }
-}
-declare namespace feng3d {
-    /**
      * Element that can be used for screen rendering.
      *
      * 能够被用于屏幕渲染的元素
