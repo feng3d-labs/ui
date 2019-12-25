@@ -45,8 +45,12 @@ declare namespace feng3d {
      * 图片组件
      */
     class Image extends Model {
-        geometry: TerrainGeometry;
+        geometry: QuadGeometry;
         material: Material;
+        castShadows: boolean;
+        receiveShadows: boolean;
+        width: number;
+        height: number;
         /**
          * The source texture of the Image element.
          *
@@ -59,6 +63,7 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
 }
 declare namespace feng3d {

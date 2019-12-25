@@ -78,8 +78,18 @@ var feng3d;
         __extends(Image, _super);
         function Image() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.geometry = feng3d.Geometry.getDefault("Terrain-Geometry");
-            _this.material = feng3d.Material.getDefault("Terrain-Material");
+            _this.geometry = feng3d.Geometry.getDefault("Quad");
+            // material = Material.getDefault("texture");
+            _this.castShadows = false;
+            _this.receiveShadows = false;
+            _this.width = 1;
+            _this.height = 1;
+            /**
+             * The source texture of the Image element.
+             *
+             * 图像元素的源纹理。
+             */
+            _this.image = feng3d.Texture2D.default;
             /**
              * Tinting color for this Image.
              *
@@ -88,12 +98,35 @@ var feng3d;
             _this.color = new feng3d.Color4();
             return _this;
         }
+        Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+            _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
+            renderAtomic.uniforms.s_diffuse = this.image;
+            renderAtomic.uniforms.u_diffuse = this.color;
+        };
         __decorate([
             feng3d.oav({ exclude: true })
         ], Image.prototype, "geometry", void 0);
         __decorate([
             feng3d.oav({ exclude: true })
         ], Image.prototype, "material", void 0);
+        __decorate([
+            feng3d.oav({ exclude: true })
+        ], Image.prototype, "castShadows", void 0);
+        __decorate([
+            feng3d.oav({ exclude: true })
+        ], Image.prototype, "receiveShadows", void 0);
+        __decorate([
+            feng3d.oav()
+        ], Image.prototype, "width", void 0);
+        __decorate([
+            feng3d.oav()
+        ], Image.prototype, "height", void 0);
+        __decorate([
+            feng3d.oav()
+        ], Image.prototype, "image", void 0);
+        __decorate([
+            feng3d.oav()
+        ], Image.prototype, "color", void 0);
         return Image;
     }(feng3d.Model));
     feng3d.Image = Image;
