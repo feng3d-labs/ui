@@ -79,7 +79,6 @@ var feng3d;
         function Image() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.geometry = feng3d.Geometry.getDefault("Quad");
-            // material = Material.getDefault("texture");
             _this.castShadows = false;
             _this.receiveShadows = false;
             _this.width = 1;
@@ -96,19 +95,18 @@ var feng3d;
              * 为该图像着色。
              */
             _this.color = new feng3d.Color4();
+            // @oav({ exclude: true })
+            _this.material = feng3d.Material.getDefault("Default-Image");
             return _this;
         }
         Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
-            renderAtomic.uniforms.s_diffuse = this.image;
-            renderAtomic.uniforms.u_diffuse = this.color;
+            renderAtomic.uniforms.s_texture = this.image;
+            renderAtomic.uniforms.u_color = this.color;
         };
         __decorate([
             feng3d.oav({ exclude: true })
         ], Image.prototype, "geometry", void 0);
-        __decorate([
-            feng3d.oav({ exclude: true })
-        ], Image.prototype, "material", void 0);
         __decorate([
             feng3d.oav({ exclude: true })
         ], Image.prototype, "castShadows", void 0);
@@ -122,14 +120,48 @@ var feng3d;
             feng3d.oav()
         ], Image.prototype, "height", void 0);
         __decorate([
-            feng3d.oav()
+            feng3d.oav(),
+            feng3d.serialize
         ], Image.prototype, "image", void 0);
         __decorate([
-            feng3d.oav()
+            feng3d.oav(),
+            feng3d.serialize
         ], Image.prototype, "color", void 0);
         return Image;
     }(feng3d.Model));
     feng3d.Image = Image;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    var ImageUniforms = /** @class */ (function () {
+        function ImageUniforms() {
+            /**
+             * 颜色
+             */
+            this.u_color = new feng3d.Color4();
+            /**
+             * 纹理数据
+             */
+            this.s_texture = feng3d.Texture2D.default;
+        }
+        __decorate([
+            feng3d.serialize,
+            feng3d.oav()
+        ], ImageUniforms.prototype, "u_color", void 0);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], ImageUniforms.prototype, "s_texture", void 0);
+        return ImageUniforms;
+    }());
+    feng3d.ImageUniforms = ImageUniforms;
+    feng3d.shaderConfig.shaders["image"] = {
+        vertex: "\n    attribute vec3 a_position;\n    attribute vec2 a_uv;\n    \n    varying vec2 v_uv;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    void main() \n    {\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(a_position, 1.0);\n        v_uv = a_uv;\n    }\n    ",
+        fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    \n    uniform vec4 u_color;\n    \n    void main() {\n    \n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
+        cls: ImageUniforms,
+        renderParams: { cullFace: feng3d.CullFace.NONE, enableBlend: true },
+    };
+    feng3d.Material.setDefault("Default-Image", { shaderName: "image" });
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {

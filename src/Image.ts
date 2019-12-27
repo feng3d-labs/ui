@@ -8,11 +8,6 @@ namespace feng3d
         @oav({ exclude: true })
         geometry = Geometry.getDefault("Quad");
 
-        // 这里需要提供一个
-        @oav({ exclude: true })
-        material: Material;
-        // material = Material.getDefault("texture");
-
         @oav({ exclude: true })
         castShadows = false;
 
@@ -31,6 +26,7 @@ namespace feng3d
          * 图像元素的源纹理。
          */
         @oav()
+        @serialize
         image = Texture2D.default;
 
         /**
@@ -39,14 +35,18 @@ namespace feng3d
          * 为该图像着色。
          */
         @oav()
+        @serialize
         color = new Color4();
+
+        // @oav({ exclude: true })
+        material = Material.getDefault("Default-Image");
 
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
-            renderAtomic.uniforms.s_diffuse = this.image;
-            renderAtomic.uniforms.u_diffuse = this.color;
+            renderAtomic.uniforms.s_texture = this.image;
+            renderAtomic.uniforms.u_color = this.color;
         }
 
     }

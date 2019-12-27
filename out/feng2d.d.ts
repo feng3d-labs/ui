@@ -46,7 +46,6 @@ declare namespace feng3d {
      */
     class Image extends Model {
         geometry: QuadGeometry;
-        material: Material;
         castShadows: boolean;
         receiveShadows: boolean;
         width: number;
@@ -63,7 +62,29 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
+        material: Material;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+    }
+}
+declare namespace feng3d {
+    interface UniformsTypes {
+        image: ImageUniforms;
+    }
+    class ImageUniforms {
+        __class__: "feng3d.ImageUniforms";
+        /**
+         * 颜色
+         */
+        u_color: Color4;
+        /**
+         * 纹理数据
+         */
+        s_texture: Texture2D;
+    }
+    interface Uniforms extends ImageUniforms {
+    }
+    interface DefaultMaterial {
+        "Default-Image": Material;
     }
 }
 declare namespace feng3d {

@@ -26,6 +26,8 @@
         "src/Canvas.ts",
         "src/Image.ts",
         //
+        "src/materials/ImageMaterial.ts",
+        //
         "src/polyfill/GameObject.ts",
     ],
 }
