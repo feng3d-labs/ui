@@ -6,11 +6,20 @@ namespace feng3d
         {
             g.addComponent(Image)
         }
+        else if (type == "Text")
+        {
+            g.addComponent(Text)
+        }
+
         return g;
     });
 
     export interface PrimitiveGameObject
     {
         Image: GameObject;
+    }
+    export interface PrimitiveGameObject
+    {
+        Text: GameObject;
     }
 }

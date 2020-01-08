@@ -67,6 +67,34 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
+    /**
+     * 文本组件
+     */
+    class Text extends Model {
+        geometry: QuadGeometry;
+        castShadows: boolean;
+        receiveShadows: boolean;
+        width: number;
+        height: number;
+        text: string;
+        /**
+         * The source texture of the Image element.
+         *
+         * 图像元素的源纹理。
+         */
+        image: Texture2D;
+        /**
+         * Tinting color for this Image.
+         *
+         * 为该图像着色。
+         */
+        color: Color4;
+        material: Material;
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        getImagedata(): ImageData;
+    }
+}
+declare namespace feng3d {
     interface UniformsTypes {
         image: ImageUniforms;
     }
@@ -90,6 +118,9 @@ declare namespace feng3d {
 declare namespace feng3d {
     interface PrimitiveGameObject {
         Image: GameObject;
+    }
+    interface PrimitiveGameObject {
+        Text: GameObject;
     }
 }
 //# sourceMappingURL=feng2d.d.ts.map
