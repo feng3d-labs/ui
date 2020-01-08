@@ -131,8 +131,8 @@ var feng3d;
     }(feng3d.Model));
     feng3d.Image = Image;
 })(feng3d || (feng3d = {}));
-var text;
-(function (text) {
+var feng3d;
+(function (feng3d) {
     /**
      * Converts a hexadecimal color number to an [R, G, B] array of normalized floats (numbers from 0.0 to 1.0).
      *
@@ -150,7 +150,7 @@ var text;
         out[2] = (hex & 0xFF) / 255;
         return out;
     }
-    text.hex2rgb = hex2rgb;
+    feng3d.hex2rgb = hex2rgb;
     /**
      * Converts a hexadecimal color number to a string.
      *
@@ -165,7 +165,7 @@ var text;
         hexString = '000000'.substr(0, 6 - hexString.length) + hexString;
         return "#" + hexString;
     }
-    text.hex2string = hex2string;
+    feng3d.hex2string = hex2string;
     /**
      * Converts a hexadecimal string to a hexadecimal color number.
      *
@@ -181,7 +181,7 @@ var text;
         }
         return parseInt(string, 16);
     }
-    text.string2hex = string2hex;
+    feng3d.string2hex = string2hex;
     /**
      * Converts a color as an [R, G, B] array of normalized floats to a hexadecimal number.
      *
@@ -194,15 +194,16 @@ var text;
     function rgb2hex(rgb) {
         return (((rgb[0] * 255) << 16) + ((rgb[1] * 255) << 8) + (rgb[2] * 255 | 0));
     }
-    text.rgb2hex = rgb2hex;
-})(text || (text = {}));
-var text;
-(function (text_1) {
+    feng3d.rgb2hex = rgb2hex;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
     function drawText(canvas, _text, style, resolution) {
         if (resolution === void 0) { resolution = 1; }
+        canvas = canvas || document.createElement("canvas");
         var _font = style.toFontString();
         var context = canvas.getContext('2d');
-        var measured = text_1.TextMetrics.measureText(_text || ' ', style, style.wordWrap, canvas);
+        var measured = feng3d.TextMetrics.measureText(_text || ' ', style, style.wordWrap, canvas);
         var width = measured.width;
         var height = measured.height;
         var lines = measured.lines;
@@ -245,7 +246,7 @@ var text;
                 context.fillStyle = 'black';
                 context.strokeStyle = 'black';
                 var dropShadowColor = style.dropShadowColor;
-                var rgb = text_1.hex2rgb(typeof dropShadowColor === 'number' ? dropShadowColor : text_1.string2hex(dropShadowColor));
+                var rgb = feng3d.hex2rgb(typeof dropShadowColor === 'number' ? dropShadowColor : feng3d.string2hex(dropShadowColor));
                 context.shadowColor = "rgba(" + rgb[0] * 255 + "," + rgb[1] * 255 + "," + rgb[2] * 255 + "," + style.dropShadowAlpha + ")";
                 context.shadowBlur = style.dropShadowBlur;
                 context.shadowOffsetX = Math.cos(style.dropShadowAngle) * style.dropShadowDistance;
@@ -279,15 +280,16 @@ var text;
             }
         }
         if (style.trim) {
-            var trimmed = text_1.trimCanvas(canvas);
+            var trimmed = feng3d.trimCanvas(canvas);
             if (trimmed.data) {
                 canvas.width = trimmed.width;
                 canvas.height = trimmed.height;
                 context.putImageData(trimmed.data, 0, 0);
             }
         }
+        return canvas;
     }
-    text_1.drawText = drawText;
+    feng3d.drawText = drawText;
     /**
      * Generates the fill style. Can automatically generate a gradient based on the fill style being an array
      *
@@ -329,7 +331,7 @@ var text;
         fillGradientStops.unshift(0);
         fill.push(stylefill[stylefill.length - 1]);
         fillGradientStops.push(1);
-        if (style.fillGradientType === text_1.TEXT_GRADIENT.LINEAR_VERTICAL) {
+        if (style.fillGradientType === feng3d.TEXT_GRADIENT.LINEAR_VERTICAL) {
             // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
             gradient = context.createLinearGradient(width / 2, 0, width / 2, height);
             // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
@@ -415,9 +417,9 @@ var text;
             previousWidth = currentWidth;
         }
     }
-})(text || (text = {}));
-var text;
-(function (text) {
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
     /**
      * Trim transparent borders from a canvas
      *
@@ -479,10 +481,10 @@ var text;
             data: data,
         };
     }
-    text.trimCanvas = trimCanvas;
-})(text || (text = {}));
-var text;
-(function (text) {
+    feng3d.trimCanvas = trimCanvas;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
     /**
      * Constants that define the type of gradient on text.
      */
@@ -496,7 +498,7 @@ var text;
          * Linear gradient
          */
         TEXT_GRADIENT[TEXT_GRADIENT["LINEAR_HORIZONTAL"] = 1] = "LINEAR_HORIZONTAL";
-    })(TEXT_GRADIENT = text.TEXT_GRADIENT || (text.TEXT_GRADIENT = {}));
+    })(TEXT_GRADIENT = feng3d.TEXT_GRADIENT || (feng3d.TEXT_GRADIENT = {}));
     var defaultStyle = {
         align: 'left',
         breakWords: false,
@@ -1115,7 +1117,7 @@ var text;
         };
         return TextStyle;
     }());
-    text.TextStyle = TextStyle;
+    feng3d.TextStyle = TextStyle;
     /**
      * Utility function to convert hexadecimal colors to strings, and simply return the color if it's a string.
      * @param color
@@ -1182,9 +1184,9 @@ var text;
         hexString = '000000'.substr(0, 6 - hexString.length) + hexString;
         return "#" + hexString;
     }
-})(text || (text = {}));
-var text;
-(function (text_2) {
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
     /**
      * The TextMetrics object represents the measurement of a block of text with a specified style.
      *
@@ -1732,8 +1734,8 @@ var text;
         ];
         return TextMetrics;
     }());
-    text_2.TextMetrics = TextMetrics;
-})(text || (text = {}));
+    feng3d.TextMetrics = TextMetrics;
+})(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
     /**
@@ -1748,7 +1750,7 @@ var feng3d;
             _this.receiveShadows = false;
             _this.width = 1;
             _this.height = 1;
-            _this.text = "Hello 🌷 world";
+            _this.text = "He\tllo 🌷 world\nHello 🌷 world";
             /**
              * The source texture of the Image element.
              *
@@ -1767,7 +1769,9 @@ var feng3d;
         }
         Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
-            this.image["_pixels"] = this.getImagedata();
+            var style = new feng3d.TextStyle();
+            // this.image["_pixels"] = this.getImagedata();
+            this.image["_pixels"] = feng3d.drawText(null, this.text, style);
             this.image.invalidate();
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
@@ -1802,9 +1806,9 @@ var feng3d;
             // Draw a text
             var text = this.text;
             var textWidth = ctx.measureText(text).width;
-            ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 100);
-            var imagedata = ctx.getImageData(0, 0, textCanvas.height, textCanvas.height);
-            return imagedata;
+            // ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 100);
+            ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2);
+            return textCanvas;
         };
         __decorate([
             feng3d.oav({ exclude: true })

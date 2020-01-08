@@ -21,7 +21,7 @@ namespace feng3d
         height = 1;
 
         @oav()
-        text = "Hello 🌷 world";
+        text = "He\tllo 🌷 world\nHello 🌷 world";
 
         /**
          * The source texture of the Image element.
@@ -46,7 +46,10 @@ namespace feng3d
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
-            this.image["_pixels"] = this.getImagedata();
+            var style = new TextStyle();
+
+            // this.image["_pixels"] = this.getImagedata();
+            this.image["_pixels"] = drawText(null, this.text, style);
             this.image.invalidate();
 
             renderAtomic.uniforms.s_texture = this.image;
@@ -92,11 +95,10 @@ namespace feng3d
             // Draw a text
             var text = this.text;
             var textWidth = ctx.measureText(text).width;
-            ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 100);
+            // ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 100);
+            ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2);
 
-            var imagedata = ctx.getImageData(0, 0, textCanvas.height, textCanvas.height);
-            return imagedata;
+            return textCanvas;
         }
-
     }
 }

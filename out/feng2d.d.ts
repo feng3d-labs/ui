@@ -66,7 +66,7 @@ declare namespace feng3d {
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
 }
-declare namespace text {
+declare namespace feng3d {
     /**
      * Converts a hexadecimal color number to an [R, G, B] array of normalized floats (numbers from 0.0 to 1.0).
      *
@@ -109,10 +109,10 @@ declare namespace text {
      */
     function rgb2hex(rgb: number[]): number;
 }
-declare namespace text {
-    function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution?: number): void;
+declare namespace feng3d {
+    function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution?: number): HTMLCanvasElement;
 }
-declare namespace text {
+declare namespace feng3d {
     /**
      * Trim transparent borders from a canvas
      *
@@ -124,7 +124,7 @@ declare namespace text {
         data: any;
     };
 }
-declare namespace text {
+declare namespace feng3d {
     /**
      * Constants that define the type of gradient on text.
      */
@@ -367,7 +367,7 @@ declare namespace text {
         toFontString(): string;
     }
 }
-declare namespace text {
+declare namespace feng3d {
     /**
      * The TextMetrics object represents the measurement of a block of text with a specified style.
      *
@@ -654,7 +654,7 @@ declare namespace feng3d {
         color: Color4;
         material: Material;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
-        getImagedata(): ImageData;
+        getImagedata(): HTMLCanvasElement;
     }
 }
 declare namespace feng3d {

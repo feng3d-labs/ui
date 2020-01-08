@@ -1,7 +1,9 @@
-namespace text
+namespace feng3d
 {
     export function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution = 1)
     {
+        canvas = canvas || document.createElement("canvas");
+
         var _font = style.toFontString();
 
         const context = canvas.getContext('2d');
@@ -129,6 +131,7 @@ namespace text
                 context.putImageData(trimmed.data, 0, 0);
             }
         }
+        return canvas;
     }
 
     /**
