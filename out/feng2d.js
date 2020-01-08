@@ -486,51 +486,22 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
-     * Constants that define the type of gradient on text.
-     * 定义文本上渐变类型的常量。
+     * 文本上渐变方向
      */
     var TEXT_GRADIENT;
     (function (TEXT_GRADIENT) {
         /**
-         * Vertical gradient
+         * 纵向梯度
          */
         TEXT_GRADIENT[TEXT_GRADIENT["LINEAR_VERTICAL"] = 0] = "LINEAR_VERTICAL";
         /**
-         * Linear gradient
+         * 横向梯度
          */
         TEXT_GRADIENT[TEXT_GRADIENT["LINEAR_HORIZONTAL"] = 1] = "LINEAR_HORIZONTAL";
     })(TEXT_GRADIENT = feng3d.TEXT_GRADIENT || (feng3d.TEXT_GRADIENT = {}));
-    var defaultStyle = {
-        align: 'left',
-        breakWords: false,
-        dropShadow: false,
-        dropShadowAlpha: 1,
-        dropShadowAngle: Math.PI / 6,
-        dropShadowBlur: 0,
-        dropShadowColor: 'black',
-        dropShadowDistance: 5,
-        fill: 'black',
-        fillGradientType: TEXT_GRADIENT.LINEAR_VERTICAL,
-        fillGradientStops: [],
-        fontFamily: 'Arial',
-        fontSize: 26,
-        fontStyle: 'normal',
-        fontVariant: 'normal',
-        fontWeight: 'normal',
-        letterSpacing: 0,
-        lineHeight: 0,
-        lineJoin: 'miter',
-        miterLimit: 10,
-        padding: 0,
-        stroke: 'black',
-        strokeThickness: 0,
-        textBaseline: 'alphabetic',
-        trim: false,
-        whiteSpace: 'pre',
-        wordWrap: false,
-        wordWrapWidth: 100,
-        leading: 0,
-    };
+    /**
+     * 通用字体
+     */
     var genericFontFamilies = [
         'serif',
         'sans-serif',
@@ -540,12 +511,7 @@ var feng3d;
         'system-ui',
     ];
     /**
-     * A TextStyle Object contains information to decorate a Text objects.
-     *
-     * An instance can be shared between multiple Text objects; then changing the style will update all text objects using it.
-     *
-     * A tool can be used to generate a text style [here](https://pixijs.io/pixi-text-style).
-     *
+     * 文本样式
      */
     var TextStyle = /** @class */ (function () {
         /**
@@ -812,55 +778,6 @@ var feng3d;
         return TextStyle;
     }());
     feng3d.TextStyle = TextStyle;
-    /**
-     * Utility function to convert hexadecimal colors to strings, and simply return the color if it's a string.
-     * @param color
-     * @return The color as a string.
-     */
-    function getSingleColor(color) {
-        if (typeof color === 'number') {
-            return hex2string(color);
-        }
-        else if (typeof color === 'string') {
-            if (color.indexOf('0x') === 0) {
-                color = color.replace('0x', '#');
-            }
-        }
-        return color;
-    }
-    /**
-     * Utility function to convert hexadecimal colors to strings, and simply return the color if it's a string.
-     * This version can also convert array of colors
-     *
-     * @param array1 First array to compare
-     * @param array2 Second array to compare
-     * @return Do the arrays contain the same values in the same order
-     */
-    function areArraysEqual(array1, array2) {
-        if (!Array.isArray(array1) || !Array.isArray(array2)) {
-            return false;
-        }
-        if (array1.length !== array2.length) {
-            return false;
-        }
-        for (var i = 0; i < array1.length; ++i) {
-            if (array1[i] !== array2[i]) {
-                return false;
-            }
-        }
-        return true;
-    }
-    /**
-     * Converts a hexadecimal color number to a string.
-     *
-     * @example
-     * PIXI.utils.hex2string(0xffffff); // returns "#ffffff"
-     */
-    function hex2string(hex) {
-        var hexString = hex.toString(16);
-        hexString = '000000'.substr(0, 6 - hexString.length) + hexString;
-        return "#" + hexString;
-    }
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {

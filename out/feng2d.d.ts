@@ -126,26 +126,20 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
-     * Constants that define the type of gradient on text.
-     * 定义文本上渐变类型的常量。
+     * 文本上渐变方向
      */
     enum TEXT_GRADIENT {
         /**
-         * Vertical gradient
+         * 纵向梯度
          */
         LINEAR_VERTICAL = 0,
         /**
-         * Linear gradient
+         * 横向梯度
          */
         LINEAR_HORIZONTAL = 1
     }
     /**
-     * A TextStyle Object contains information to decorate a Text objects.
-     *
-     * An instance can be shared between multiple Text objects; then changing the style will update all text objects using it.
-     *
-     * A tool can be used to generate a text style [here](https://pixijs.io/pixi-text-style).
-     *
+     * 文本样式
      */
     class TextStyle {
         styleID: number;
