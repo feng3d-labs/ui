@@ -26,6 +26,8 @@
         "src/Canvas.ts",
         "src/Image.ts",
         "src/TextTexture.ts",
+        "src/TextStyle.ts",
+        "src/drawText.ts",
         "src/Text.ts",
         //
         "src/materials/ImageMaterial.ts",

@@ -68,6 +68,16 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
+     * 文本样式
+     */
+    class TextStyle {
+    }
+}
+declare namespace feng3d {
+    function drawText(text: string, width: number, height: number, style: TextStyle): ImageData;
+}
+declare namespace feng3d {
+    /**
      * 文本组件
      */
     class Text extends Model {
@@ -89,9 +99,9 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
+        style: TextStyle;
         material: Material;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
-        getImagedata(): ImageData;
     }
 }
 declare namespace feng3d {

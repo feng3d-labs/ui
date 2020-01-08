@@ -134,6 +134,52 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * 文本样式
+     */
+    var TextStyle = /** @class */ (function () {
+        function TextStyle() {
+        }
+        return TextStyle;
+    }());
+    feng3d.TextStyle = TextStyle;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    function drawText(text, width, height, style) {
+        var canvas = document.createElement('canvas');
+        if (!canvas) {
+            console.log('Failed to create canvas');
+            return null;
+        }
+        canvas.width = width;
+        canvas.height = width;
+        var ctx = canvas.getContext('2d');
+        if (!ctx) {
+            console.log('Failed to get rendering context for 2d context');
+            return null;
+        }
+        // Clear <canvas> with a white
+        ctx.fillStyle = 'rgba(0, 0, 0, 0)';
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        // Set text properties
+        ctx.font = '42px bold sans-serif';
+        ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
+        ctx.textBaseline = 'middle';
+        ctx.shadowColor = 'rgba(19, 169, 184, 1.0)';
+        ctx.shadowOffsetX = 3;
+        ctx.shadowOffsetY = 3;
+        ctx.shadowBlur = 4;
+        // Draw a text
+        var textWidth = ctx.measureText(text).width;
+        ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 100);
+        var imagedata = ctx.getImageData(0, 0, canvas.height, canvas.height);
+        return imagedata;
+    }
+    feng3d.drawText = drawText;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
      * 文本组件
      */
     var Text = /** @class */ (function (_super) {
@@ -143,8 +189,8 @@ var feng3d;
             _this.geometry = feng3d.Geometry.getDefault("Quad");
             _this.castShadows = false;
             _this.receiveShadows = false;
-            _this.width = 1;
-            _this.height = 1;
+            _this.width = 256;
+            _this.height = 256;
             _this.text = "Hello 🌷 world";
             /**
              * The source texture of the Image element.
@@ -158,50 +204,17 @@ var feng3d;
              * 为该图像着色。
              */
             _this.color = new feng3d.Color4();
+            _this.style = new feng3d.TextStyle();
             // @oav({ exclude: true })
             _this.material = feng3d.Material.getDefault("Default-Image");
             return _this;
         }
         Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
-            this.image["_pixels"] = this.getImagedata();
+            this.image["_pixels"] = feng3d.drawText(this.text, this.width, this.height, this.style);
             this.image.invalidate();
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
-        };
-        Text.prototype.getImagedata = function () {
-            // Create <canvas> to draw a text
-            var textCanvas = document.createElement('canvas');
-            if (!textCanvas) {
-                console.log('Failed to create canvas');
-                return null;
-            }
-            // Set the size of <canvas>
-            textCanvas.width = 256;
-            textCanvas.height = 256;
-            // Get the rendering context for 2D
-            var ctx = textCanvas.getContext('2d');
-            if (!ctx) {
-                console.log('Failed to get rendering context for 2d context');
-                return null;
-            }
-            // Clear <canvas> with a white
-            ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-            ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
-            // Set text properties
-            ctx.font = '42px bold sans-serif';
-            ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
-            ctx.textBaseline = 'middle';
-            ctx.shadowColor = 'rgba(19, 169, 184, 1.0)';
-            ctx.shadowOffsetX = 3;
-            ctx.shadowOffsetY = 3;
-            ctx.shadowBlur = 4;
-            // Draw a text
-            var text = this.text;
-            var textWidth = ctx.measureText(text).width;
-            ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 100);
-            var imagedata = ctx.getImageData(0, 0, textCanvas.height, textCanvas.height);
-            return imagedata;
         };
         __decorate([
             feng3d.oav({ exclude: true })
@@ -225,6 +238,10 @@ var feng3d;
             feng3d.oav(),
             feng3d.serialize
         ], Text.prototype, "color", void 0);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Text.prototype, "style", void 0);
         return Text;
     }(feng3d.Model));
     feng3d.Text = Text;
