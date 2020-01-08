@@ -155,15 +155,6 @@ var feng3d;
         FontStyle["italic"] = "italic";
         FontStyle["bold italic"] = "bold italic";
     })(FontStyle = feng3d.FontStyle || (feng3d.FontStyle = {}));
-    // export enum CanvasTextBaseline
-    // {
-    //     "top" = "top",
-    //     "hanging" = "hanging",
-    //     "middle" = "middle",
-    //     "alphabetic" = "alphabetic",
-    //     "ideographic" = "ideographic",
-    //     "bottom" = "bottom",
-    // }
     /**
      * 水平对齐方式
      */
@@ -207,12 +198,6 @@ var feng3d;
              * 字体颜色。
              */
             this.fontColor = new feng3d.Color4(0, 0, 0, 1);
-            // /**
-            //  * 文本基线，决定文字垂直方向的对齐方式。
-            //  */
-            // @oav({ tooltip: "文本基线，决定文字垂直方向的对齐方式。", component: "OAVEnum", componentParam: { enumClass: CanvasTextBaseline } })
-            // @serialize
-            // textBaseline = CanvasTextBaseline.alphabetic;
             /**
              * 阴影颜色。
              */

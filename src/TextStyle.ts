@@ -24,16 +24,6 @@ namespace feng3d
         'bold italic' = 'bold italic',
     }
 
-    // export enum CanvasTextBaseline
-    // {
-    //     "top" = "top",
-    //     "hanging" = "hanging",
-    //     "middle" = "middle",
-    //     "alphabetic" = "alphabetic",
-    //     "ideographic" = "ideographic",
-    //     "bottom" = "bottom",
-    // }
-
     /**
      * 水平对齐方式
      */
@@ -93,13 +83,6 @@ namespace feng3d
         @oav({ tooltip: "字体颜色。" })
         @serialize
         fontColor = new Color4(0, 0, 0, 1);
-
-        // /**
-        //  * 文本基线，决定文字垂直方向的对齐方式。
-        //  */
-        // @oav({ tooltip: "文本基线，决定文字垂直方向的对齐方式。", component: "OAVEnum", componentParam: { enumClass: CanvasTextBaseline } })
-        // @serialize
-        // textBaseline = CanvasTextBaseline.alphabetic;
 
         /**
          * 阴影颜色。
