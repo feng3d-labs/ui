@@ -287,36 +287,51 @@ var feng3d;
             console.log('Failed to get rendering context for 2d context');
             return null;
         }
-        // Clear <canvas> with a white
+        // 测量文本宽度
+        var textWidth = ctx.measureText(text).width;
+        if (autoSize) {
+            width = textWidth + Math.abs(style.shadowOffsetX) + Math.abs(style.shadowBlur);
+        }
+        // 绘制背景
         ctx.fillStyle = style.backgroundColor.toRGBA();
         ctx.fillRect(0, 0, width, height);
-        // Set text properties
+        // 
         ctx.font = style.fontSize + "px " + style.fontStyle + " " + style.fontFamily;
         ctx.fillStyle = style.fontColor.toRGBA();
         ctx.shadowColor = style.shadowColor.toRGBA();
         ctx.shadowOffsetX = style.shadowOffsetX;
         ctx.shadowOffsetY = style.shadowOffsetY;
         ctx.shadowBlur = style.shadowBlur;
-        // Draw a text
-        var textWidth = ctx.measureText(text).width;
         var x = 0;
         var y = 0;
-        if (style.horizontalAlign == feng3d.HorizontalAlign.left)
+        if (style.horizontalAlign == feng3d.HorizontalAlign.left) {
             x = 0;
+            if (style.shadowOffsetX < 0)
+                x -= style.shadowOffsetX;
+        }
         else if (style.horizontalAlign == feng3d.HorizontalAlign.center)
             x = (width - textWidth) / 2;
-        else if (style.horizontalAlign == feng3d.HorizontalAlign.right)
+        else if (style.horizontalAlign == feng3d.HorizontalAlign.right) {
             x = width - textWidth;
-        if (style.verticalAlign == feng3d.VerticalAlign.top)
+            if (style.shadowOffsetX > 0)
+                x -= style.shadowOffsetX;
+        }
+        if (style.verticalAlign == feng3d.VerticalAlign.top) {
             y = 0;
+            if (style.shadowOffsetY < 0)
+                y -= style.shadowOffsetY;
+        }
         else if (style.verticalAlign == feng3d.VerticalAlign.middle)
             y = height / 2;
-        else if (style.verticalAlign == feng3d.VerticalAlign.bottom)
+        else if (style.verticalAlign == feng3d.VerticalAlign.bottom) {
             y = height;
+            if (style.shadowOffsetY > 0)
+                y -= style.shadowOffsetY;
+        }
         ctx.textBaseline = style.verticalAlign;
         ctx.fillText(text, x, y);
         var imagedata = ctx.getImageData(0, 0, width, height);
-        return imagedata;
+        return { imagedata: imagedata, width: width, height: height };
     }
     feng3d.drawText = drawText;
 })(feng3d || (feng3d = {}));
@@ -349,8 +364,11 @@ var feng3d;
         }
         Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
-            this.image["_pixels"] = feng3d.drawText(this.text, this.width, this.height, this.style, this.autoSize);
+            var _a = feng3d.drawText(this.text, this.width, this.height, this.style, this.autoSize), imagedata = _a.imagedata, width = _a.width, height = _a.height;
+            this.image["_pixels"] = imagedata;
             this.image.invalidate();
+            this.width = width;
+            this.height = height;
             this.transform.sx = this.width * 0.01;
             this.transform.sy = this.height * 0.01;
             renderAtomic.uniforms.s_texture = this.image;

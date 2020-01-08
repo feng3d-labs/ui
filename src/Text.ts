@@ -47,9 +47,14 @@ namespace feng3d
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
-            this.image["_pixels"] = drawText(this.text, this.width, this.height, this.style, this.autoSize);
+            var { imagedata, width, height } = drawText(this.text, this.width, this.height, this.style, this.autoSize);
+
+            this.image["_pixels"] = imagedata;
+
             this.image.invalidate();
 
+            this.width = width;
+            this.height = height;
             this.transform.sx = this.width * 0.01;
             this.transform.sy = this.height * 0.01;
 

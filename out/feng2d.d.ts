@@ -154,7 +154,11 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
-    function drawText(text: string, width: number, height: number, style: TextStyle, autoSize?: boolean): ImageData;
+    function drawText(text: string, width: number, height: number, style: TextStyle, autoSize?: boolean): {
+        imagedata: ImageData;
+        width: number;
+        height: number;
+    };
 }
 declare namespace feng3d {
     /**
