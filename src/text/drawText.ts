@@ -301,5 +301,83 @@ namespace feng3d
         }
     }
 
+    /**
+      * 除去边界透明部分
+      *
+      * @param canvas 画布
+      */
+    export function trimCanvas(canvas: HTMLCanvasElement)
+    {
+        var width = canvas.width;
+        var height = canvas.height;
 
+        const context = canvas.getContext('2d');
+        const imageData = context.getImageData(0, 0, width, height);
+        const pixels = imageData.data;
+        const len = pixels.length;
+
+        var top = NaN;
+        var left = NaN;
+        var right = NaN;
+        var bottom = NaN;
+
+        var data = null;
+        var i: number;
+        var x: number;
+        var y: number;
+
+        for (i = 0; i < len; i += 4)
+        {
+            if (pixels[i + 3] !== 0)
+            {
+                x = (i / 4) % width;
+                y = ~~((i / 4) / width);
+
+                if (isNaN(top))
+                {
+                    top = y;
+                }
+
+                if (isNaN(left))
+                {
+                    left = x;
+                }
+                else if (x < left)
+                {
+                    left = x;
+                }
+
+                if (isNaN(right))
+                {
+                    right = x + 1;
+                }
+                else if (right < x)
+                {
+                    right = x + 1;
+                }
+
+                if (isNaN(bottom))
+                {
+                    bottom = y;
+                }
+                else if (bottom < y)
+                {
+                    bottom = y;
+                }
+            }
+        }
+
+        if (!isNaN(top))
+        {
+            width = right - left;
+            height = bottom - top + 1;
+            data = context.getImageData(left, top, width, height);
+        }
+
+        return {
+            height,
+            width,
+            data,
+        };
+    }
 }

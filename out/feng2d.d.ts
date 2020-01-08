@@ -111,18 +111,18 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution?: number): HTMLCanvasElement;
-}
-declare namespace feng3d {
     /**
-     * Trim transparent borders from a canvas
-     *
-     * @param canvas - the canvas to trim
-     */
+      * 除去边界透明部分
+      *
+      * @param canvas 画布
+      */
     function trimCanvas(canvas: HTMLCanvasElement): {
         height: number;
         width: number;
         data: any;
     };
+}
+declare namespace feng3d {
 }
 declare namespace feng3d {
     /**

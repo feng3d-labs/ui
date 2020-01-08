@@ -280,7 +280,7 @@ var feng3d;
             }
         }
         if (style.trim) {
-            var trimmed = feng3d.trimCanvas(canvas);
+            var trimmed = trimCanvas(canvas);
             if (trimmed.data) {
                 canvas.width = trimmed.width;
                 canvas.height = trimmed.height;
@@ -417,28 +417,22 @@ var feng3d;
             previousWidth = currentWidth;
         }
     }
-})(feng3d || (feng3d = {}));
-var feng3d;
-(function (feng3d) {
     /**
-     * Trim transparent borders from a canvas
-     *
-     * @param canvas - the canvas to trim
-     */
+      * 除去边界透明部分
+      *
+      * @param canvas 画布
+      */
     function trimCanvas(canvas) {
-        // https://gist.github.com/remy/784508
         var width = canvas.width;
         var height = canvas.height;
         var context = canvas.getContext('2d');
         var imageData = context.getImageData(0, 0, width, height);
         var pixels = imageData.data;
         var len = pixels.length;
-        var bound = {
-            top: null,
-            left: null,
-            right: null,
-            bottom: null,
-        };
+        var top = NaN;
+        var left = NaN;
+        var right = NaN;
+        var bottom = NaN;
         var data = null;
         var i;
         var x;
@@ -447,33 +441,33 @@ var feng3d;
             if (pixels[i + 3] !== 0) {
                 x = (i / 4) % width;
                 y = ~~((i / 4) / width);
-                if (bound.top === null) {
-                    bound.top = y;
+                if (isNaN(top)) {
+                    top = y;
                 }
-                if (bound.left === null) {
-                    bound.left = x;
+                if (isNaN(left)) {
+                    left = x;
                 }
-                else if (x < bound.left) {
-                    bound.left = x;
+                else if (x < left) {
+                    left = x;
                 }
-                if (bound.right === null) {
-                    bound.right = x + 1;
+                if (isNaN(right)) {
+                    right = x + 1;
                 }
-                else if (bound.right < x) {
-                    bound.right = x + 1;
+                else if (right < x) {
+                    right = x + 1;
                 }
-                if (bound.bottom === null) {
-                    bound.bottom = y;
+                if (isNaN(bottom)) {
+                    bottom = y;
                 }
-                else if (bound.bottom < y) {
-                    bound.bottom = y;
+                else if (bottom < y) {
+                    bottom = y;
                 }
             }
         }
-        if (bound.top !== null) {
-            width = bound.right - bound.left;
-            height = bound.bottom - bound.top + 1;
-            data = context.getImageData(bound.left, bound.top, width, height);
+        if (!isNaN(top)) {
+            width = right - left;
+            height = bottom - top + 1;
+            data = context.getImageData(left, top, width, height);
         }
         return {
             height: height,
