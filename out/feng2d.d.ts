@@ -127,6 +127,7 @@ declare namespace feng3d {
 declare namespace feng3d {
     /**
      * Constants that define the type of gradient on text.
+     * 定义文本上渐变类型的常量。
      */
     enum TEXT_GRADIENT {
         /**
@@ -145,198 +146,130 @@ declare namespace feng3d {
      *
      * A tool can be used to generate a text style [here](https://pixijs.io/pixi-text-style).
      *
-     * @class
-     * @memberof PIXI
      */
     class TextStyle {
         styleID: number;
-        private _align;
-        private _breakWords;
-        private _dropShadow;
-        private _dropShadowAlpha;
-        private _dropShadowAngle;
-        private _dropShadowBlur;
-        private _dropShadowColor;
-        private _dropShadowDistance;
-        private _fill;
-        private _fillGradientType;
-        private _fillGradientStops;
-        private _fontFamily;
-        private _fontSize;
-        private _fontStyle;
-        private _fontVariant;
-        private _fontWeight;
-        private _letterSpacing;
-        private _lineHeight;
-        private _lineJoin;
-        private _miterLimit;
-        private _padding;
-        private _stroke;
-        private _strokeThickness;
-        private _textBaseline;
-        private _trim;
-        private _whiteSpace;
-        private _wordWrap;
-        private _wordWrapWidth;
-        private _leading;
         /**
-         * @param style - The style parameters
+         * @param style 样式参数
          */
         constructor(style?: Partial<TextStyle>);
         /**
-         * Creates a new TextStyle object with the same values as this one.
-         * Note that the only the properties of the object are cloned.
-         *
-         * @return New cloned TextStyle object
-         */
-        clone(): TextStyle;
-        /**
-         * Resets all properties to the defaults specified in TextStyle.prototype._default
-         */
-        reset(): void;
-        /**
          * Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text
          */
-        get align(): "left" | "right" | "center";
-        set align(align: "left" | "right" | "center");
+        align: 'left' | 'center' | 'right';
         /**
          * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true
          */
-        get breakWords(): boolean;
-        set breakWords(breakWords: boolean);
+        breakWords: boolean;
         /**
          * Set a drop shadow for the text
          */
-        get dropShadow(): boolean;
-        set dropShadow(dropShadow: boolean);
+        dropShadow: boolean;
         /**
          * Set alpha for the drop shadow
          */
-        get dropShadowAlpha(): number;
-        set dropShadowAlpha(dropShadowAlpha: number);
+        dropShadowAlpha: number;
         /**
          * Set a angle of the drop shadow
          */
-        get dropShadowAngle(): number;
-        set dropShadowAngle(dropShadowAngle: number);
+        dropShadowAngle: number;
         /**
          * Set a shadow blur radius
          */
-        get dropShadowBlur(): number;
-        set dropShadowBlur(dropShadowBlur: number);
+        dropShadowBlur: number;
         /**
          * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
          */
-        get dropShadowColor(): string | number;
-        set dropShadowColor(dropShadowColor: string | number);
+        dropShadowColor: string | number;
         /**
          * Set a distance of the drop shadow
          */
-        get dropShadowDistance(): number;
-        set dropShadowDistance(dropShadowDistance: number);
+        dropShadowDistance: number;
         /**
          * A canvas fillstyle that will be used on the text e.g 'red', '#00FF00'.
          * Can be an array to create a gradient eg ['#000000','#FFFFFF']
          *
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
          */
-        get fill(): string | number;
-        set fill(fill: string | number);
+        fill: string | number;
         /**
          * If fill is an array of colours to create a gradient, this can change the type/direction of the gradient.
          */
-        get fillGradientType(): TEXT_GRADIENT;
-        set fillGradientType(fillGradientType: TEXT_GRADIENT);
+        fillGradientType: TEXT_GRADIENT;
         /**
          * If fill is an array of colours to create a gradient, this array can set the stop points
          * (numbers between 0 and 1) for the color, overriding the default behaviour of evenly spacing them.
          */
-        get fillGradientStops(): number[];
-        set fillGradientStops(fillGradientStops: number[]);
+        fillGradientStops: number[];
         /**
          * The font family
          */
-        get fontFamily(): string | string[];
-        set fontFamily(fontFamily: string | string[]);
+        fontFamily: string | string[];
         /**
          * The font size
          * (as a number it converts to px, but as a string, equivalents are '26px','20pt','160%' or '1.6em')
          */
-        get fontSize(): number;
-        set fontSize(fontSize: number);
+        fontSize: number;
         /**
          * The font style
          * ('normal', 'italic' or 'oblique')
          */
-        get fontStyle(): string;
-        set fontStyle(fontStyle: string);
+        fontStyle: string;
         /**
          * The font variant
          * ('normal' or 'small-caps')
          */
-        get fontVariant(): string;
-        set fontVariant(fontVariant: string);
+        fontVariant: string;
         /**
          * The font weight
          * ('normal', 'bold', 'bolder', 'lighter' and '100', '200', '300', '400', '500', '600', '700', 800' or '900')
          */
-        get fontWeight(): string;
-        set fontWeight(fontWeight: string);
+        fontWeight: string;
         /**
          * The amount of spacing between letters, default is 0
          */
-        get letterSpacing(): number;
-        set letterSpacing(letterSpacing: number);
+        letterSpacing: number;
         /**
          * The line height, a number that represents the vertical space that a letter uses
          */
-        get lineHeight(): number;
-        set lineHeight(lineHeight: number);
+        lineHeight: number;
         /**
          * The space between lines
          */
-        get leading(): number;
-        set leading(leading: number);
+        leading: number;
         /**
          * The lineJoin property sets the type of corner created, it can resolve spiked text issues.
          * Default is 'miter' (creates a sharp corner).
          */
-        get lineJoin(): CanvasLineJoin;
-        set lineJoin(lineJoin: CanvasLineJoin);
+        lineJoin: CanvasLineJoin;
         /**
          * The miter limit to use when using the 'miter' lineJoin mode
          * This can reduce or increase the spikiness of rendered text.
          */
-        get miterLimit(): number;
-        set miterLimit(miterLimit: number);
+        miterLimit: number;
         /**
          * Occasionally some fonts are cropped. Adding some padding will prevent this from happening
          * by adding padding to all sides of the text.
          */
-        get padding(): number;
-        set padding(padding: number);
+        padding: number;
         /**
          * A canvas fillstyle that will be used on the text stroke
          * e.g 'blue', '#FCFF00'
          */
-        get stroke(): string | CanvasGradient | CanvasPattern;
-        set stroke(stroke: string | CanvasGradient | CanvasPattern);
+        stroke: string | CanvasGradient | CanvasPattern;
         /**
          * A number that represents the thickness of the stroke.
          * Default is 0 (no stroke)
          */
-        get strokeThickness(): number;
-        set strokeThickness(strokeThickness: number);
+        strokeThickness: number;
         /**
          * The baseline of the text that is rendered.
          */
-        get textBaseline(): CanvasTextBaseline;
-        set textBaseline(textBaseline: CanvasTextBaseline);
+        textBaseline: CanvasTextBaseline;
         /**
          * Trim transparent borders
          */
-        get trim(): boolean;
-        set trim(trim: boolean);
+        trim: boolean;
         /**
          * How newlines and spaces should be handled.
          * Default is 'pre' (preserve, preserve).
@@ -347,18 +280,19 @@ declare namespace feng3d {
          * 'pre'        | Preserve      |   Preserve
          * 'pre-line'   | Preserve      |   Collapse
          */
-        get whiteSpace(): string;
-        set whiteSpace(whiteSpace: string);
+        whiteSpace: string;
         /**
          * Indicates if word wrap should be used
          */
-        get wordWrap(): boolean;
-        set wordWrap(wordWrap: boolean);
+        wordWrap: boolean;
         /**
          * The width at which text will wrap, it needs wordWrap to be set to true
          */
-        get wordWrapWidth(): number;
-        set wordWrapWidth(wordWrapWidth: number);
+        wordWrapWidth: number;
+        /**
+         * 使数据失效
+         */
+        invalidate(): void;
         /**
          * Generates a font style string to use for `TextMetrics.measureFont()`.
          *
@@ -653,8 +587,8 @@ declare namespace feng3d {
          */
         color: Color4;
         material: Material;
+        style: TextStyle;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
-        getImagedata(): HTMLCanvasElement;
     }
 }
 declare namespace feng3d {

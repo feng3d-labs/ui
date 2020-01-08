@@ -42,63 +42,19 @@ namespace feng3d
         // @oav({ exclude: true })
         material = Material.getDefault("Default-Image");
 
+        @oav()
+        style = new TextStyle();
+
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
-            var style = new TextStyle();
-
             // this.image["_pixels"] = this.getImagedata();
-            this.image["_pixels"] = drawText(null, this.text, style);
+            this.image["_pixels"] = drawText(null, this.text, this.style);
             this.image.invalidate();
 
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
-        }
-
-        getImagedata()
-        {
-            // Create <canvas> to draw a text
-            var textCanvas = document.createElement('canvas');
-            if (!textCanvas)
-            {
-                console.log('Failed to create canvas');
-                return null;
-            }
-
-            // Set the size of <canvas>
-            textCanvas.width = 256;
-            textCanvas.height = 256;
-
-            // Get the rendering context for 2D
-            var ctx = textCanvas.getContext('2d');
-            if (!ctx)
-            {
-                console.log('Failed to get rendering context for 2d context');
-                return null;
-            }
-
-            // Clear <canvas> with a white
-            ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-            ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
-
-            // Set text properties
-            ctx.font = '42px bold sans-serif';
-            ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
-            ctx.textBaseline = 'middle';
-
-            ctx.shadowColor = 'rgba(19, 169, 184, 1.0)';
-            ctx.shadowOffsetX = 3;
-            ctx.shadowOffsetY = 3;
-            ctx.shadowBlur = 4;
-
-            // Draw a text
-            var text = this.text;
-            var textWidth = ctx.measureText(text).width;
-            // ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 100);
-            ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2);
-
-            return textCanvas;
         }
     }
 }

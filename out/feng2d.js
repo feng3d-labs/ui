@@ -487,6 +487,7 @@ var feng3d;
 (function (feng3d) {
     /**
      * Constants that define the type of gradient on text.
+     * 定义文本上渐变类型的常量。
      */
     var TEXT_GRADIENT;
     (function (TEXT_GRADIENT) {
@@ -545,497 +546,130 @@ var feng3d;
      *
      * A tool can be used to generate a text style [here](https://pixijs.io/pixi-text-style).
      *
-     * @class
-     * @memberof PIXI
      */
     var TextStyle = /** @class */ (function () {
         /**
-         * @param style - The style parameters
+         * @param style 样式参数
          */
         function TextStyle(style) {
-            this._align = 'left';
-            this._breakWords = false;
-            this._dropShadow = false;
-            this._dropShadowAlpha = 1;
-            this._dropShadowAngle = Math.PI / 6;
-            this._dropShadowBlur = 0;
-            this._dropShadowColor = 'black';
-            this._dropShadowDistance = 5;
-            this._fill = 'black';
-            this._fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
-            this._fillGradientStops = [];
-            this._fontFamily = 'Arial';
-            this._fontSize = 26;
-            this._fontStyle = 'normal';
-            this._fontVariant = 'normal';
-            this._fontWeight = 'normal';
-            this._letterSpacing = 0;
-            this._lineHeight = 0;
-            this._lineJoin = 'miter';
-            this._miterLimit = 10;
-            this._padding = 0;
-            this._stroke = 'black';
-            this._strokeThickness = 0;
-            this._textBaseline = 'alphabetic';
-            this._trim = false;
-            this._whiteSpace = 'pre';
-            this._wordWrap = false;
-            this._wordWrapWidth = 100;
-            this._leading = 0;
             this.styleID = 0;
-            this.reset();
-            deepCopyProperties(this, style, style);
-        }
-        /**
-         * Creates a new TextStyle object with the same values as this one.
-         * Note that the only the properties of the object are cloned.
-         *
-         * @return New cloned TextStyle object
-         */
-        TextStyle.prototype.clone = function () {
-            var clonedProperties = {};
-            deepCopyProperties(clonedProperties, this, defaultStyle);
-            return new TextStyle(clonedProperties);
-        };
-        /**
-         * Resets all properties to the defaults specified in TextStyle.prototype._default
-         */
-        TextStyle.prototype.reset = function () {
-            deepCopyProperties(this, defaultStyle, defaultStyle);
-        };
-        Object.defineProperty(TextStyle.prototype, "align", {
             /**
              * Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text
              */
-            get: function () {
-                return this._align;
-            },
-            set: function (align) {
-                if (this._align !== align) {
-                    this._align = align;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "breakWords", {
+            this.align = 'left';
             /**
              * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true
              */
-            get: function () {
-                return this._breakWords;
-            },
-            set: function (breakWords) {
-                if (this._breakWords !== breakWords) {
-                    this._breakWords = breakWords;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "dropShadow", {
+            this.breakWords = false;
             /**
              * Set a drop shadow for the text
              */
-            get: function () {
-                return this._dropShadow;
-            },
-            set: function (dropShadow) {
-                if (this._dropShadow !== dropShadow) {
-                    this._dropShadow = dropShadow;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "dropShadowAlpha", {
+            this.dropShadow = false;
             /**
              * Set alpha for the drop shadow
              */
-            get: function () {
-                return this._dropShadowAlpha;
-            },
-            set: function (dropShadowAlpha) {
-                if (this._dropShadowAlpha !== dropShadowAlpha) {
-                    this._dropShadowAlpha = dropShadowAlpha;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "dropShadowAngle", {
+            this.dropShadowAlpha = 1;
             /**
              * Set a angle of the drop shadow
              */
-            get: function () {
-                return this._dropShadowAngle;
-            },
-            set: function (dropShadowAngle) {
-                if (this._dropShadowAngle !== dropShadowAngle) {
-                    this._dropShadowAngle = dropShadowAngle;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "dropShadowBlur", {
+            this.dropShadowAngle = Math.PI / 6;
             /**
              * Set a shadow blur radius
              */
-            get: function () {
-                return this._dropShadowBlur;
-            },
-            set: function (dropShadowBlur) {
-                if (this._dropShadowBlur !== dropShadowBlur) {
-                    this._dropShadowBlur = dropShadowBlur;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "dropShadowColor", {
+            this.dropShadowBlur = 0;
             /**
              * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
              */
-            get: function () {
-                return this._dropShadowColor;
-            },
-            set: function (dropShadowColor) {
-                var outputColor = getSingleColor(dropShadowColor);
-                if (this._dropShadowColor !== outputColor) {
-                    this._dropShadowColor = outputColor;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "dropShadowDistance", {
+            this.dropShadowColor = 'black';
             /**
              * Set a distance of the drop shadow
              */
-            get: function () {
-                return this._dropShadowDistance;
-            },
-            set: function (dropShadowDistance) {
-                if (this._dropShadowDistance !== dropShadowDistance) {
-                    this._dropShadowDistance = dropShadowDistance;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fill", {
+            this.dropShadowDistance = 5;
             /**
              * A canvas fillstyle that will be used on the text e.g 'red', '#00FF00'.
              * Can be an array to create a gradient eg ['#000000','#FFFFFF']
              *
              * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
              */
-            get: function () {
-                return this._fill;
-            },
-            set: function (fill) {
-                var outputColor = getSingleColor(fill);
-                if (this._fill !== outputColor) {
-                    this._fill = outputColor;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fillGradientType", {
+            this.fill = 'black';
             /**
              * If fill is an array of colours to create a gradient, this can change the type/direction of the gradient.
              */
-            get: function () {
-                return this._fillGradientType;
-            },
-            set: function (fillGradientType) {
-                if (this._fillGradientType !== fillGradientType) {
-                    this._fillGradientType = fillGradientType;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fillGradientStops", {
+            this.fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
             /**
              * If fill is an array of colours to create a gradient, this array can set the stop points
              * (numbers between 0 and 1) for the color, overriding the default behaviour of evenly spacing them.
              */
-            get: function () {
-                return this._fillGradientStops;
-            },
-            set: function (fillGradientStops) {
-                if (!areArraysEqual(this._fillGradientStops, fillGradientStops)) {
-                    this._fillGradientStops = fillGradientStops;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fontFamily", {
+            this.fillGradientStops = [];
             /**
              * The font family
              */
-            get: function () {
-                return this._fontFamily;
-            },
-            set: function (fontFamily) {
-                if (this.fontFamily !== fontFamily) {
-                    this._fontFamily = fontFamily;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fontSize", {
+            this.fontFamily = 'Arial';
             /**
              * The font size
              * (as a number it converts to px, but as a string, equivalents are '26px','20pt','160%' or '1.6em')
              */
-            get: function () {
-                return this._fontSize;
-            },
-            set: function (fontSize) {
-                if (this._fontSize !== fontSize) {
-                    this._fontSize = fontSize;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fontStyle", {
+            this.fontSize = 26;
             /**
              * The font style
              * ('normal', 'italic' or 'oblique')
              */
-            get: function () {
-                return this._fontStyle;
-            },
-            set: function (fontStyle) {
-                if (this._fontStyle !== fontStyle) {
-                    this._fontStyle = fontStyle;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fontVariant", {
+            this.fontStyle = 'normal';
             /**
              * The font variant
              * ('normal' or 'small-caps')
              */
-            get: function () {
-                return this._fontVariant;
-            },
-            set: function (fontVariant) {
-                if (this._fontVariant !== fontVariant) {
-                    this._fontVariant = fontVariant;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "fontWeight", {
+            this.fontVariant = 'normal';
             /**
              * The font weight
              * ('normal', 'bold', 'bolder', 'lighter' and '100', '200', '300', '400', '500', '600', '700', 800' or '900')
              */
-            get: function () {
-                return this._fontWeight;
-            },
-            set: function (fontWeight) {
-                if (this._fontWeight !== fontWeight) {
-                    this._fontWeight = fontWeight;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "letterSpacing", {
+            this.fontWeight = 'normal';
             /**
              * The amount of spacing between letters, default is 0
              */
-            get: function () {
-                return this._letterSpacing;
-            },
-            set: function (letterSpacing) {
-                if (this._letterSpacing !== letterSpacing) {
-                    this._letterSpacing = letterSpacing;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "lineHeight", {
+            this.letterSpacing = 0;
             /**
              * The line height, a number that represents the vertical space that a letter uses
              */
-            get: function () {
-                return this._lineHeight;
-            },
-            set: function (lineHeight) {
-                if (this._lineHeight !== lineHeight) {
-                    this._lineHeight = lineHeight;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "leading", {
+            this.lineHeight = 0;
             /**
              * The space between lines
              */
-            get: function () {
-                return this._leading;
-            },
-            set: function (leading) {
-                if (this._leading !== leading) {
-                    this._leading = leading;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "lineJoin", {
+            this.leading = 0;
             /**
              * The lineJoin property sets the type of corner created, it can resolve spiked text issues.
              * Default is 'miter' (creates a sharp corner).
              */
-            get: function () {
-                return this._lineJoin;
-            },
-            set: function (lineJoin) {
-                if (this._lineJoin !== lineJoin) {
-                    this._lineJoin = lineJoin;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "miterLimit", {
+            this.lineJoin = 'miter';
             /**
              * The miter limit to use when using the 'miter' lineJoin mode
              * This can reduce or increase the spikiness of rendered text.
              */
-            get: function () {
-                return this._miterLimit;
-            },
-            set: function (miterLimit) {
-                if (this._miterLimit !== miterLimit) {
-                    this._miterLimit = miterLimit;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "padding", {
+            this.miterLimit = 10;
             /**
              * Occasionally some fonts are cropped. Adding some padding will prevent this from happening
              * by adding padding to all sides of the text.
              */
-            get: function () {
-                return this._padding;
-            },
-            set: function (padding) {
-                if (this._padding !== padding) {
-                    this._padding = padding;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "stroke", {
+            this.padding = 0;
             /**
              * A canvas fillstyle that will be used on the text stroke
              * e.g 'blue', '#FCFF00'
              */
-            get: function () {
-                return this._stroke;
-            },
-            set: function (stroke) {
-                var outputColor = getSingleColor(stroke);
-                if (this._stroke !== outputColor) {
-                    this._stroke = outputColor;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "strokeThickness", {
+            this.stroke = 'black';
             /**
              * A number that represents the thickness of the stroke.
              * Default is 0 (no stroke)
              */
-            get: function () {
-                return this._strokeThickness;
-            },
-            set: function (strokeThickness) {
-                if (this._strokeThickness !== strokeThickness) {
-                    this._strokeThickness = strokeThickness;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "textBaseline", {
+            this.strokeThickness = 0;
             /**
              * The baseline of the text that is rendered.
              */
-            get: function () {
-                return this._textBaseline;
-            },
-            set: function (textBaseline) {
-                if (this._textBaseline !== textBaseline) {
-                    this._textBaseline = textBaseline;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "trim", {
+            this.textBaseline = 'alphabetic';
             /**
              * Trim transparent borders
              */
-            get: function () {
-                return this._trim;
-            },
-            set: function (trim) {
-                if (this._trim !== trim) {
-                    this._trim = trim;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "whiteSpace", {
+            this.trim = false;
             /**
              * How newlines and spaces should be handled.
              * Default is 'pre' (preserve, preserve).
@@ -1046,50 +680,23 @@ var feng3d;
              * 'pre'        | Preserve      |   Preserve
              * 'pre-line'   | Preserve      |   Collapse
              */
-            get: function () {
-                return this._whiteSpace;
-            },
-            set: function (whiteSpace) {
-                if (this._whiteSpace !== whiteSpace) {
-                    this._whiteSpace = whiteSpace;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "wordWrap", {
+            this.whiteSpace = 'pre';
             /**
              * Indicates if word wrap should be used
              */
-            get: function () {
-                return this._wordWrap;
-            },
-            set: function (wordWrap) {
-                if (this._wordWrap !== wordWrap) {
-                    this._wordWrap = wordWrap;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
-        Object.defineProperty(TextStyle.prototype, "wordWrapWidth", {
+            this.wordWrap = false;
             /**
              * The width at which text will wrap, it needs wordWrap to be set to true
              */
-            get: function () {
-                return this._wordWrapWidth;
-            },
-            set: function (wordWrapWidth) {
-                if (this._wordWrapWidth !== wordWrapWidth) {
-                    this._wordWrapWidth = wordWrapWidth;
-                    this.styleID++;
-                }
-            },
-            enumerable: true,
-            configurable: true
-        });
+            this.wordWrapWidth = 100;
+            feng3d.serialization.setValue(this, style);
+        }
+        /**
+         * 使数据失效
+         */
+        TextStyle.prototype.invalidate = function () {
+            this.styleID++;
+        };
         /**
          * Generates a font style string to use for `TextMetrics.measureFont()`.
          *
@@ -1115,6 +722,93 @@ var feng3d;
             }
             return this.fontStyle + " " + this.fontVariant + " " + this.fontWeight + " " + fontSizeString + " " + fontFamilies.join(',');
         };
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "align", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "breakWords", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadow", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowAlpha", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowAngle", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowBlur", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowColor", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowDistance", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fill", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fillGradientType", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fillGradientStops", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fontFamily", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fontSize", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fontStyle", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fontVariant", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "fontWeight", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "letterSpacing", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "lineHeight", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "leading", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "lineJoin", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "miterLimit", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "padding", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "stroke", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "strokeThickness", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "textBaseline", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "trim", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "whiteSpace", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "wordWrap", void 0);
+        __decorate([
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "wordWrapWidth", void 0);
         return TextStyle;
     }());
     feng3d.TextStyle = TextStyle;
@@ -1155,23 +849,6 @@ var feng3d;
             }
         }
         return true;
-    }
-    /**
-     * Utility function to ensure that object properties are copied by value, and not by reference
-     *
-     * @param target Target object to copy properties into
-     * @param source Source object for the properties to copy
-     * @param propertyObj Object containing properties names we want to loop over
-     */
-    function deepCopyProperties(target, source, propertyObj) {
-        for (var prop in propertyObj) {
-            if (Array.isArray(source[prop])) {
-                target[prop] = source[prop].slice();
-            }
-            else {
-                target[prop] = source[prop];
-            }
-        }
     }
     /**
      * Converts a hexadecimal color number to a string.
@@ -1765,50 +1442,16 @@ var feng3d;
             _this.color = new feng3d.Color4();
             // @oav({ exclude: true })
             _this.material = feng3d.Material.getDefault("Default-Image");
+            _this.style = new feng3d.TextStyle();
             return _this;
         }
         Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
-            var style = new feng3d.TextStyle();
             // this.image["_pixels"] = this.getImagedata();
-            this.image["_pixels"] = feng3d.drawText(null, this.text, style);
+            this.image["_pixels"] = feng3d.drawText(null, this.text, this.style);
             this.image.invalidate();
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
-        };
-        Text.prototype.getImagedata = function () {
-            // Create <canvas> to draw a text
-            var textCanvas = document.createElement('canvas');
-            if (!textCanvas) {
-                console.log('Failed to create canvas');
-                return null;
-            }
-            // Set the size of <canvas>
-            textCanvas.width = 256;
-            textCanvas.height = 256;
-            // Get the rendering context for 2D
-            var ctx = textCanvas.getContext('2d');
-            if (!ctx) {
-                console.log('Failed to get rendering context for 2d context');
-                return null;
-            }
-            // Clear <canvas> with a white
-            ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-            ctx.fillRect(0, 0, textCanvas.width, textCanvas.height);
-            // Set text properties
-            ctx.font = '42px bold sans-serif';
-            ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
-            ctx.textBaseline = 'middle';
-            ctx.shadowColor = 'rgba(19, 169, 184, 1.0)';
-            ctx.shadowOffsetX = 3;
-            ctx.shadowOffsetY = 3;
-            ctx.shadowBlur = 4;
-            // Draw a text
-            var text = this.text;
-            var textWidth = ctx.measureText(text).width;
-            // ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2 + 100);
-            ctx.fillText(text, (textCanvas.width - textWidth) / 2, textCanvas.height / 2);
-            return textCanvas;
         };
         __decorate([
             feng3d.oav({ exclude: true })
@@ -1832,6 +1475,9 @@ var feng3d;
             feng3d.oav(),
             feng3d.serialize
         ], Text.prototype, "color", void 0);
+        __decorate([
+            feng3d.oav()
+        ], Text.prototype, "style", void 0);
         return Text;
     }(feng3d.Model));
     feng3d.Text = Text;

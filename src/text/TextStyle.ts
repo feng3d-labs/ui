@@ -3,6 +3,7 @@ namespace feng3d
 
     /**
      * Constants that define the type of gradient on text.
+     * 定义文本上渐变类型的常量。
      */
     export enum TEXT_GRADIENT
     {
@@ -64,206 +65,66 @@ namespace feng3d
      *
      * A tool can be used to generate a text style [here](https://pixijs.io/pixi-text-style).
      *
-     * @class
-     * @memberof PIXI
      */
     export class TextStyle
     {
-        styleID: number;
-
-        private _align: 'left' | 'center' | 'right' = 'left';
-        private _breakWords = false;
-        private _dropShadow = false;
-        private _dropShadowAlpha = 1;
-        private _dropShadowAngle = Math.PI / 6;
-        private _dropShadowBlur = 0;
-        private _dropShadowColor: string | number = 'black';
-        private _dropShadowDistance = 5;
-        private _fill: string | number = 'black';
-        private _fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
-        private _fillGradientStops: number[] = [];
-        private _fontFamily: string | string[] = 'Arial';
-        private _fontSize = 26;
-        private _fontStyle = 'normal';
-        private _fontVariant = 'normal';
-        private _fontWeight = 'normal';
-        private _letterSpacing = 0;
-        private _lineHeight = 0;
-        private _lineJoin: CanvasLineJoin = 'miter';
-        private _miterLimit = 10;
-        private _padding = 0;
-        private _stroke: string | CanvasGradient | CanvasPattern = 'black';
-        private _strokeThickness = 0;
-        private _textBaseline: CanvasTextBaseline = 'alphabetic';
-        private _trim = false;
-        private _whiteSpace = 'pre';
-        private _wordWrap = false;
-        private _wordWrapWidth = 100;
-        private _leading = 0;
+        styleID = 0;
 
         /**
-         * @param style - The style parameters
+         * @param style 样式参数
          */
         constructor(style?: Partial<TextStyle>)
         {
-            this.styleID = 0;
-
-            this.reset();
-
-            deepCopyProperties(this, style, style);
-        }
-
-        /**
-         * Creates a new TextStyle object with the same values as this one.
-         * Note that the only the properties of the object are cloned.
-         *
-         * @return New cloned TextStyle object
-         */
-        clone()
-        {
-            const clonedProperties = {};
-
-            deepCopyProperties(clonedProperties, this, defaultStyle);
-
-            return new TextStyle(clonedProperties);
-        }
-
-        /**
-         * Resets all properties to the defaults specified in TextStyle.prototype._default
-         */
-        reset()
-        {
-            deepCopyProperties(this, defaultStyle, defaultStyle);
+            serialization.setValue(this, style);
         }
 
         /**
          * Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text
          */
-        get align()
-        {
-            return this._align;
-        }
-        set align(align)
-        {
-            if (this._align !== align)
-            {
-                this._align = align;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        align: 'left' | 'center' | 'right' = 'left';
 
         /**
          * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true
          */
-        get breakWords()
-        {
-            return this._breakWords;
-        }
-        set breakWords(breakWords)
-        {
-            if (this._breakWords !== breakWords)
-            {
-                this._breakWords = breakWords;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        breakWords = false;
 
         /**
          * Set a drop shadow for the text
          */
-        get dropShadow()
-        {
-            return this._dropShadow;
-        }
-        set dropShadow(dropShadow)
-        {
-            if (this._dropShadow !== dropShadow)
-            {
-                this._dropShadow = dropShadow;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        dropShadow = false;
 
         /**
          * Set alpha for the drop shadow
          */
-        get dropShadowAlpha()
-        {
-            return this._dropShadowAlpha;
-        }
-        set dropShadowAlpha(dropShadowAlpha)
-        {
-            if (this._dropShadowAlpha !== dropShadowAlpha)
-            {
-                this._dropShadowAlpha = dropShadowAlpha;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        dropShadowAlpha = 1;
 
         /**
          * Set a angle of the drop shadow
          */
-        get dropShadowAngle()
-        {
-            return this._dropShadowAngle;
-        }
-        set dropShadowAngle(dropShadowAngle)
-        {
-            if (this._dropShadowAngle !== dropShadowAngle)
-            {
-                this._dropShadowAngle = dropShadowAngle;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        dropShadowAngle = Math.PI / 6;
 
         /**
          * Set a shadow blur radius
          */
-        get dropShadowBlur()
-        {
-            return this._dropShadowBlur;
-        }
-        set dropShadowBlur(dropShadowBlur)
-        {
-            if (this._dropShadowBlur !== dropShadowBlur)
-            {
-                this._dropShadowBlur = dropShadowBlur;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        dropShadowBlur = 0;
 
         /**
          * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
          */
-        get dropShadowColor()
-        {
-            return this._dropShadowColor;
-        }
-        set dropShadowColor(dropShadowColor)
-        {
-            const outputColor = getSingleColor(dropShadowColor);
-            if (this._dropShadowColor !== outputColor)
-            {
-                this._dropShadowColor = outputColor;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        dropShadowColor: string | number = 'black';
 
         /**
          * Set a distance of the drop shadow
          */
-        get dropShadowDistance()
-        {
-            return this._dropShadowDistance;
-        }
-        set dropShadowDistance(dropShadowDistance)
-        {
-            if (this._dropShadowDistance !== dropShadowDistance)
-            {
-                this._dropShadowDistance = dropShadowDistance;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        dropShadowDistance = 5;
 
         /**
          * A canvas fillstyle that will be used on the text e.g 'red', '#00FF00'.
@@ -271,302 +132,120 @@ namespace feng3d
          * 
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
          */
-        get fill()
-        {
-            return this._fill;
-        }
-        set fill(fill)
-        {
-            const outputColor = getSingleColor(fill);
-            if (this._fill !== outputColor)
-            {
-                this._fill = outputColor;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fill: string | number = 'black';
 
         /**
          * If fill is an array of colours to create a gradient, this can change the type/direction of the gradient.
          */
-        get fillGradientType()
-        {
-            return this._fillGradientType;
-        }
-        set fillGradientType(fillGradientType)
-        {
-            if (this._fillGradientType !== fillGradientType)
-            {
-                this._fillGradientType = fillGradientType;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
 
         /**
          * If fill is an array of colours to create a gradient, this array can set the stop points
          * (numbers between 0 and 1) for the color, overriding the default behaviour of evenly spacing them.
          */
-        get fillGradientStops()
-        {
-            return this._fillGradientStops;
-        }
-        set fillGradientStops(fillGradientStops)
-        {
-            if (!areArraysEqual(this._fillGradientStops, fillGradientStops))
-            {
-                this._fillGradientStops = fillGradientStops;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fillGradientStops: number[] = [];
 
         /**
          * The font family
          */
-        get fontFamily()
-        {
-            return this._fontFamily;
-        }
-        set fontFamily(fontFamily)
-        {
-            if (this.fontFamily !== fontFamily)
-            {
-                this._fontFamily = fontFamily;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fontFamily: string | string[] = 'Arial';
 
         /**
          * The font size
          * (as a number it converts to px, but as a string, equivalents are '26px','20pt','160%' or '1.6em')
          */
-        get fontSize()
-        {
-            return this._fontSize;
-        }
-        set fontSize(fontSize)
-        {
-            if (this._fontSize !== fontSize)
-            {
-                this._fontSize = fontSize;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fontSize = 26;
 
         /**
          * The font style
          * ('normal', 'italic' or 'oblique')
          */
-        get fontStyle()
-        {
-            return this._fontStyle;
-        }
-        set fontStyle(fontStyle)
-        {
-            if (this._fontStyle !== fontStyle)
-            {
-                this._fontStyle = fontStyle;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fontStyle = 'normal';
 
         /**
          * The font variant
          * ('normal' or 'small-caps')
          */
-        get fontVariant()
-        {
-            return this._fontVariant;
-        }
-        set fontVariant(fontVariant)
-        {
-            if (this._fontVariant !== fontVariant)
-            {
-                this._fontVariant = fontVariant;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fontVariant = 'normal';
 
         /**
          * The font weight
          * ('normal', 'bold', 'bolder', 'lighter' and '100', '200', '300', '400', '500', '600', '700', 800' or '900')
          */
-        get fontWeight()
-        {
-            return this._fontWeight;
-        }
-        set fontWeight(fontWeight)
-        {
-            if (this._fontWeight !== fontWeight)
-            {
-                this._fontWeight = fontWeight;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        fontWeight = 'normal';
 
         /**
          * The amount of spacing between letters, default is 0
          */
-        get letterSpacing()
-        {
-            return this._letterSpacing;
-        }
-        set letterSpacing(letterSpacing)
-        {
-            if (this._letterSpacing !== letterSpacing)
-            {
-                this._letterSpacing = letterSpacing;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        letterSpacing = 0;
 
         /**
          * The line height, a number that represents the vertical space that a letter uses
          */
-        get lineHeight()
-        {
-            return this._lineHeight;
-        }
-        set lineHeight(lineHeight)
-        {
-            if (this._lineHeight !== lineHeight)
-            {
-                this._lineHeight = lineHeight;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        lineHeight = 0;
 
         /**
          * The space between lines
          */
-        get leading()
-        {
-            return this._leading;
-        }
-        set leading(leading)
-        {
-            if (this._leading !== leading)
-            {
-                this._leading = leading;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        leading = 0;
 
         /**
          * The lineJoin property sets the type of corner created, it can resolve spiked text issues.
          * Default is 'miter' (creates a sharp corner).
          */
-        get lineJoin()
-        {
-            return this._lineJoin;
-        }
-        set lineJoin(lineJoin)
-        {
-            if (this._lineJoin !== lineJoin)
-            {
-                this._lineJoin = lineJoin;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        lineJoin: CanvasLineJoin = 'miter';
 
         /**
          * The miter limit to use when using the 'miter' lineJoin mode
          * This can reduce or increase the spikiness of rendered text.
          */
-        get miterLimit()
-        {
-            return this._miterLimit;
-        }
-        set miterLimit(miterLimit)
-        {
-            if (this._miterLimit !== miterLimit)
-            {
-                this._miterLimit = miterLimit;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        miterLimit = 10;
 
         /**
          * Occasionally some fonts are cropped. Adding some padding will prevent this from happening
          * by adding padding to all sides of the text.
          */
-        get padding()
-        {
-            return this._padding;
-        }
-        set padding(padding)
-        {
-            if (this._padding !== padding)
-            {
-                this._padding = padding;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        padding = 0;
 
         /**
          * A canvas fillstyle that will be used on the text stroke
          * e.g 'blue', '#FCFF00'
          */
-        get stroke()
-        {
-            return this._stroke;
-        }
-        set stroke(stroke)
-        {
-            const outputColor = getSingleColor(<any>stroke);
-            if (this._stroke !== outputColor)
-            {
-                this._stroke = outputColor;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        stroke: string | CanvasGradient | CanvasPattern = 'black';
 
         /**
          * A number that represents the thickness of the stroke.
          * Default is 0 (no stroke)
          */
-        get strokeThickness()
-        {
-            return this._strokeThickness;
-        }
-        set strokeThickness(strokeThickness)
-        {
-            if (this._strokeThickness !== strokeThickness)
-            {
-                this._strokeThickness = strokeThickness;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        strokeThickness = 0;
 
         /**
          * The baseline of the text that is rendered.
          */
-        get textBaseline()
-        {
-            return this._textBaseline;
-        }
-        set textBaseline(textBaseline)
-        {
-            if (this._textBaseline !== textBaseline)
-            {
-                this._textBaseline = textBaseline;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        textBaseline: CanvasTextBaseline = 'alphabetic';
 
         /**
          * Trim transparent borders
          */
-        get trim()
-        {
-            return this._trim;
-        }
-        set trim(trim)
-        {
-            if (this._trim !== trim)
-            {
-                this._trim = trim;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        trim = false;
 
         /**
          * How newlines and spaces should be handled.
@@ -578,49 +257,27 @@ namespace feng3d
          * 'pre'        | Preserve      |   Preserve
          * 'pre-line'   | Preserve      |   Collapse
          */
-        get whiteSpace()
-        {
-            return this._whiteSpace;
-        }
-        set whiteSpace(whiteSpace)
-        {
-            if (this._whiteSpace !== whiteSpace)
-            {
-                this._whiteSpace = whiteSpace;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        whiteSpace = 'pre';
 
         /**
          * Indicates if word wrap should be used
          */
-        get wordWrap()
-        {
-            return this._wordWrap;
-        }
-        set wordWrap(wordWrap)
-        {
-            if (this._wordWrap !== wordWrap)
-            {
-                this._wordWrap = wordWrap;
-                this.styleID++;
-            }
-        }
+        @watch("invalidate")
+        wordWrap = false;
 
         /**
          * The width at which text will wrap, it needs wordWrap to be set to true
          */
-        get wordWrapWidth()
+        @watch("invalidate")
+        wordWrapWidth = 100;
+
+        /**
+         * 使数据失效
+         */
+        invalidate()
         {
-            return this._wordWrapWidth;
-        }
-        set wordWrapWidth(wordWrapWidth)
-        {
-            if (this._wordWrapWidth !== wordWrapWidth)
-            {
-                this._wordWrapWidth = wordWrapWidth;
-                this.styleID++;
-            }
+            this.styleID++;
         }
 
         /**
@@ -710,27 +367,6 @@ namespace feng3d
         }
 
         return true;
-    }
-
-    /**
-     * Utility function to ensure that object properties are copied by value, and not by reference
-     * 
-     * @param target Target object to copy properties into
-     * @param source Source object for the properties to copy
-     * @param propertyObj Object containing properties names we want to loop over
-     */
-    function deepCopyProperties(target: any, source: any, propertyObj?: Object)
-    {
-        for (const prop in propertyObj)
-        {
-            if (Array.isArray(source[prop]))
-            {
-                target[prop] = source[prop].slice();
-            } else
-            {
-                target[prop] = source[prop];
-            }
-        }
     }
 
     /**
