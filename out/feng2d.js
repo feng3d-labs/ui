@@ -134,11 +134,154 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * 字体
+     */
+    var FontFamily;
+    (function (FontFamily) {
+        FontFamily["serif"] = "serif";
+        FontFamily["sans-serif"] = "sans-serif";
+        FontFamily["monospace"] = "monospace";
+        FontFamily["cursive"] = "cursive";
+        FontFamily["fantasy"] = "fantasy";
+        FontFamily["system-ui"] = "system-ui";
+    })(FontFamily = feng3d.FontFamily || (feng3d.FontFamily = {}));
+    /**
+     * 字体样式
+     */
+    var FontStyle;
+    (function (FontStyle) {
+        FontStyle["normal"] = "normal";
+        FontStyle["bold"] = "bold";
+        FontStyle["italic"] = "italic";
+        FontStyle["bold italic"] = "bold italic";
+    })(FontStyle = feng3d.FontStyle || (feng3d.FontStyle = {}));
+    // export enum CanvasTextBaseline
+    // {
+    //     "top" = "top",
+    //     "hanging" = "hanging",
+    //     "middle" = "middle",
+    //     "alphabetic" = "alphabetic",
+    //     "ideographic" = "ideographic",
+    //     "bottom" = "bottom",
+    // }
+    /**
+     * 水平对齐方式
+     */
+    var HorizontalAlign;
+    (function (HorizontalAlign) {
+        HorizontalAlign["left"] = "left";
+        HorizontalAlign["center"] = "center";
+        HorizontalAlign["right"] = "right";
+    })(HorizontalAlign = feng3d.HorizontalAlign || (feng3d.HorizontalAlign = {}));
+    /**
+     * 垂直对齐方式
+     */
+    var VerticalAlign;
+    (function (VerticalAlign) {
+        VerticalAlign["top"] = "top";
+        VerticalAlign["middle"] = "middle";
+        VerticalAlign["bottom"] = "bottom";
+    })(VerticalAlign = feng3d.VerticalAlign || (feng3d.VerticalAlign = {}));
+    /**
      * 文本样式
      */
     var TextStyle = /** @class */ (function () {
         function TextStyle() {
+            /**
+             * 背景颜色，默认透明背景。
+             */
+            this.backgroundColor = new feng3d.Color4(0, 0, 0, 0);
+            /**
+             * 字体尺寸。
+             */
+            this.fontSize = 42;
+            /**
+             * 字体样式。
+             */
+            this.fontStyle = FontStyle.normal;
+            /**
+             * 字体类型。
+             */
+            this.fontFamily = FontFamily["sans-serif"];
+            /**
+             * 字体颜色。
+             */
+            this.fontColor = new feng3d.Color4(0, 0, 0, 1);
+            // /**
+            //  * 文本基线，决定文字垂直方向的对齐方式。
+            //  */
+            // @oav({ tooltip: "文本基线，决定文字垂直方向的对齐方式。", component: "OAVEnum", componentParam: { enumClass: CanvasTextBaseline } })
+            // @serialize
+            // textBaseline = CanvasTextBaseline.alphabetic;
+            /**
+             * 阴影颜色。
+             */
+            this.shadowColor = new feng3d.Color4(0, 0, 0, 1);
+            /**
+             * X轴方向阴影偏移。
+             */
+            this.shadowOffsetX = 3;
+            /**
+             * Y轴方向阴影偏移。
+             */
+            this.shadowOffsetY = 3;
+            /**
+             * 阴影模糊度。
+             */
+            this.shadowBlur = 4;
+            /**
+             * 水平对齐方式。
+             */
+            this.horizontalAlign = HorizontalAlign.left;
+            /**
+             * 垂直对齐方式。
+             */
+            this.verticalAlign = VerticalAlign.top;
         }
+        __decorate([
+            feng3d.oav({ tooltip: "背景颜色，默认透明背景。" }),
+            feng3d.serialize
+        ], TextStyle.prototype, "backgroundColor", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "字体尺寸。" }),
+            feng3d.serialize
+        ], TextStyle.prototype, "fontSize", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "字体样式。", component: "OAVEnum", componentParam: { enumClass: FontStyle } }),
+            feng3d.serialize
+        ], TextStyle.prototype, "fontStyle", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "字体类型。", component: "OAVEnum", componentParam: { enumClass: FontFamily } }),
+            feng3d.serialize
+        ], TextStyle.prototype, "fontFamily", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "字体颜色。" }),
+            feng3d.serialize
+        ], TextStyle.prototype, "fontColor", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "阴影颜色。" }),
+            feng3d.serialize
+        ], TextStyle.prototype, "shadowColor", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "X轴方向阴影偏移。" }),
+            feng3d.serialize
+        ], TextStyle.prototype, "shadowOffsetX", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "Y轴方向阴影偏移。" }),
+            feng3d.serialize
+        ], TextStyle.prototype, "shadowOffsetY", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "阴影模糊度。" }),
+            feng3d.serialize
+        ], TextStyle.prototype, "shadowBlur", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "水平对齐方式。", component: "OAVEnum", componentParam: { enumClass: HorizontalAlign } }),
+            feng3d.serialize
+        ], TextStyle.prototype, "horizontalAlign", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "垂直对齐方式。", component: "OAVEnum", componentParam: { enumClass: VerticalAlign } }),
+            feng3d.serialize
+        ], TextStyle.prototype, "verticalAlign", void 0);
         return TextStyle;
     }());
     feng3d.TextStyle = TextStyle;
@@ -152,27 +295,41 @@ var feng3d;
             return null;
         }
         canvas.width = width;
-        canvas.height = width;
+        canvas.height = height;
         var ctx = canvas.getContext('2d');
         if (!ctx) {
             console.log('Failed to get rendering context for 2d context');
             return null;
         }
         // Clear <canvas> with a white
-        ctx.fillStyle = 'rgba(0, 0, 0, 0)';
-        ctx.fillRect(0, 0, canvas.width, canvas.height);
+        ctx.fillStyle = style.backgroundColor.toRGBA();
+        ctx.fillRect(0, 0, width, height);
         // Set text properties
-        ctx.font = '42px bold sans-serif';
-        ctx.fillStyle = 'rgba(53, 60, 145, 1.0)';
-        ctx.textBaseline = 'middle';
-        ctx.shadowColor = 'rgba(19, 169, 184, 1.0)';
-        ctx.shadowOffsetX = 3;
-        ctx.shadowOffsetY = 3;
-        ctx.shadowBlur = 4;
+        ctx.font = style.fontSize + "px " + style.fontStyle + " " + style.fontFamily;
+        ctx.fillStyle = style.fontColor.toRGBA();
+        ctx.shadowColor = style.shadowColor.toRGBA();
+        ctx.shadowOffsetX = style.shadowOffsetX;
+        ctx.shadowOffsetY = style.shadowOffsetY;
+        ctx.shadowBlur = style.shadowBlur;
         // Draw a text
         var textWidth = ctx.measureText(text).width;
-        ctx.fillText(text, (canvas.width - textWidth) / 2, canvas.height / 2 + 100);
-        var imagedata = ctx.getImageData(0, 0, canvas.height, canvas.height);
+        var x = 0;
+        var y = 0;
+        if (style.horizontalAlign == feng3d.HorizontalAlign.left)
+            x = 0;
+        else if (style.horizontalAlign == feng3d.HorizontalAlign.center)
+            x = (width - textWidth) / 2;
+        else if (style.horizontalAlign == feng3d.HorizontalAlign.right)
+            x = width - textWidth;
+        if (style.verticalAlign == feng3d.VerticalAlign.top)
+            y = 0;
+        else if (style.verticalAlign == feng3d.VerticalAlign.middle)
+            y = height / 2;
+        else if (style.verticalAlign == feng3d.VerticalAlign.bottom)
+            y = height;
+        ctx.textBaseline = style.verticalAlign;
+        ctx.fillText(text, x, y);
+        var imagedata = ctx.getImageData(0, 0, width, height);
         return imagedata;
     }
     feng3d.drawText = drawText;

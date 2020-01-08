@@ -68,9 +68,89 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
+     * 字体
+     */
+    enum FontFamily {
+        'serif' = "serif",
+        'sans-serif' = "sans-serif",
+        'monospace' = "monospace",
+        'cursive' = "cursive",
+        'fantasy' = "fantasy",
+        'system-ui' = "system-ui"
+    }
+    /**
+     * 字体样式
+     */
+    enum FontStyle {
+        "normal" = "normal",
+        'bold' = "bold",
+        'italic' = "italic",
+        'bold italic' = "bold italic"
+    }
+    /**
+     * 水平对齐方式
+     */
+    enum HorizontalAlign {
+        'left' = "left",
+        'center' = "center",
+        'right' = "right"
+    }
+    /**
+     * 垂直对齐方式
+     */
+    enum VerticalAlign {
+        "top" = "top",
+        "middle" = "middle",
+        "bottom" = "bottom"
+    }
+    /**
      * 文本样式
      */
     class TextStyle {
+        /**
+         * 背景颜色，默认透明背景。
+         */
+        backgroundColor: Color4;
+        /**
+         * 字体尺寸。
+         */
+        fontSize: number;
+        /**
+         * 字体样式。
+         */
+        fontStyle: FontStyle;
+        /**
+         * 字体类型。
+         */
+        fontFamily: FontFamily;
+        /**
+         * 字体颜色。
+         */
+        fontColor: Color4;
+        /**
+         * 阴影颜色。
+         */
+        shadowColor: Color4;
+        /**
+         * X轴方向阴影偏移。
+         */
+        shadowOffsetX: number;
+        /**
+         * Y轴方向阴影偏移。
+         */
+        shadowOffsetY: number;
+        /**
+         * 阴影模糊度。
+         */
+        shadowBlur: number;
+        /**
+         * 水平对齐方式。
+         */
+        horizontalAlign: HorizontalAlign;
+        /**
+         * 垂直对齐方式。
+         */
+        verticalAlign: VerticalAlign;
     }
 }
 declare namespace feng3d {
