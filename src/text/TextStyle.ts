@@ -62,12 +62,6 @@ namespace feng3d
         dropShadow = false;
 
         /**
-         * Set alpha for the drop shadow
-         */
-        @watch("invalidate")
-        dropShadowAlpha = 1;
-
-        /**
          * Set a angle of the drop shadow
          */
         @watch("invalidate")
@@ -83,7 +77,7 @@ namespace feng3d
          * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
          */
         @watch("invalidate")
-        dropShadowColor: string | number = 'black';
+        dropShadowColor = new Color4(0, 0, 0, 0);
 
         /**
          * Set a distance of the drop shadow

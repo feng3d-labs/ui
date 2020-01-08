@@ -67,49 +67,6 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
-    /**
-     * Converts a hexadecimal color number to an [R, G, B] array of normalized floats (numbers from 0.0 to 1.0).
-     *
-     * @example
-     * PIXI.utils.hex2rgb(0xffffff); // returns [1, 1, 1]
-     *
-     * @param hex - The hexadecimal number to convert
-     * @param out If supplied, this array will be used rather than returning a new one
-     * @return An array representing the [R, G, B] of the color where all values are floats.
-     */
-    function hex2rgb(hex: number, out?: number[]): number[];
-    /**
-     * Converts a hexadecimal color number to a string.
-     *
-     * @example
-     * PIXI.utils.hex2string(0xffffff); // returns "#ffffff"
-     *
-     * @param hex - Number in hex (e.g., `0xffffff`)
-     * @return The string color (e.g., `"#ffffff"`).
-     */
-    function hex2string(hex: number): string;
-    /**
-     * Converts a hexadecimal string to a hexadecimal color number.
-     *
-     * @example
-     * PIXI.utils.string2hex("#ffffff"); // returns 0xffffff
-     *
-     * @param The string color (e.g., `"#ffffff"`)
-     * @return Number in hexadecimal.
-     */
-    function string2hex(string: string): number;
-    /**
-     * Converts a color as an [R, G, B] array of normalized floats to a hexadecimal number.
-     *
-     * @example
-     * PIXI.utils.rgb2hex([1, 1, 1]); // returns 0xffffff
-     *
-     * @param rgb - Array of numbers where all values are normalized floats from 0.0 to 1.0.
-     * @return Number in hexadecimal.
-     */
-    function rgb2hex(rgb: number[]): number;
-}
-declare namespace feng3d {
     function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution?: number): HTMLCanvasElement;
     /**
       * 除去边界透明部分
@@ -121,8 +78,6 @@ declare namespace feng3d {
         width: number;
         data: any;
     };
-}
-declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
@@ -160,10 +115,6 @@ declare namespace feng3d {
          */
         dropShadow: boolean;
         /**
-         * Set alpha for the drop shadow
-         */
-        dropShadowAlpha: number;
-        /**
          * Set a angle of the drop shadow
          */
         dropShadowAngle: number;
@@ -174,7 +125,7 @@ declare namespace feng3d {
         /**
          * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
          */
-        dropShadowColor: string | number;
+        dropShadowColor: Color4;
         /**
          * Set a distance of the drop shadow
          */

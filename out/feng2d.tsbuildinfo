@@ -7,7 +7,6 @@
       "../src/Image.ts",
       "../src/text/hex.ts",
       "../src/text/drawText.ts",
-      "../src/text/trimCanvas.ts",
       "../src/text/TextStyle.ts",
       "../src/text/TextMetrics.ts",
       "../src/TextTexture.ts",
@@ -31,7 +30,7 @@
         },
         {
           "pos": 1177,
-          "end": 60189,
+          "end": 59829,
           "kind": "text"
         }
       ],
@@ -46,7 +45,7 @@
       "sections": [
         {
           "pos": 0,
-          "end": 20390,
+          "end": 18664,
           "kind": "text"
         }
       ]

@@ -60,10 +60,7 @@ namespace feng3d
                 context.fillStyle = 'black';
                 context.strokeStyle = 'black';
 
-                const dropShadowColor = style.dropShadowColor;
-                const rgb = hex2rgb(typeof dropShadowColor === 'number' ? dropShadowColor : string2hex(dropShadowColor));
-
-                context.shadowColor = `rgba(${rgb[0] * 255},${rgb[1] * 255},${rgb[2] * 255},${style.dropShadowAlpha})`;
+                context.shadowColor = style.dropShadowColor.toRGBA();
                 context.shadowBlur = style.dropShadowBlur;
                 context.shadowOffsetX = Math.cos(style.dropShadowAngle) * style.dropShadowDistance;
                 context.shadowOffsetY = (Math.sin(style.dropShadowAngle) * style.dropShadowDistance) + dsOffsetShadow;
