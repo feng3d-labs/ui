@@ -1,6 +1,6 @@
 namespace feng3d
 {
-    export function drawText(text: string, width: number, height: number, style: TextStyle)
+    export function drawText(text: string, width: number, height: number, style: TextStyle, autoSize = false)
     {
         var canvas = document.createElement('canvas');
         if (!canvas)
@@ -50,6 +50,8 @@ namespace feng3d
             y = height;
 
         ctx.textBaseline = style.verticalAlign;
+
+
 
         ctx.fillText(text, x, y);
         var imagedata = ctx.getImageData(0, 0, width, height);

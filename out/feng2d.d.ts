@@ -154,7 +154,7 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
-    function drawText(text: string, width: number, height: number, style: TextStyle): ImageData;
+    function drawText(text: string, width: number, height: number, style: TextStyle, autoSize?: boolean): ImageData;
 }
 declare namespace feng3d {
     /**
@@ -164,6 +164,7 @@ declare namespace feng3d {
         geometry: QuadGeometry;
         castShadows: boolean;
         receiveShadows: boolean;
+        autoSize: boolean;
         width: number;
         height: number;
         text: string;
@@ -173,12 +174,6 @@ declare namespace feng3d {
          * 图像元素的源纹理。
          */
         image: Texture2D;
-        /**
-         * Tinting color for this Image.
-         *
-         * 为该图像着色。
-         */
-        color: Color4;
         style: TextStyle;
         material: Material;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;

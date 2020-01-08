@@ -15,13 +15,19 @@ namespace feng3d
         receiveShadows = false;
 
         @oav()
+        @serialize
+        autoSize = true;
+
+        @oav()
+        @serialize
         width = 256;
 
         @oav()
+        @serialize
         height = 256;
 
         @oav()
-        text = "Hello 🌷 world";
+        text = "Hello 🌷 world\nHello 🌷 world";
 
         /**
          * The source texture of the Image element.
@@ -29,15 +35,6 @@ namespace feng3d
          * 图像元素的源纹理。
          */
         image = new Texture2D();
-
-        /**
-         * Tinting color for this Image.
-         * 
-         * 为该图像着色。
-         */
-        @oav()
-        @serialize
-        color = new Color4();
 
         @oav()
         @serialize
@@ -50,11 +47,13 @@ namespace feng3d
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
-            this.image["_pixels"] = drawText(this.text, this.width, this.height, this.style);
+            this.image["_pixels"] = drawText(this.text, this.width, this.height, this.style, this.autoSize);
             this.image.invalidate();
 
+            this.transform.sx = this.width * 0.01;
+            this.transform.sy = this.height * 0.01;
+
             renderAtomic.uniforms.s_texture = this.image;
-            renderAtomic.uniforms.u_color = this.color;
         }
     }
 }

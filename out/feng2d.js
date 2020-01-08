@@ -273,7 +273,8 @@ var feng3d;
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
-    function drawText(text, width, height, style) {
+    function drawText(text, width, height, style, autoSize) {
+        if (autoSize === void 0) { autoSize = false; }
         var canvas = document.createElement('canvas');
         if (!canvas) {
             console.log('Failed to create canvas');
@@ -331,21 +332,16 @@ var feng3d;
             _this.geometry = feng3d.Geometry.getDefault("Quad");
             _this.castShadows = false;
             _this.receiveShadows = false;
+            _this.autoSize = true;
             _this.width = 256;
             _this.height = 256;
-            _this.text = "Hello 🌷 world";
+            _this.text = "Hello 🌷 world\nHello 🌷 world";
             /**
              * The source texture of the Image element.
              *
              * 图像元素的源纹理。
              */
             _this.image = new feng3d.Texture2D();
-            /**
-             * Tinting color for this Image.
-             *
-             * 为该图像着色。
-             */
-            _this.color = new feng3d.Color4();
             _this.style = new feng3d.TextStyle();
             // @oav({ exclude: true })
             _this.material = feng3d.Material.getDefault("Default-Image");
@@ -353,10 +349,11 @@ var feng3d;
         }
         Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
-            this.image["_pixels"] = feng3d.drawText(this.text, this.width, this.height, this.style);
+            this.image["_pixels"] = feng3d.drawText(this.text, this.width, this.height, this.style, this.autoSize);
             this.image.invalidate();
+            this.transform.sx = this.width * 0.01;
+            this.transform.sy = this.height * 0.01;
             renderAtomic.uniforms.s_texture = this.image;
-            renderAtomic.uniforms.u_color = this.color;
         };
         __decorate([
             feng3d.oav({ exclude: true })
@@ -368,18 +365,20 @@ var feng3d;
             feng3d.oav({ exclude: true })
         ], Text.prototype, "receiveShadows", void 0);
         __decorate([
-            feng3d.oav()
+            feng3d.oav(),
+            feng3d.serialize
+        ], Text.prototype, "autoSize", void 0);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
         ], Text.prototype, "width", void 0);
         __decorate([
-            feng3d.oav()
+            feng3d.oav(),
+            feng3d.serialize
         ], Text.prototype, "height", void 0);
         __decorate([
             feng3d.oav()
         ], Text.prototype, "text", void 0);
-        __decorate([
-            feng3d.oav(),
-            feng3d.serialize
-        ], Text.prototype, "color", void 0);
         __decorate([
             feng3d.oav(),
             feng3d.serialize
