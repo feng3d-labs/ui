@@ -108,6 +108,10 @@ namespace feng3d
 
     /**
      * 文本样式
+     * 
+     * 从pixi.js移植
+     * 
+     * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextStyle.js
      */
     export class TextStyle
     {

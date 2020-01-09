@@ -498,6 +498,10 @@ var feng3d;
     })(WhiteSpaceHandle = feng3d.WhiteSpaceHandle || (feng3d.WhiteSpaceHandle = {}));
     /**
      * 文本样式
+     *
+     * 从pixi.js移植
+     *
+     * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextStyle.js
      */
     var TextStyle = /** @class */ (function () {
         /**
@@ -776,12 +780,13 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
-     * The TextMetrics object represents the measurement of a block of text with a specified style.
+     * 文本度量
      *
-     * ```js
-     * let style = new PIXI.TextStyle({fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'})
-     * let textMetrics = PIXI.TextMetrics.measureText('Your text', style)
-     * ```
+     * 用于度量指定样式的文本的宽度。
+     *
+     * 从pixi.js移植
+     *
+     * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextMetrics.js
      */
     var TextMetrics = /** @class */ (function () {
         /**

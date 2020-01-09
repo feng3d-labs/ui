@@ -2,38 +2,38 @@ namespace feng3d
 {
 
     /**
-     * The TextMetrics object represents the measurement of a block of text with a specified style.
-     *
-     * ```js
-     * let style = new PIXI.TextStyle({fontFamily : 'Arial', fontSize: 24, fill : 0xff1010, align : 'center'})
-     * let textMetrics = PIXI.TextMetrics.measureText('Your text', style)
-     * ```
+     * 文本度量
+     * 
+     * 用于度量指定样式的文本的宽度。
+     * 
+     * 从pixi.js移植
+     * 
+     * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextMetrics.js
      */
     export class TextMetrics
     {
         /**
-         * The text that was measured
-         *
+         * 被测量的文本。
          */
         text: string;
 
         /**
-         * The style that was measured
+         * 被测量的样式。
          */
         style: TextStyle;
 
         /**
-         * The measured width of the text
+         * 测量出的宽度。
          */
         width: number;
 
         /**
-         * The measured height of the text
+         * 测量出的高度。
          */
         height: number;
 
         /**
-         * An array of lines of the text broken by new lines and wrapping is specified in style
+         * 根据样式分割成的多行文本。
          */
         lines: string[];
 
