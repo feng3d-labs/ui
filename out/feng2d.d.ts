@@ -573,18 +573,13 @@ declare namespace feng3d {
         width: number;
         height: number;
         text: string;
+        isAutoSize: boolean;
         /**
          * The source texture of the Image element.
          *
          * 图像元素的源纹理。
          */
         image: Texture2D;
-        /**
-         * Tinting color for this Image.
-         *
-         * 为该图像着色。
-         */
-        color: Color4;
         material: Material;
         style: TextStyle;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;

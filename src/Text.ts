@@ -15,34 +15,33 @@ namespace feng3d
         receiveShadows = false;
 
         @oav()
-        width = 1;
+        width = 100;
 
         @oav()
-        height = 1;
+        height = 30;
 
         @oav()
+        @serialize
         text = "Hello 🌷 world\nHello 🌷 world";
+
+        @oav()
+        @serialize
+        isAutoSize = false;
 
         /**
          * The source texture of the Image element.
          * 
          * 图像元素的源纹理。
          */
-        image = new Texture2D();
-
-        /**
-         * Tinting color for this Image.
-         * 
-         * 为该图像着色。
-         */
         @oav()
         @serialize
-        color = new Color4();
+        image = new Texture2D();
 
         // @oav({ exclude: true })
         material = Material.getDefault("Default-Image");
 
         @oav()
+        @serialize
         style = new TextStyle();
 
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
@@ -54,14 +53,16 @@ namespace feng3d
             this.image["_pixels"] = canvas;
             this.image.invalidate();
 
-            this.width = canvas.width;
-            this.height = canvas.height;
+            if (this.isAutoSize)
+            {
+                this.width = canvas.width;
+                this.height = canvas.height;
+            }
 
-            this.transform.sx = this.width * 0.01;
-            this.transform.sy = this.height * 0.01;
+            this.transform.sx = this.width;
+            this.transform.sy = this.height;
 
             renderAtomic.uniforms.s_texture = this.image;
-            renderAtomic.uniforms.u_color = this.color;
         }
     }
 }

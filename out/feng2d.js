@@ -546,7 +546,7 @@ var feng3d;
             /**
              * 将用于文本笔划的画布填充样式。
              */
-            this.stroke = new feng3d.Color4();
+            this.stroke = new feng3d.Color4(0, 0, 0, 1);
             /**
              * 一个表示笔画厚度的数字。
              */
@@ -574,7 +574,7 @@ var feng3d;
             /**
              * 投影颜色。
              */
-            this.dropShadowColor = new feng3d.Color4(0, 0, 0, 0);
+            this.dropShadowColor = new feng3d.Color4(0, 0, 0, 1);
             /**
              * 投影角度。
              */
@@ -663,115 +663,143 @@ var feng3d;
         };
         __decorate([
             feng3d.oav({ block: "Font", tooltip: "字体。", component: "OAVEnum", componentParam: { enumClass: FontFamily } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontFamily", void 0);
         __decorate([
             feng3d.oav({ block: "Font", tooltip: "字体尺寸。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontSize", void 0);
         __decorate([
             feng3d.oav({ block: "Font", tooltip: "字体样式。", component: "OAVEnum", componentParam: { enumClass: FontStyle } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontStyle", void 0);
         __decorate([
             feng3d.oav({ block: "Font", tooltip: "字体变体。", component: "OAVEnum", componentParam: { enumClass: FontVariant } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontVariant", void 0);
         __decorate([
             feng3d.oav({ block: "Font", tooltip: "字型粗细。", component: "OAVEnum", componentParam: { enumClass: FontWeight } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontWeight", void 0);
         __decorate([
             feng3d.oav({ block: "Fill", tooltip: "用于填充文本的颜色。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fill", void 0);
         __decorate([
             feng3d.oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fillGradientType", void 0);
         __decorate([
             feng3d.oav({ block: "Fill" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fillGradientStops", void 0);
         __decorate([
             feng3d.oav({ block: "Stroke", tooltip: "将用于文本笔划的画布填充样式。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "stroke", void 0);
         __decorate([
             feng3d.oav({ block: "Stroke", tooltip: "一个表示笔画厚度的数字。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "strokeThickness", void 0);
         __decorate([
             feng3d.oav({ block: "Stroke", tooltip: "lineJoin属性设置创建的角的类型，它可以解决带尖刺的文本问题。", component: "OAVEnum", componentParam: { enumClass: CanvasLineJoin } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "lineJoin", void 0);
         __decorate([
             feng3d.oav({ block: "Stroke", tooltip: "当使用“miter”lineJoin模式时，miter限制使用。这可以减少或增加呈现文本的尖锐性。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "miterLimit", void 0);
         __decorate([
             feng3d.oav({ block: "Layout", tooltip: "字母之间的间距，默认为0" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "letterSpacing", void 0);
         __decorate([
             feng3d.oav({ block: "Layout", tooltip: "呈现文本的基线。", component: "OAVEnum", componentParam: { enumClass: CanvasTextBaseline } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "textBaseline", void 0);
         __decorate([
             feng3d.oav({ block: "Drop Shadow", tooltip: "是否为文本设置一个投影。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadow", void 0);
         __decorate([
             feng3d.oav({ block: "Drop Shadow", tooltip: "投影颜色。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowColor", void 0);
         __decorate([
             feng3d.oav({ block: "Drop Shadow", tooltip: "投影角度。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowAngle", void 0);
         __decorate([
             feng3d.oav({ block: "Drop Shadow", tooltip: "阴影模糊半径。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowBlur", void 0);
         __decorate([
             feng3d.oav({ block: "Drop Shadow", tooltip: "投影距离。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowDistance", void 0);
         __decorate([
             feng3d.oav({ block: "Multiline", tooltip: "是否应使用自动换行。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "wordWrap", void 0);
         __decorate([
             feng3d.oav({ block: "Multiline" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "breakWords", void 0);
         __decorate([
             feng3d.oav({ block: "Multiline", tooltip: "多行文本对齐方式。", component: "OAVEnum", componentParam: { enumClass: TextAlign } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "align", void 0);
         __decorate([
             feng3d.oav({ block: "Multiline", tooltip: "如何处理换行与空格。", component: "OAVEnum", componentParam: { enumClass: WhiteSpaceHandle } }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "whiteSpace", void 0);
         __decorate([
             feng3d.oav({ block: "Multiline", tooltip: "文本的换行宽度。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "wordWrapWidth", void 0);
         __decorate([
             feng3d.oav({ block: "Multiline", tooltip: "行高。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "lineHeight", void 0);
         __decorate([
             feng3d.oav({ block: "Multiline", tooltip: "行距。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "leading", void 0);
         __decorate([
             feng3d.oav({ block: "Texture", tooltip: "内边距，用于文字被裁减问题。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "padding", void 0);
         __decorate([
             feng3d.oav({ block: "Texture", tooltip: "是否修剪透明边界。" }),
-            feng3d.watch("invalidate")
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "trim", void 0);
         return TextStyle;
     }());
@@ -1341,21 +1369,16 @@ var feng3d;
             _this.geometry = feng3d.Geometry.getDefault("Quad");
             _this.castShadows = false;
             _this.receiveShadows = false;
-            _this.width = 1;
-            _this.height = 1;
+            _this.width = 100;
+            _this.height = 30;
             _this.text = "Hello 🌷 world\nHello 🌷 world";
+            _this.isAutoSize = false;
             /**
              * The source texture of the Image element.
              *
              * 图像元素的源纹理。
              */
             _this.image = new feng3d.Texture2D();
-            /**
-             * Tinting color for this Image.
-             *
-             * 为该图像着色。
-             */
-            _this.color = new feng3d.Color4();
             // @oav({ exclude: true })
             _this.material = feng3d.Material.getDefault("Default-Image");
             _this.style = new feng3d.TextStyle();
@@ -1367,12 +1390,13 @@ var feng3d;
             var canvas = feng3d.drawText(null, this.text, this.style);
             this.image["_pixels"] = canvas;
             this.image.invalidate();
-            this.width = canvas.width;
-            this.height = canvas.height;
-            this.transform.sx = this.width * 0.01;
-            this.transform.sy = this.height * 0.01;
+            if (this.isAutoSize) {
+                this.width = canvas.width;
+                this.height = canvas.height;
+            }
+            this.transform.sx = this.width;
+            this.transform.sy = this.height;
             renderAtomic.uniforms.s_texture = this.image;
-            renderAtomic.uniforms.u_color = this.color;
         };
         __decorate([
             feng3d.oav({ exclude: true })
@@ -1390,14 +1414,20 @@ var feng3d;
             feng3d.oav()
         ], Text.prototype, "height", void 0);
         __decorate([
-            feng3d.oav()
+            feng3d.oav(),
+            feng3d.serialize
         ], Text.prototype, "text", void 0);
         __decorate([
             feng3d.oav(),
             feng3d.serialize
-        ], Text.prototype, "color", void 0);
+        ], Text.prototype, "isAutoSize", void 0);
         __decorate([
-            feng3d.oav()
+            feng3d.oav(),
+            feng3d.serialize
+        ], Text.prototype, "image", void 0);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
         ], Text.prototype, "style", void 0);
         return Text;
     }(feng3d.Model));
