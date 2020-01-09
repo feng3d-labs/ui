@@ -81,17 +81,82 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
-     * 文本上渐变方向
+     * 文本上渐变方向。
      */
     enum TEXT_GRADIENT {
         /**
-         * 纵向梯度
+         * 纵向梯度。
          */
         LINEAR_VERTICAL = 0,
         /**
-         * 横向梯度
+         * 横向梯度。
          */
         LINEAR_HORIZONTAL = 1
+    }
+    /**
+     * 通用字体。
+     */
+    enum FontFamily {
+        'Arial' = "Arial",
+        'serif' = "serif",
+        'sans-serif' = "sans-serif",
+        'monospace' = "monospace",
+        'cursive' = "cursive",
+        'fantasy' = "fantasy",
+        'system-ui' = "system-ui"
+    }
+    /**
+     * 字体样式。
+     */
+    enum FontStyle {
+        'normal' = "normal",
+        'italic' = "italic",
+        'oblique' = "oblique"
+    }
+    /**
+     * 字体变体。
+     */
+    enum FontVariant {
+        'normal' = "normal",
+        'small-caps' = "small-caps"
+    }
+    enum FontWeight {
+        'normal' = "normal",
+        'bold' = "bold",
+        'bolder' = "bolder",
+        'lighter' = "lighter"
+    }
+    /**
+     * 设置创建的角的类型，它可以解决带尖刺的文本问题。
+     */
+    enum CanvasLineJoin {
+        "round" = "round",
+        "bevel" = "bevel",
+        "miter" = "miter"
+    }
+    /**
+     * 画布文本基线
+     */
+    enum CanvasTextBaseline {
+        "top" = "top",
+        "hanging" = "hanging",
+        "middle" = "middle",
+        "alphabetic" = "alphabetic",
+        "ideographic" = "ideographic",
+        "bottom" = "bottom"
+    }
+    /**
+     * 文本对齐方式
+     */
+    enum TextAlign {
+        'left' = "left",
+        'center' = "center",
+        'right' = "right"
+    }
+    enum WhiteSpaceHandle {
+        "normal" = "normal",
+        'pre' = "pre",
+        'pre-line' = "pre-line"
     }
     /**
      * 文本样式
@@ -103,120 +168,96 @@ declare namespace feng3d {
          */
         constructor(style?: Partial<TextStyle>);
         /**
-         * Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text
+         * 字体。
          */
-        align: 'left' | 'center' | 'right';
+        fontFamily: FontFamily;
         /**
-         * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true
-         */
-        breakWords: boolean;
-        /**
-         * Set a drop shadow for the text
-         */
-        dropShadow: boolean;
-        /**
-         * Set a angle of the drop shadow
-         */
-        dropShadowAngle: number;
-        /**
-         * Set a shadow blur radius
-         */
-        dropShadowBlur: number;
-        /**
-         * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
-         */
-        dropShadowColor: Color4;
-        /**
-         * Set a distance of the drop shadow
-         */
-        dropShadowDistance: number;
-        /**
-         * A canvas fillstyle that will be used on the text e.g 'red', '#00FF00'.
-         * Can be an array to create a gradient eg ['#000000','#FFFFFF']
-         *
-         * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
-         */
-        fill: string | number;
-        /**
-         * If fill is an array of colours to create a gradient, this can change the type/direction of the gradient.
-         */
-        fillGradientType: TEXT_GRADIENT;
-        /**
-         * If fill is an array of colours to create a gradient, this array can set the stop points
-         * (numbers between 0 and 1) for the color, overriding the default behaviour of evenly spacing them.
-         */
-        fillGradientStops: number[];
-        /**
-         * The font family
-         */
-        fontFamily: string | string[];
-        /**
-         * The font size
-         * (as a number it converts to px, but as a string, equivalents are '26px','20pt','160%' or '1.6em')
+         * 字体尺寸。
          */
         fontSize: number;
         /**
-         * The font style
-         * ('normal', 'italic' or 'oblique')
+         * 字体样式。
          */
-        fontStyle: string;
+        fontStyle: FontStyle;
         /**
-         * The font variant
-         * ('normal' or 'small-caps')
+         * 字体变体。
          */
-        fontVariant: string;
+        fontVariant: FontVariant;
         /**
-         * The font weight
-         * ('normal', 'bold', 'bolder', 'lighter' and '100', '200', '300', '400', '500', '600', '700', 800' or '900')
+         * 字型粗细。
          */
-        fontWeight: string;
+        fontWeight: FontWeight;
         /**
-         * The amount of spacing between letters, default is 0
+         * 用于填充文本的颜色。
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
          */
-        letterSpacing: number;
+        fill: Color4;
         /**
-         * The line height, a number that represents the vertical space that a letter uses
+         * 如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。
          */
-        lineHeight: number;
+        fillGradientType: TEXT_GRADIENT;
         /**
-         * The space between lines
+         * 如果填充是一个颜色数组来创建渐变，这个数组可以设置停止点
          */
-        leading: number;
+        fillGradientStops: number[];
         /**
-         * The lineJoin property sets the type of corner created, it can resolve spiked text issues.
-         * Default is 'miter' (creates a sharp corner).
+         * 将用于文本笔划的画布填充样式。
          */
-        lineJoin: CanvasLineJoin;
+        stroke: Color4;
         /**
-         * The miter limit to use when using the 'miter' lineJoin mode
-         * This can reduce or increase the spikiness of rendered text.
-         */
-        miterLimit: number;
-        /**
-         * Occasionally some fonts are cropped. Adding some padding will prevent this from happening
-         * by adding padding to all sides of the text.
-         */
-        padding: number;
-        /**
-         * A canvas fillstyle that will be used on the text stroke
-         * e.g 'blue', '#FCFF00'
-         */
-        stroke: string | CanvasGradient | CanvasPattern;
-        /**
-         * A number that represents the thickness of the stroke.
-         * Default is 0 (no stroke)
+         * 一个表示笔画厚度的数字。
          */
         strokeThickness: number;
         /**
-         * The baseline of the text that is rendered.
+         * lineJoin属性设置创建的角的类型，它可以解决带尖刺的文本问题。
+         */
+        lineJoin: CanvasLineJoin;
+        /**
+         * 当使用“miter”lineJoin模式时，miter限制使用。这可以减少或增加呈现文本的尖锐性。
+         */
+        miterLimit: number;
+        /**
+         * 字母之间的间距，默认为0
+         */
+        letterSpacing: number;
+        /**
+         * 呈现文本的基线。
          */
         textBaseline: CanvasTextBaseline;
         /**
-         * Trim transparent borders
+         * 是否为文本设置一个投影。
          */
-        trim: boolean;
+        dropShadow: boolean;
         /**
-         * How newlines and spaces should be handled.
+         * 投影颜色。
+         */
+        dropShadowColor: Color4;
+        /**
+         * 投影角度。
+         */
+        dropShadowAngle: number;
+        /**
+         * 阴影模糊半径。
+         */
+        dropShadowBlur: number;
+        /**
+         * 投影距离。
+         */
+        dropShadowDistance: number;
+        /**
+         * 是否应使用自动换行。
+         */
+        wordWrap: boolean;
+        /**
+         * 能否把单词分多行。
+         */
+        breakWords: boolean;
+        /**
+         * 多行文本对齐方式。
+         */
+        align: TextAlign;
+        /**
+         * 如何处理换行与空格。
          * Default is 'pre' (preserve, preserve).
          *
          *  value       | New lines     |   Spaces
@@ -225,23 +266,34 @@ declare namespace feng3d {
          * 'pre'        | Preserve      |   Preserve
          * 'pre-line'   | Preserve      |   Collapse
          */
-        whiteSpace: string;
+        whiteSpace: WhiteSpaceHandle;
         /**
-         * Indicates if word wrap should be used
-         */
-        wordWrap: boolean;
-        /**
-         * The width at which text will wrap, it needs wordWrap to be set to true
+         * 文本的换行宽度。
          */
         wordWrapWidth: number;
+        /**
+         * 行高。
+         */
+        lineHeight: number;
+        /**
+         * 行距。
+         */
+        leading: number;
+        /**
+         * 内边距，用于文字被裁减问题。
+         */
+        padding: number;
+        /**
+         * 是否修剪透明边界。
+         */
+        trim: boolean;
         /**
          * 使数据失效
          */
         invalidate(): void;
         /**
-         * Generates a font style string to use for `TextMetrics.measureFont()`.
          *
-         * @return Font style string, for passing to `TextMetrics.measureFont()`
+         * 生成用于' TextMetrics.measureFont() '的字体样式字符串。
          */
         toFontString(): string;
     }

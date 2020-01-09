@@ -62,14 +62,14 @@ namespace feng3d
 
                 context.shadowColor = style.dropShadowColor.toRGBA();
                 context.shadowBlur = style.dropShadowBlur;
-                context.shadowOffsetX = Math.cos(style.dropShadowAngle) * style.dropShadowDistance;
-                context.shadowOffsetY = (Math.sin(style.dropShadowAngle) * style.dropShadowDistance) + dsOffsetShadow;
+                context.shadowOffsetX = Math.cos(style.dropShadowAngle * Math.DEG2RAD) * style.dropShadowDistance;
+                context.shadowOffsetY = (Math.sin(style.dropShadowAngle * Math.DEG2RAD) * style.dropShadowDistance) + dsOffsetShadow;
             }
             else
             {
                 // set canvas text styles
                 context.fillStyle = _generateFillStyle(canvas, style, lines, resolution);
-                context.strokeStyle = style.stroke;
+                context.strokeStyle = style.stroke.toRGBA();
 
                 context.shadowColor = "";
                 context.shadowBlur = 0;
@@ -144,7 +144,7 @@ namespace feng3d
         var stylefill = style.fill;
         if (!Array.isArray(stylefill))
         {
-            return stylefill;
+            return stylefill.toRGBA();
         }
         else if (stylefill.length === 1)
         {

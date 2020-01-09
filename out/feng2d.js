@@ -248,13 +248,13 @@ var feng3d;
                 context.strokeStyle = 'black';
                 context.shadowColor = style.dropShadowColor.toRGBA();
                 context.shadowBlur = style.dropShadowBlur;
-                context.shadowOffsetX = Math.cos(style.dropShadowAngle) * style.dropShadowDistance;
-                context.shadowOffsetY = (Math.sin(style.dropShadowAngle) * style.dropShadowDistance) + dsOffsetShadow;
+                context.shadowOffsetX = Math.cos(style.dropShadowAngle * Math.DEG2RAD) * style.dropShadowDistance;
+                context.shadowOffsetY = (Math.sin(style.dropShadowAngle * Math.DEG2RAD) * style.dropShadowDistance) + dsOffsetShadow;
             }
             else {
                 // set canvas text styles
                 context.fillStyle = _generateFillStyle(canvas, style, lines, resolution);
-                context.strokeStyle = style.stroke;
+                context.strokeStyle = style.stroke.toRGBA();
                 context.shadowColor = "";
                 context.shadowBlur = 0;
                 context.shadowOffsetX = 0;
@@ -301,7 +301,7 @@ var feng3d;
         var context = canvas.getContext('2d');
         var stylefill = style.fill;
         if (!Array.isArray(stylefill)) {
-            return stylefill;
+            return stylefill.toRGBA();
         }
         else if (stylefill.length === 1) {
             return stylefill[0];
@@ -479,30 +479,101 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
-     * 文本上渐变方向
+     * 文本上渐变方向。
      */
     var TEXT_GRADIENT;
     (function (TEXT_GRADIENT) {
         /**
-         * 纵向梯度
+         * 纵向梯度。
          */
         TEXT_GRADIENT[TEXT_GRADIENT["LINEAR_VERTICAL"] = 0] = "LINEAR_VERTICAL";
         /**
-         * 横向梯度
+         * 横向梯度。
          */
         TEXT_GRADIENT[TEXT_GRADIENT["LINEAR_HORIZONTAL"] = 1] = "LINEAR_HORIZONTAL";
     })(TEXT_GRADIENT = feng3d.TEXT_GRADIENT || (feng3d.TEXT_GRADIENT = {}));
     /**
-     * 通用字体
+     * 通用字体。
      */
-    var genericFontFamilies = [
-        'serif',
-        'sans-serif',
-        'monospace',
-        'cursive',
-        'fantasy',
-        'system-ui',
-    ];
+    var FontFamily;
+    (function (FontFamily) {
+        FontFamily["Arial"] = "Arial";
+        FontFamily["serif"] = "serif";
+        FontFamily["sans-serif"] = "sans-serif";
+        FontFamily["monospace"] = "monospace";
+        FontFamily["cursive"] = "cursive";
+        FontFamily["fantasy"] = "fantasy";
+        FontFamily["system-ui"] = "system-ui";
+    })(FontFamily = feng3d.FontFamily || (feng3d.FontFamily = {}));
+    /**
+     * 字体样式。
+     */
+    var FontStyle;
+    (function (FontStyle) {
+        FontStyle["normal"] = "normal";
+        FontStyle["italic"] = "italic";
+        FontStyle["oblique"] = "oblique";
+    })(FontStyle = feng3d.FontStyle || (feng3d.FontStyle = {}));
+    /**
+     * 字体变体。
+     */
+    var FontVariant;
+    (function (FontVariant) {
+        FontVariant["normal"] = "normal";
+        FontVariant["small-caps"] = "small-caps";
+    })(FontVariant = feng3d.FontVariant || (feng3d.FontVariant = {}));
+    var FontWeight;
+    (function (FontWeight) {
+        FontWeight["normal"] = "normal";
+        FontWeight["bold"] = "bold";
+        FontWeight["bolder"] = "bolder";
+        FontWeight["lighter"] = "lighter";
+        // '100' = '100',
+        // '200' = '200',
+        // '300' = '300',
+        // '400' = '400',
+        // '500' = '500',
+        // '600' = '600',
+        // '700' = '700',
+        // '800' = '800',
+        // '900' = '900',
+    })(FontWeight = feng3d.FontWeight || (feng3d.FontWeight = {}));
+    /**
+     * 设置创建的角的类型，它可以解决带尖刺的文本问题。
+     */
+    var CanvasLineJoin;
+    (function (CanvasLineJoin) {
+        CanvasLineJoin["round"] = "round";
+        CanvasLineJoin["bevel"] = "bevel";
+        CanvasLineJoin["miter"] = "miter";
+    })(CanvasLineJoin = feng3d.CanvasLineJoin || (feng3d.CanvasLineJoin = {}));
+    /**
+     * 画布文本基线
+     */
+    var CanvasTextBaseline;
+    (function (CanvasTextBaseline) {
+        CanvasTextBaseline["top"] = "top";
+        CanvasTextBaseline["hanging"] = "hanging";
+        CanvasTextBaseline["middle"] = "middle";
+        CanvasTextBaseline["alphabetic"] = "alphabetic";
+        CanvasTextBaseline["ideographic"] = "ideographic";
+        CanvasTextBaseline["bottom"] = "bottom";
+    })(CanvasTextBaseline = feng3d.CanvasTextBaseline || (feng3d.CanvasTextBaseline = {}));
+    /**
+     * 文本对齐方式
+     */
+    var TextAlign;
+    (function (TextAlign) {
+        TextAlign["left"] = "left";
+        TextAlign["center"] = "center";
+        TextAlign["right"] = "right";
+    })(TextAlign = feng3d.TextAlign || (feng3d.TextAlign = {}));
+    var WhiteSpaceHandle;
+    (function (WhiteSpaceHandle) {
+        WhiteSpaceHandle["normal"] = "normal";
+        WhiteSpaceHandle["pre"] = "pre";
+        WhiteSpaceHandle["pre-line"] = "pre-line";
+    })(WhiteSpaceHandle = feng3d.WhiteSpaceHandle || (feng3d.WhiteSpaceHandle = {}));
     /**
      * 文本样式
      */
@@ -513,120 +584,97 @@ var feng3d;
         function TextStyle(style) {
             this.styleID = 0;
             /**
-             * Alignment for multiline text ('left', 'center' or 'right'), does not affect single line text
+             * 字体。
              */
-            this.align = 'left';
+            this.fontFamily = FontFamily.Arial;
             /**
-             * Indicates if lines can be wrapped within words, it needs wordWrap to be set to true
-             */
-            this.breakWords = false;
-            /**
-             * Set a drop shadow for the text
-             */
-            this.dropShadow = false;
-            /**
-             * Set a angle of the drop shadow
-             */
-            this.dropShadowAngle = Math.PI / 6;
-            /**
-             * Set a shadow blur radius
-             */
-            this.dropShadowBlur = 0;
-            /**
-             * A fill style to be used on the dropshadow e.g 'red', '#00FF00'
-             */
-            this.dropShadowColor = new feng3d.Color4(0, 0, 0, 0);
-            /**
-             * Set a distance of the drop shadow
-             */
-            this.dropShadowDistance = 5;
-            /**
-             * A canvas fillstyle that will be used on the text e.g 'red', '#00FF00'.
-             * Can be an array to create a gradient eg ['#000000','#FFFFFF']
-             *
-             * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
-             */
-            this.fill = 'black';
-            /**
-             * If fill is an array of colours to create a gradient, this can change the type/direction of the gradient.
-             */
-            this.fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
-            /**
-             * If fill is an array of colours to create a gradient, this array can set the stop points
-             * (numbers between 0 and 1) for the color, overriding the default behaviour of evenly spacing them.
-             */
-            this.fillGradientStops = [];
-            /**
-             * The font family
-             */
-            this.fontFamily = 'Arial';
-            /**
-             * The font size
-             * (as a number it converts to px, but as a string, equivalents are '26px','20pt','160%' or '1.6em')
+             * 字体尺寸。
              */
             this.fontSize = 26;
             /**
-             * The font style
-             * ('normal', 'italic' or 'oblique')
+             * 字体样式。
              */
-            this.fontStyle = 'normal';
+            this.fontStyle = FontStyle.normal;
             /**
-             * The font variant
-             * ('normal' or 'small-caps')
+             * 字体变体。
              */
-            this.fontVariant = 'normal';
+            this.fontVariant = FontVariant.normal;
             /**
-             * The font weight
-             * ('normal', 'bold', 'bolder', 'lighter' and '100', '200', '300', '400', '500', '600', '700', 800' or '900')
+             * 字型粗细。
              */
-            this.fontWeight = 'normal';
+            this.fontWeight = FontWeight.normal;
             /**
-             * The amount of spacing between letters, default is 0
+             * 用于填充文本的颜色。
+             * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
              */
-            this.letterSpacing = 0;
+            this.fill = new feng3d.Color4(0, 0, 0, 1);
+            // fill = new MinMaxGradient();
             /**
-             * The line height, a number that represents the vertical space that a letter uses
+             * 如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。
              */
-            this.lineHeight = 0;
+            this.fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
             /**
-             * The space between lines
+             * 如果填充是一个颜色数组来创建渐变，这个数组可以设置停止点
              */
-            this.leading = 0;
+            this.fillGradientStops = [];
             /**
-             * The lineJoin property sets the type of corner created, it can resolve spiked text issues.
-             * Default is 'miter' (creates a sharp corner).
+             * 将用于文本笔划的画布填充样式。
              */
-            this.lineJoin = 'miter';
+            this.stroke = new feng3d.Color4();
             /**
-             * The miter limit to use when using the 'miter' lineJoin mode
-             * This can reduce or increase the spikiness of rendered text.
-             */
-            this.miterLimit = 10;
-            /**
-             * Occasionally some fonts are cropped. Adding some padding will prevent this from happening
-             * by adding padding to all sides of the text.
-             */
-            this.padding = 0;
-            /**
-             * A canvas fillstyle that will be used on the text stroke
-             * e.g 'blue', '#FCFF00'
-             */
-            this.stroke = 'black';
-            /**
-             * A number that represents the thickness of the stroke.
-             * Default is 0 (no stroke)
+             * 一个表示笔画厚度的数字。
              */
             this.strokeThickness = 0;
             /**
-             * The baseline of the text that is rendered.
+             * lineJoin属性设置创建的角的类型，它可以解决带尖刺的文本问题。
              */
-            this.textBaseline = 'alphabetic';
+            this.lineJoin = CanvasLineJoin.miter;
             /**
-             * Trim transparent borders
+             * 当使用“miter”lineJoin模式时，miter限制使用。这可以减少或增加呈现文本的尖锐性。
              */
-            this.trim = false;
+            this.miterLimit = 10;
             /**
-             * How newlines and spaces should be handled.
+             * 字母之间的间距，默认为0
+             */
+            this.letterSpacing = 0;
+            /**
+             * 呈现文本的基线。
+             */
+            this.textBaseline = CanvasTextBaseline.alphabetic;
+            /**
+             * 是否为文本设置一个投影。
+             */
+            this.dropShadow = false;
+            /**
+             * 投影颜色。
+             */
+            this.dropShadowColor = new feng3d.Color4(0, 0, 0, 0);
+            /**
+             * 投影角度。
+             */
+            this.dropShadowAngle = 30;
+            /**
+             * 阴影模糊半径。
+             */
+            this.dropShadowBlur = 0;
+            /**
+             * 投影距离。
+             */
+            this.dropShadowDistance = 5;
+            /**
+             * 是否应使用自动换行。
+             */
+            this.wordWrap = false;
+            /**
+             * 能否把单词分多行。
+             */
+            this.breakWords = false;
+            /**
+             * 多行文本对齐方式。
+             */
+            this.align = TextAlign.left;
+            /**
+             * 如何处理换行与空格。
              * Default is 'pre' (preserve, preserve).
              *
              *  value       | New lines     |   Spaces
@@ -635,15 +683,27 @@ var feng3d;
              * 'pre'        | Preserve      |   Preserve
              * 'pre-line'   | Preserve      |   Collapse
              */
-            this.whiteSpace = 'pre';
+            this.whiteSpace = WhiteSpaceHandle.pre;
             /**
-             * Indicates if word wrap should be used
-             */
-            this.wordWrap = false;
-            /**
-             * The width at which text will wrap, it needs wordWrap to be set to true
+             * 文本的换行宽度。
              */
             this.wordWrapWidth = 100;
+            /**
+             * 行高。
+             */
+            this.lineHeight = 0;
+            /**
+             * 行距。
+             */
+            this.leading = 0;
+            /**
+             * 内边距，用于文字被裁减问题。
+             */
+            this.padding = 0;
+            /**
+             * 是否修剪透明边界。
+             */
+            this.trim = false;
             feng3d.serialization.setValue(this, style);
         }
         /**
@@ -653,24 +713,22 @@ var feng3d;
             this.styleID++;
         };
         /**
-         * Generates a font style string to use for `TextMetrics.measureFont()`.
          *
-         * @return Font style string, for passing to `TextMetrics.measureFont()`
+         * 生成用于' TextMetrics.measureFont() '的字体样式字符串。
          */
         TextStyle.prototype.toFontString = function () {
-            // build canvas api font setting from individual components. Convert a numeric this.fontSize to px
-            var fontSizeString = (typeof this.fontSize === 'number') ? this.fontSize + "px" : this.fontSize;
-            // Clean-up fontFamily property by quoting each font name
-            // this will support font names with spaces
+            var fontSizeString = this.fontSize + "px";
+            // 通过引用每个字体名来清除fontFamily属性
+            // 这将支持带有空格的字体名称
             var fontFamilies = this.fontFamily;
             if (!Array.isArray(this.fontFamily)) {
                 fontFamilies = this.fontFamily.split(',');
             }
             for (var i = fontFamilies.length - 1; i >= 0; i--) {
-                // Trim any extra white-space
+                // 修剪任何多余的空白
                 var fontFamily = fontFamilies[i].trim();
-                // Check if font already contains strings
-                if (!(/([\"\'])[^\'\"]+\1/).test(fontFamily) && genericFontFamilies.indexOf(fontFamily) < 0) {
+                // 检查字体是否已经包含字符串
+                if (!(/([\"\'])[^\'\"]+\1/).test(fontFamily) && FontFamily[fontFamily] == undefined) {
                     fontFamily = "\"" + fontFamily + "\"";
                 }
                 fontFamilies[i] = fontFamily;
@@ -678,89 +736,117 @@ var feng3d;
             return this.fontStyle + " " + this.fontVariant + " " + this.fontWeight + " " + fontSizeString + " " + fontFamilies.join(',');
         };
         __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "align", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "breakWords", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "dropShadow", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "dropShadowAngle", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "dropShadowBlur", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "dropShadowColor", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "dropShadowDistance", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "fill", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "fillGradientType", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "fillGradientStops", void 0);
-        __decorate([
+            feng3d.oav({ block: "Font", tooltip: "字体。", component: "OAVEnum", componentParam: { enumClass: FontFamily } }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "fontFamily", void 0);
         __decorate([
+            feng3d.oav({ block: "Font", tooltip: "字体尺寸。" }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "fontSize", void 0);
         __decorate([
+            feng3d.oav({ block: "Font", tooltip: "字体样式。", component: "OAVEnum", componentParam: { enumClass: FontStyle } }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "fontStyle", void 0);
         __decorate([
+            feng3d.oav({ block: "Font", tooltip: "字体变体。", component: "OAVEnum", componentParam: { enumClass: FontVariant } }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "fontVariant", void 0);
         __decorate([
+            feng3d.oav({ block: "Font", tooltip: "字型粗细。", component: "OAVEnum", componentParam: { enumClass: FontWeight } }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "fontWeight", void 0);
         __decorate([
+            feng3d.oav({ block: "Fill", tooltip: "用于填充文本的颜色。" }),
             feng3d.watch("invalidate")
-        ], TextStyle.prototype, "letterSpacing", void 0);
+        ], TextStyle.prototype, "fill", void 0);
         __decorate([
+            feng3d.oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。" }),
             feng3d.watch("invalidate")
-        ], TextStyle.prototype, "lineHeight", void 0);
+        ], TextStyle.prototype, "fillGradientType", void 0);
         __decorate([
+            feng3d.oav({ block: "Fill" }),
             feng3d.watch("invalidate")
-        ], TextStyle.prototype, "leading", void 0);
+        ], TextStyle.prototype, "fillGradientStops", void 0);
         __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "lineJoin", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "miterLimit", void 0);
-        __decorate([
-            feng3d.watch("invalidate")
-        ], TextStyle.prototype, "padding", void 0);
-        __decorate([
+            feng3d.oav({ block: "Stroke", tooltip: "将用于文本笔划的画布填充样式。" }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "stroke", void 0);
         __decorate([
+            feng3d.oav({ block: "Stroke", tooltip: "一个表示笔画厚度的数字。" }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "strokeThickness", void 0);
         __decorate([
+            feng3d.oav({ block: "Stroke", tooltip: "lineJoin属性设置创建的角的类型，它可以解决带尖刺的文本问题。", component: "OAVEnum", componentParam: { enumClass: CanvasLineJoin } }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "lineJoin", void 0);
+        __decorate([
+            feng3d.oav({ block: "Stroke", tooltip: "当使用“miter”lineJoin模式时，miter限制使用。这可以减少或增加呈现文本的尖锐性。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "miterLimit", void 0);
+        __decorate([
+            feng3d.oav({ block: "Layout", tooltip: "字母之间的间距，默认为0" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "letterSpacing", void 0);
+        __decorate([
+            feng3d.oav({ block: "Layout", tooltip: "呈现文本的基线。", component: "OAVEnum", componentParam: { enumClass: CanvasTextBaseline } }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "textBaseline", void 0);
         __decorate([
+            feng3d.oav({ block: "Drop Shadow", tooltip: "是否为文本设置一个投影。" }),
             feng3d.watch("invalidate")
-        ], TextStyle.prototype, "trim", void 0);
+        ], TextStyle.prototype, "dropShadow", void 0);
         __decorate([
+            feng3d.oav({ block: "Drop Shadow", tooltip: "投影颜色。" }),
             feng3d.watch("invalidate")
-        ], TextStyle.prototype, "whiteSpace", void 0);
+        ], TextStyle.prototype, "dropShadowColor", void 0);
         __decorate([
+            feng3d.oav({ block: "Drop Shadow", tooltip: "投影角度。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowAngle", void 0);
+        __decorate([
+            feng3d.oav({ block: "Drop Shadow", tooltip: "阴影模糊半径。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowBlur", void 0);
+        __decorate([
+            feng3d.oav({ block: "Drop Shadow", tooltip: "投影距离。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "dropShadowDistance", void 0);
+        __decorate([
+            feng3d.oav({ block: "Multiline", tooltip: "是否应使用自动换行。" }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "wordWrap", void 0);
         __decorate([
+            feng3d.oav({ block: "Multiline" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "breakWords", void 0);
+        __decorate([
+            feng3d.oav({ block: "Multiline", tooltip: "多行文本对齐方式。", component: "OAVEnum", componentParam: { enumClass: TextAlign } }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "align", void 0);
+        __decorate([
+            feng3d.oav({ block: "Multiline", tooltip: "如何处理换行与空格。", component: "OAVEnum", componentParam: { enumClass: WhiteSpaceHandle } }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "whiteSpace", void 0);
+        __decorate([
+            feng3d.oav({ block: "Multiline", tooltip: "文本的换行宽度。" }),
             feng3d.watch("invalidate")
         ], TextStyle.prototype, "wordWrapWidth", void 0);
+        __decorate([
+            feng3d.oav({ block: "Multiline", tooltip: "行高。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "lineHeight", void 0);
+        __decorate([
+            feng3d.oav({ block: "Multiline", tooltip: "行距。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "leading", void 0);
+        __decorate([
+            feng3d.oav({ block: "Texture", tooltip: "内边距，用于文字被裁减问题。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "padding", void 0);
+        __decorate([
+            feng3d.oav({ block: "Texture", tooltip: "是否修剪透明边界。" }),
+            feng3d.watch("invalidate")
+        ], TextStyle.prototype, "trim", void 0);
         return TextStyle;
     }());
     feng3d.TextStyle = TextStyle;
