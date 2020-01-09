@@ -280,23 +280,24 @@ var feng3d;
             console.log('Failed to create canvas');
             return null;
         }
-        canvas.width = width;
-        canvas.height = height;
         var ctx = canvas.getContext('2d');
         if (!ctx) {
             console.log('Failed to get rendering context for 2d context');
             return null;
         }
+        // 
+        ctx.font = style.fontSize + "px " + style.fontStyle + " " + style.fontFamily;
         // 测量文本宽度
         var textWidth = ctx.measureText(text).width;
         if (autoSize) {
             width = textWidth + Math.abs(style.shadowOffsetX) + Math.abs(style.shadowBlur);
+            height = style.fontSize * 0.5;
         }
+        canvas.width = width;
+        canvas.height = height;
         // 绘制背景
         ctx.fillStyle = style.backgroundColor.toRGBA();
         ctx.fillRect(0, 0, width, height);
-        // 
-        ctx.font = style.fontSize + "px " + style.fontStyle + " " + style.fontFamily;
         ctx.fillStyle = style.fontColor.toRGBA();
         ctx.shadowColor = style.shadowColor.toRGBA();
         ctx.shadowOffsetX = style.shadowOffsetX;
