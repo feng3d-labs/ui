@@ -3,7 +3,7 @@ namespace feng3d
     /**
      * 图片组件
      */
-    export class Image extends Model
+    export class Image extends Renderable
     {
         @oav({ exclude: true })
         geometry = Geometry.getDefault("Quad");

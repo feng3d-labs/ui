@@ -128,7 +128,7 @@ var feng3d;
             feng3d.serialize
         ], Image.prototype, "color", void 0);
         return Image;
-    }(feng3d.Model));
+    }(feng3d.Renderable));
     feng3d.Image = Image;
 })(feng3d || (feng3d = {}));
 var feng3d;
@@ -403,7 +403,7 @@ var feng3d;
             feng3d.serialize
         ], Text.prototype, "style", void 0);
         return Text;
-    }(feng3d.Model));
+    }(feng3d.Renderable));
     feng3d.Text = Text;
 })(feng3d || (feng3d = {}));
 var feng3d;

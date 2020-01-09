@@ -44,7 +44,7 @@ declare namespace feng3d {
     /**
      * 图片组件
      */
-    class Image extends Model {
+    class Image extends Renderable {
         geometry: QuadGeometry;
         castShadows: boolean;
         receiveShadows: boolean;
@@ -164,7 +164,7 @@ declare namespace feng3d {
     /**
      * 文本组件
      */
-    class Text extends Model {
+    class Text extends Renderable {
         geometry: QuadGeometry;
         castShadows: boolean;
         receiveShadows: boolean;
