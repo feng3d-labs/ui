@@ -1330,7 +1330,7 @@ var feng3d;
             _this.receiveShadows = false;
             _this.width = 1;
             _this.height = 1;
-            _this.text = "He\tllo 🌷 world\nHello 🌷 world";
+            _this.text = "Hello 🌷 world\nHello 🌷 world";
             /**
              * The source texture of the Image element.
              *
@@ -1351,8 +1351,13 @@ var feng3d;
         Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
             // this.image["_pixels"] = this.getImagedata();
-            this.image["_pixels"] = feng3d.drawText(null, this.text, this.style);
+            var canvas = feng3d.drawText(null, this.text, this.style);
+            this.image["_pixels"] = canvas;
             this.image.invalidate();
+            this.width = canvas.width;
+            this.height = canvas.height;
+            this.transform.sx = this.width * 0.01;
+            this.transform.sy = this.height * 0.01;
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
         };
