@@ -1,5 +1,13 @@
 namespace feng3d
 {
+    /**
+     * 绘制文本
+     * 
+     * @param canvas 画布
+     * @param _text 文本
+     * @param style 文本样式
+     * @param resolution 分辨率
+     */
     export function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution = 1)
     {
         canvas = canvas || document.createElement("canvas");
@@ -32,31 +40,20 @@ namespace feng3d
         let linePositionX: number;
         let linePositionY: number;
 
-        // require 2 passes if a shadow; the first to draw the drop shadow, the second to draw the text
+        // 需要2个通过如果一个阴影;第一个绘制投影，第二个绘制文本
         const passesCount = style.dropShadow ? 2 : 1;
 
-        // For v4, we drew text at the colours of the drop shadow underneath the normal text. This gave the correct zIndex,
-        // but features such as alpha and shadowblur did not look right at all, since we were using actual text as a shadow.
-        //
-        // For v5.0.0, we moved over to just use the canvas API for drop shadows, which made them look much nicer and more
-        // visually please, but now because the stroke is drawn and then the fill, drop shadows would appear on both the fill
-        // and the stroke; and fill drop shadows would appear over the top of the stroke.
-        //
-        // For v5.1.1, the new route is to revert to v4 style of drawing text first to get the drop shadows underneath normal
-        // text, but instead drawing text in the correct location, we'll draw it off screen (-paddingY), and then adjust the
-        // drop shadow so only that appears on screen (+paddingY). Now we'll have the correct draw order of the shadow
-        // beneath the text, whilst also having the proper text shadow styling.
         for (let i = 0; i < passesCount; ++i)
         {
             const isShadowPass = style.dropShadow && i === 0;
-            const dsOffsetText = isShadowPass ? height * 2 : 0; // we only want the drop shadow, so put text way off-screen
+            const dsOffsetText = isShadowPass ? height * 2 : 0; // 我们只想要投影，所以把文本放到屏幕外
             const dsOffsetShadow = dsOffsetText * resolution;
 
             if (isShadowPass)
             {
-                // On Safari, text with gradient and drop shadows together do not position correctly
-                // if the scale of the canvas is not 1: https://bugs.webkit.org/show_bug.cgi?id=197689
-                // Therefore we'll set the styles to be a plain black whilst generating this drop shadow
+                // 在Safari上，带有渐变和阴影的文本不能正确定位
+                // 如果画布的比例不是1: https://bugs.webkit.org/show_bug.cgi?id=197689
+                // 因此，我们将样式设置为纯黑色，同时生成这个投影
                 context.fillStyle = 'black';
                 context.strokeStyle = 'black';
 
@@ -67,7 +64,7 @@ namespace feng3d
             }
             else
             {
-                // set canvas text styles
+                // 设置画布文本样式
                 context.fillStyle = _generateFillStyle(canvas, style, lines, resolution);
                 context.strokeStyle = style.stroke.toRGBA();
 
@@ -77,7 +74,7 @@ namespace feng3d
                 context.shadowOffsetY = 0;
             }
 
-            // draw lines line by line
+            // 一行一行绘制
             for (let i = 0; i < lines.length; i++)
             {
                 linePositionX = style.strokeThickness / 2;
@@ -117,6 +114,7 @@ namespace feng3d
             }
         }
 
+        // 除去透明边缘。
         if (style.trim)
         {
             const trimmed = trimCanvas(canvas);
@@ -132,11 +130,11 @@ namespace feng3d
     }
 
     /**
-     * Generates the fill style. Can automatically generate a gradient based on the fill style being an array
+     * 生成填充样式。可以自动生成一个基于填充样式为数组的渐变。
      *
-     * @param style - The style.
-     * @param lines - The lines of text.
-     * @return The fill style
+     * @param style 文本样式。
+     * @param lines 多行文本。
+     * @return 填充样式。
      */
     function _generateFillStyle(canvas: HTMLCanvasElement, style: TextStyle, lines: string[], resolution = 1)
     {
@@ -151,8 +149,7 @@ namespace feng3d
             return stylefill[0];
         }
 
-        // the gradient will be evenly spaced out according to how large the array is.
-        // ['#FF0000', '#00FF00', '#0000FF'] would created stops at 0.25, 0.5 and 0.75
+        // 画布颜色渐变。
         let gradient: CanvasGradient;
         let totalIterations: number;
         let currentIteration: number;
@@ -161,11 +158,10 @@ namespace feng3d
         const width = Math.ceil(canvas.width / resolution);
         const height = Math.ceil(canvas.height / resolution);
 
-        // make a copy of the style settings, so we can manipulate them later
         const fill: string[] = <any>stylefill.slice();
         const fillGradientStops = style.fillGradientStops.slice();
 
-        // wanting to evenly distribute the fills. So an array of 4 colours should give fills of 0.25, 0.5 and 0.75
+        // 初始化渐变关键帧
         if (!fillGradientStops.length)
         {
             const lengthPlus1 = fill.length + 1;
@@ -176,8 +172,7 @@ namespace feng3d
             }
         }
 
-        // stop the bleeding of the last gradient on the line above to the top gradient of the this line
-        // by hard defining the first gradient colour at point 0, and last gradient colour at point 1
+        // 设置渐变起点与终点。
         fill.unshift(stylefill[0]);
         fillGradientStops.unshift(0);
 
@@ -186,11 +181,10 @@ namespace feng3d
 
         if (style.fillGradientType === TEXT_GRADIENT.LINEAR_VERTICAL)
         {
-            // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
+            // 创建纵向渐变
             gradient = context.createLinearGradient(width / 2, 0, width / 2, height);
 
-            // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
-            // ['#FF0000', '#00FF00', '#0000FF'] over 2 lines would create stops at 0.125, 0.25, 0.375, 0.625, 0.75, 0.875
+            // 我们需要重复渐变，这样每一行文本都有相同的垂直渐变效果
             totalIterations = (fill.length + 1) * lines.length;
             currentIteration = 0;
             for (let i = 0; i < lines.length; i++)
@@ -213,11 +207,9 @@ namespace feng3d
         }
         else
         {
-            // start the gradient at the center left of the canvas, and end at the center right of the canvas
+            // 从画布的中间左侧开始渐变，并在画布的中间右侧结束
             gradient = context.createLinearGradient(0, height / 2, width, height / 2);
 
-            // can just evenly space out the gradients in this case, as multiple lines makes no difference
-            // to an even left to right gradient
             totalIterations = fill.length + 1;
             currentIteration = 1;
 
@@ -239,19 +231,18 @@ namespace feng3d
         return gradient;
     }
 
-
     /**
      * Render the text with letter-spacing.
-     * @param text The text to draw
-     * @param x Horizontal position to draw the text
-     * @param y Vertical position to draw the text
-     * @param isStroke Is this drawing for the outside stroke of the
-     *  text? If not, it's for the inside fill
+     * 绘制文本。
+     * 
+     * @param text 文本。
+     * @param x X轴位置。
+     * @param y Y轴位置。
+     * @param isStroke
      */
     function drawLetterSpacing(canvas: HTMLCanvasElement, style: TextStyle, text: string, x: number, y: number, isStroke = false)
     {
         const context = canvas.getContext('2d');
-        // letterSpacing of 0 means normal
         const letterSpacing = style.letterSpacing;
 
         if (letterSpacing === 0)
@@ -270,13 +261,10 @@ namespace feng3d
 
         let currentPosition = x;
 
-        // Using Array.from correctly splits characters whilst keeping emoji together.
-        // This is not supported on IE as it requires ES6, so regular text splitting occurs.
-        // This also doesn't account for emoji that are multiple emoji put together to make something else.
-        // Handling all of this would require a big library itself.
+        // 使用 Array.from 可以解决表情符号的分割问题。 如  "🌷","🎁","💩","😜" "👍"
         // https://medium.com/@giltayar/iterating-over-emoji-characters-the-es6-way-f06e4589516
         // https://github.com/orling/grapheme-splitter
-        const stringArray = text.split('');
+        const stringArray = Array.from(text);
         let previousWidth = context.measureText(text).width;
         let currentWidth = 0;
 
@@ -303,7 +291,7 @@ namespace feng3d
       *
       * @param canvas 画布
       */
-    export function trimCanvas(canvas: HTMLCanvasElement)
+    function trimCanvas(canvas: HTMLCanvasElement)
     {
         var width = canvas.width;
         var height = canvas.height;
@@ -318,7 +306,7 @@ namespace feng3d
         var right = NaN;
         var bottom = NaN;
 
-        var data = null;
+        var data: ImageData = null;
         var i: number;
         var x: number;
         var y: number;

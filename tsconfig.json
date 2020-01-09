@@ -26,7 +26,6 @@
         "src/Canvas.ts",
         "src/Image.ts",
         //
-        "src/text/hex.ts",
         "src/text/drawText.ts",
         "src/text/TextStyle.ts",
         "src/text/TextMetrics.ts",

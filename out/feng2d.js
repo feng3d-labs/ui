@@ -131,74 +131,16 @@ var feng3d;
     }(feng3d.Model));
     feng3d.Image = Image;
 })(feng3d || (feng3d = {}));
-// namespace feng3d
-// {
-//     /**
-//      * Converts a hexadecimal color number to an [R, G, B] array of normalized floats (numbers from 0.0 to 1.0).
-//      *
-//      * @example
-//      * PIXI.utils.hex2rgb(0xffffff); // returns [1, 1, 1]
-//      * 
-//      * @param hex - The hexadecimal number to convert
-//      * @param out If supplied, this array will be used rather than returning a new one
-//      * @return An array representing the [R, G, B] of the color where all values are floats.
-//      */
-//     export function hex2rgb(hex: number, out?: number[])
-//     {
-//         out = out || [];
-//         out[0] = ((hex >> 16) & 0xFF) / 255;
-//         out[1] = ((hex >> 8) & 0xFF) / 255;
-//         out[2] = (hex & 0xFF) / 255;
-//         return out;
-//     }
-//     /**
-//      * Converts a hexadecimal color number to a string.
-//      *
-//      * @example
-//      * PIXI.utils.hex2string(0xffffff); // returns "#ffffff"
-//      * 
-//      * @param hex - Number in hex (e.g., `0xffffff`)
-//      * @return The string color (e.g., `"#ffffff"`).
-//      */
-//     export function hex2string(hex: number)
-//     {
-//         let hexString = hex.toString(16);
-//         hexString = '000000'.substr(0, 6 - hexString.length) + hexString;
-//         return `#${hexString}`;
-//     }
-//     /**
-//      * Converts a hexadecimal string to a hexadecimal color number.
-//      *
-//      * @example
-//      * PIXI.utils.string2hex("#ffffff"); // returns 0xffffff
-//      * 
-//      * @param The string color (e.g., `"#ffffff"`)
-//      * @return Number in hexadecimal.
-//      */
-//     export function string2hex(string: string)
-//     {
-//         if (typeof string === 'string' && string[0] === '#')
-//         {
-//             string = string.substr(1);
-//         }
-//         return parseInt(string, 16);
-//     }
-//     /**
-//      * Converts a color as an [R, G, B] array of normalized floats to a hexadecimal number.
-//      *
-//      * @example
-//      * PIXI.utils.rgb2hex([1, 1, 1]); // returns 0xffffff
-//      * 
-//      * @param rgb - Array of numbers where all values are normalized floats from 0.0 to 1.0.
-//      * @return Number in hexadecimal.
-//      */
-//     export function rgb2hex(rgb: number[])
-//     {
-//         return (((rgb[0] * 255) << 16) + ((rgb[1] * 255) << 8) + (rgb[2] * 255 | 0));
-//     }
-// }
 var feng3d;
 (function (feng3d) {
+    /**
+     * 绘制文本
+     *
+     * @param canvas 画布
+     * @param _text 文本
+     * @param style 文本样式
+     * @param resolution 分辨率
+     */
     function drawText(canvas, _text, style, resolution) {
         if (resolution === void 0) { resolution = 1; }
         canvas = canvas || document.createElement("canvas");
@@ -223,27 +165,16 @@ var feng3d;
         context.miterLimit = style.miterLimit;
         var linePositionX;
         var linePositionY;
-        // require 2 passes if a shadow; the first to draw the drop shadow, the second to draw the text
+        // 需要2个通过如果一个阴影;第一个绘制投影，第二个绘制文本
         var passesCount = style.dropShadow ? 2 : 1;
-        // For v4, we drew text at the colours of the drop shadow underneath the normal text. This gave the correct zIndex,
-        // but features such as alpha and shadowblur did not look right at all, since we were using actual text as a shadow.
-        //
-        // For v5.0.0, we moved over to just use the canvas API for drop shadows, which made them look much nicer and more
-        // visually please, but now because the stroke is drawn and then the fill, drop shadows would appear on both the fill
-        // and the stroke; and fill drop shadows would appear over the top of the stroke.
-        //
-        // For v5.1.1, the new route is to revert to v4 style of drawing text first to get the drop shadows underneath normal
-        // text, but instead drawing text in the correct location, we'll draw it off screen (-paddingY), and then adjust the
-        // drop shadow so only that appears on screen (+paddingY). Now we'll have the correct draw order of the shadow
-        // beneath the text, whilst also having the proper text shadow styling.
         for (var i = 0; i < passesCount; ++i) {
             var isShadowPass = style.dropShadow && i === 0;
-            var dsOffsetText = isShadowPass ? height * 2 : 0; // we only want the drop shadow, so put text way off-screen
+            var dsOffsetText = isShadowPass ? height * 2 : 0; // 我们只想要投影，所以把文本放到屏幕外
             var dsOffsetShadow = dsOffsetText * resolution;
             if (isShadowPass) {
-                // On Safari, text with gradient and drop shadows together do not position correctly
-                // if the scale of the canvas is not 1: https://bugs.webkit.org/show_bug.cgi?id=197689
-                // Therefore we'll set the styles to be a plain black whilst generating this drop shadow
+                // 在Safari上，带有渐变和阴影的文本不能正确定位
+                // 如果画布的比例不是1: https://bugs.webkit.org/show_bug.cgi?id=197689
+                // 因此，我们将样式设置为纯黑色，同时生成这个投影
                 context.fillStyle = 'black';
                 context.strokeStyle = 'black';
                 context.shadowColor = style.dropShadowColor.toRGBA();
@@ -252,7 +183,7 @@ var feng3d;
                 context.shadowOffsetY = (Math.sin(style.dropShadowAngle * Math.DEG2RAD) * style.dropShadowDistance) + dsOffsetShadow;
             }
             else {
-                // set canvas text styles
+                // 设置画布文本样式
                 context.fillStyle = _generateFillStyle(canvas, style, lines, resolution);
                 context.strokeStyle = style.stroke.toRGBA();
                 context.shadowColor = "";
@@ -260,7 +191,7 @@ var feng3d;
                 context.shadowOffsetX = 0;
                 context.shadowOffsetY = 0;
             }
-            // draw lines line by line
+            // 一行一行绘制
             for (var i_1 = 0; i_1 < lines.length; i_1++) {
                 linePositionX = style.strokeThickness / 2;
                 linePositionY = ((style.strokeThickness / 2) + (i_1 * lineHeight)) + fontProperties.ascent;
@@ -278,6 +209,7 @@ var feng3d;
                 }
             }
         }
+        // 除去透明边缘。
         if (style.trim) {
             var trimmed = trimCanvas(canvas);
             if (trimmed.data) {
@@ -290,11 +222,11 @@ var feng3d;
     }
     feng3d.drawText = drawText;
     /**
-     * Generates the fill style. Can automatically generate a gradient based on the fill style being an array
+     * 生成填充样式。可以自动生成一个基于填充样式为数组的渐变。
      *
-     * @param style - The style.
-     * @param lines - The lines of text.
-     * @return The fill style
+     * @param style 文本样式。
+     * @param lines 多行文本。
+     * @return 填充样式。
      */
     function _generateFillStyle(canvas, style, lines, resolution) {
         if (resolution === void 0) { resolution = 1; }
@@ -306,35 +238,31 @@ var feng3d;
         else if (stylefill.length === 1) {
             return stylefill[0];
         }
-        // the gradient will be evenly spaced out according to how large the array is.
-        // ['#FF0000', '#00FF00', '#0000FF'] would created stops at 0.25, 0.5 and 0.75
+        // 画布颜色渐变。
         var gradient;
         var totalIterations;
         var currentIteration;
         var stop;
         var width = Math.ceil(canvas.width / resolution);
         var height = Math.ceil(canvas.height / resolution);
-        // make a copy of the style settings, so we can manipulate them later
         var fill = stylefill.slice();
         var fillGradientStops = style.fillGradientStops.slice();
-        // wanting to evenly distribute the fills. So an array of 4 colours should give fills of 0.25, 0.5 and 0.75
+        // 初始化渐变关键帧
         if (!fillGradientStops.length) {
             var lengthPlus1 = fill.length + 1;
             for (var i = 1; i < lengthPlus1; ++i) {
                 fillGradientStops.push(i / lengthPlus1);
             }
         }
-        // stop the bleeding of the last gradient on the line above to the top gradient of the this line
-        // by hard defining the first gradient colour at point 0, and last gradient colour at point 1
+        // 设置渐变起点与终点。
         fill.unshift(stylefill[0]);
         fillGradientStops.unshift(0);
         fill.push(stylefill[stylefill.length - 1]);
         fillGradientStops.push(1);
         if (style.fillGradientType === feng3d.TEXT_GRADIENT.LINEAR_VERTICAL) {
-            // start the gradient at the top center of the canvas, and end at the bottom middle of the canvas
+            // 创建纵向渐变
             gradient = context.createLinearGradient(width / 2, 0, width / 2, height);
-            // we need to repeat the gradient so that each individual line of text has the same vertical gradient effect
-            // ['#FF0000', '#00FF00', '#0000FF'] over 2 lines would create stops at 0.125, 0.25, 0.375, 0.625, 0.75, 0.875
+            // 我们需要重复渐变，这样每一行文本都有相同的垂直渐变效果
             totalIterations = (fill.length + 1) * lines.length;
             currentIteration = 0;
             for (var i = 0; i < lines.length; i++) {
@@ -352,10 +280,8 @@ var feng3d;
             }
         }
         else {
-            // start the gradient at the center left of the canvas, and end at the center right of the canvas
+            // 从画布的中间左侧开始渐变，并在画布的中间右侧结束
             gradient = context.createLinearGradient(0, height / 2, width, height / 2);
-            // can just evenly space out the gradients in this case, as multiple lines makes no difference
-            // to an even left to right gradient
             totalIterations = fill.length + 1;
             currentIteration = 1;
             for (var i = 0; i < fill.length; i++) {
@@ -373,16 +299,16 @@ var feng3d;
     }
     /**
      * Render the text with letter-spacing.
-     * @param text The text to draw
-     * @param x Horizontal position to draw the text
-     * @param y Vertical position to draw the text
-     * @param isStroke Is this drawing for the outside stroke of the
-     *  text? If not, it's for the inside fill
+     * 绘制文本。
+     *
+     * @param text 文本。
+     * @param x X轴位置。
+     * @param y Y轴位置。
+     * @param isStroke
      */
     function drawLetterSpacing(canvas, style, text, x, y, isStroke) {
         if (isStroke === void 0) { isStroke = false; }
         var context = canvas.getContext('2d');
-        // letterSpacing of 0 means normal
         var letterSpacing = style.letterSpacing;
         if (letterSpacing === 0) {
             if (isStroke) {
@@ -394,13 +320,10 @@ var feng3d;
             return;
         }
         var currentPosition = x;
-        // Using Array.from correctly splits characters whilst keeping emoji together.
-        // This is not supported on IE as it requires ES6, so regular text splitting occurs.
-        // This also doesn't account for emoji that are multiple emoji put together to make something else.
-        // Handling all of this would require a big library itself.
+        // 使用 Array.from 可以解决表情符号的分割问题。 如  "🌷","🎁","💩","😜" "👍"
         // https://medium.com/@giltayar/iterating-over-emoji-characters-the-es6-way-f06e4589516
         // https://github.com/orling/grapheme-splitter
-        var stringArray = text.split('');
+        var stringArray = Array.from(text);
         var previousWidth = context.measureText(text).width;
         var currentWidth = 0;
         for (var i = 0; i < stringArray.length; ++i) {
@@ -474,7 +397,6 @@ var feng3d;
             data: data,
         };
     }
-    feng3d.trimCanvas = trimCanvas;
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {

@@ -5,7 +5,6 @@
       "../src/enums/UIRenderMode.ts",
       "../src/Canvas.ts",
       "../src/Image.ts",
-      "../src/text/hex.ts",
       "../src/text/drawText.ts",
       "../src/text/TextStyle.ts",
       "../src/text/TextMetrics.ts",
@@ -30,7 +29,7 @@
         },
         {
           "pos": 1177,
-          "end": 63183,
+          "end": 57944,
           "kind": "text"
         }
       ],
@@ -45,7 +44,7 @@
       "sections": [
         {
           "pos": 0,
-          "end": 18094,
+          "end": 18034,
           "kind": "text"
         }
       ]

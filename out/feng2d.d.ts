@@ -67,17 +67,15 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
-    function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution?: number): HTMLCanvasElement;
     /**
-      * 除去边界透明部分
-      *
-      * @param canvas 画布
-      */
-    function trimCanvas(canvas: HTMLCanvasElement): {
-        height: number;
-        width: number;
-        data: any;
-    };
+     * 绘制文本
+     *
+     * @param canvas 画布
+     * @param _text 文本
+     * @param style 文本样式
+     * @param resolution 分辨率
+     */
+    function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution?: number): HTMLCanvasElement;
 }
 declare namespace feng3d {
     /**
