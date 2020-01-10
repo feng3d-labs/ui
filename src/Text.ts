@@ -15,48 +15,52 @@ namespace feng3d
         receiveShadows = false;
 
         @oav()
-        @serialize
-        autoSize = true;
+        width = 100;
+
+        @oav()
+        height = 30;
 
         @oav()
         @serialize
-        width = 256;
-
-        @oav()
-        @serialize
-        height = 256;
-
-        @oav()
         text = "Hello 🌷 world\nHello 🌷 world";
+
+        @oav()
+        @serialize
+        isAutoSize = false;
 
         /**
          * The source texture of the Image element.
          * 
          * 图像元素的源纹理。
          */
+        @oav()
+        @serialize
         image = new Texture2D();
+
+        // @oav({ exclude: true })
+        material = Material.getDefault("Default-Image");
 
         @oav()
         @serialize
         style = new TextStyle();
 
-        // @oav({ exclude: true })
-        material = Material.getDefault("Default-Image");
-
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
-            var { imagedata, width, height } = drawText(this.text, this.width, this.height, this.style, this.autoSize);
-
-            this.image["_pixels"] = imagedata;
-
+            // this.image["_pixels"] = this.getImagedata();
+            var canvas = drawText(null, this.text, this.style);
+            this.image["_pixels"] = canvas;
             this.image.invalidate();
 
-            this.width = width;
-            this.height = height;
-            this.transform.sx = this.width * 0.01;
-            this.transform.sy = this.height * 0.01;
+            if (this.isAutoSize)
+            {
+                this.width = canvas.width;
+                this.height = canvas.height;
+            }
+
+            this.transform.sx = this.width;
+            this.transform.sy = this.height;
 
             renderAtomic.uniforms.s_texture = this.image;
         }
