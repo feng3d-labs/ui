@@ -8,6 +8,7 @@ namespace feng3d
         } else 
         {
             g.addComponent(Transform2D);
+            g.addComponent(CanvasRenderable);
 
             if (type == "Image")
             {

@@ -3,17 +3,8 @@ namespace feng3d
     /**
      * 图片组件
      */
-    export class Image extends Renderable
+    export class Image extends Component
     {
-        @oav({ exclude: true })
-        geometry = Geometry.getDefault("Quad");
-
-        @oav({ exclude: true })
-        castShadows = false;
-
-        @oav({ exclude: true })
-        receiveShadows = false;
-
         @oav()
         width = 1;
 
@@ -37,9 +28,6 @@ namespace feng3d
         @oav()
         @serialize
         color = new Color4();
-
-        // @oav({ exclude: true })
-        material = Material.getDefault("Default-Image");
 
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
         {

@@ -1,13 +1,5 @@
 namespace feng3d
 {
-    export interface ShaderMacro
-    {
-        /**
-         * 是否为UI
-         */
-        IS_UI: boolean;
-    }
-
     /**
      * 2D变换
      * 
@@ -98,43 +90,39 @@ namespace feng3d
             this.transform.matrix = mat;
         }
 
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
-        {
-            renderAtomic.shaderMacro.IS_UI = true;
-        }
-
         private readonly _position = new Vector2();
         private readonly _scale = new Vector2(1, 1);
 
         protected readonly _matrix = new Matrix3x3();
 
-        private _positionChanged(object: Vector2, property: string, oldvalue: number)
+        private _positionChanged(object: Vector2, property: "x" | "y", oldvalue: number)
         {
             if (!Math.equals(object[property], oldvalue))
-                this._invalidateTransform();
+            {
+                if (property == "x")
+                    this.transform.x = object.x;
+                else
+                    this.transform.y = object.y;
+            }
         }
 
         private _rotationChanged(object: Transform2D, property: string, oldvalue: number)
         {
             if (!Math.equals(object[property], oldvalue))
-                this._invalidateTransform();
+            {
+                this.transform.rz = this.rotation;
+            }
         }
 
         private _scaleChanged(object: Vector2, property: string, oldvalue: number)
         {
             if (!Math.equals(object[property], oldvalue))
-                this._invalidateTransform();
-        }
-
-        private _invalidateTransform()
-        {
-            this.transform.x = this.x;
-            this.transform.y = this.y;
-
-            this.transform.rz = this.rotation;
-
-            this.transform.sx = this.sx;
-            this.transform.sy = this.sy;
+            {
+                if (property == "x")
+                    this.transform.sx = object.x;
+                else
+                    this.transform.sy = object.y;
+            }
         }
 
         private _onTransformChanged()

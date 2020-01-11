@@ -24,6 +24,8 @@
         "src/enums/UIRenderMode.ts",
         //
         "src/core/Transform2D.ts",
+        "src/render/CanvasRenderer.ts",
+        "src/CanvasRenderable.ts",
         "src/Canvas.ts",
         "src/Image.ts",
         //
@@ -36,5 +38,6 @@
         "src/materials/ImageMaterial.ts",
         //
         "src/polyfill/GameObject.ts",
+        "src/polyfill/View.ts",
     ],
 }

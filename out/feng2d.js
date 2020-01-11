@@ -154,27 +154,26 @@ var feng3d;
             enumerable: true,
             configurable: true
         });
-        Transform2D.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
-            renderAtomic.shaderMacro.IS_UI = true;
-        };
         Transform2D.prototype._positionChanged = function (object, property, oldvalue) {
-            if (!Math.equals(object[property], oldvalue))
-                this._invalidateTransform();
+            if (!Math.equals(object[property], oldvalue)) {
+                if (property == "x")
+                    this.transform.x = object.x;
+                else
+                    this.transform.y = object.y;
+            }
         };
         Transform2D.prototype._rotationChanged = function (object, property, oldvalue) {
-            if (!Math.equals(object[property], oldvalue))
-                this._invalidateTransform();
+            if (!Math.equals(object[property], oldvalue)) {
+                this.transform.rz = this.rotation;
+            }
         };
         Transform2D.prototype._scaleChanged = function (object, property, oldvalue) {
-            if (!Math.equals(object[property], oldvalue))
-                this._invalidateTransform();
-        };
-        Transform2D.prototype._invalidateTransform = function () {
-            this.transform.x = this.x;
-            this.transform.y = this.y;
-            this.transform.rz = this.rotation;
-            this.transform.sx = this.sx;
-            this.transform.sy = this.sy;
+            if (!Math.equals(object[property], oldvalue)) {
+                if (property == "x")
+                    this.transform.sx = object.x;
+                else
+                    this.transform.sy = object.y;
+            }
         };
         Transform2D.prototype._onTransformChanged = function () {
             this.x = this.transform.x;
@@ -199,6 +198,70 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * 前向渲染器
+     */
+    var CanvasRenderer = /** @class */ (function () {
+        function CanvasRenderer() {
+        }
+        /**
+         * 渲染
+         */
+        CanvasRenderer.prototype.draw = function (gl, canvas) {
+            var renderables = canvas.getComponentsInChildren(feng3d.CanvasRenderable);
+            renderables.forEach(function (renderable) {
+                //绘制
+                var renderAtomic = renderable.renderAtomic;
+                renderAtomic.uniforms.u_viewProjection = canvas.projection;
+                renderable.beforeRender(gl, renderAtomic, null, null);
+                gl.render(renderAtomic);
+            });
+        };
+        return CanvasRenderer;
+    }());
+    feng3d.CanvasRenderer = CanvasRenderer;
+    feng3d.canvasRenderer = new CanvasRenderer();
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
+     * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
+     */
+    var CanvasRenderable = /** @class */ (function (_super) {
+        __extends(CanvasRenderable, _super);
+        function CanvasRenderable() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            _this.renderAtomic = new feng3d.RenderAtomic();
+            _this.geometry = feng3d.Geometry.getDefault("Quad");
+            _this.material = feng3d.Material.getDefault("Default-Image");
+            return _this;
+        }
+        /**
+         * 渲染前执行函数
+         *
+         * 可用于渲染前收集渲染数据，或者更新显示效果等
+         *
+         * @param gl
+         * @param renderAtomic
+         * @param scene
+         * @param camera
+         */
+        CanvasRenderable.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+            var _this = this;
+            //
+            this.geometry.beforeRender(renderAtomic);
+            this.material.beforeRender(renderAtomic);
+            this.gameObject.components.forEach(function (element) {
+                if (element != _this)
+                    element.beforeRender(gl, renderAtomic, scene, camera);
+            });
+        };
+        return CanvasRenderable;
+    }(feng3d.Behaviour));
+    feng3d.CanvasRenderable = CanvasRenderable;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
      * Element that can be used for screen rendering.
      *
      * 能够被用于屏幕渲染的元素
@@ -213,16 +276,46 @@ var feng3d;
              * 画布是在世界或覆盖模式?
              */
             _this.renderMode = feng3d.UIRenderMode.ScreenSpaceOverlay;
+            _this.width = 1;
+            _this.height = 1;
+            /**
+             * 投影矩阵
+             *
+             * 渲染前自动更新
+             */
+            _this.projection = new feng3d.Matrix4x4();
             return _this;
         }
         Canvas.prototype.init = function () {
-            this.transform.hideFlags = this.transform.hideFlags | feng3d.HideFlags.Hide;
-            this.gameObject.hideFlags = this.gameObject.hideFlags | feng3d.HideFlags.DontTransform;
+            // this.transform.hideFlags = this.transform.hideFlags | HideFlags.Hide;
+            // this.gameObject.hideFlags = this.gameObject.hideFlags | HideFlags.DontTransform;
         };
-        Canvas.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
-            gl.canvas.width;
-            gl.canvas.height;
+        /**
+         * 更新布局
+         *
+         * @param width 画布宽度
+         * @param height 画布高度
+         */
+        Canvas.prototype.layout = function (width, height) {
+            this.width = width;
+            this.height = height;
+            this.transform.x = 0;
+            this.transform.y = 0;
+            this.transform.z = 0;
+            this.transform.rx = 0;
+            this.transform.ry = 0;
+            this.transform.rz = 0;
+            this.transform.sx = 1;
+            this.transform.sy = 1;
+            this.transform.sz = 1;
+            this.projection.identity().appendScale(2 / width, 2 / height, 1).appendTranslation(-1, -1, 0);
         };
+        __decorate([
+            feng3d.oav({ editable: false })
+        ], Canvas.prototype, "width", void 0);
+        __decorate([
+            feng3d.oav({ editable: false })
+        ], Canvas.prototype, "height", void 0);
         return Canvas;
     }(feng3d.Behaviour));
     feng3d.Canvas = Canvas;
@@ -236,9 +329,6 @@ var feng3d;
         __extends(Image, _super);
         function Image() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.geometry = feng3d.Geometry.getDefault("Quad");
-            _this.castShadows = false;
-            _this.receiveShadows = false;
             _this.width = 1;
             _this.height = 1;
             /**
@@ -253,8 +343,6 @@ var feng3d;
              * 为该图像着色。
              */
             _this.color = new feng3d.Color4();
-            // @oav({ exclude: true })
-            _this.material = feng3d.Material.getDefault("Default-Image");
             return _this;
         }
         Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
@@ -262,15 +350,6 @@ var feng3d;
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
         };
-        __decorate([
-            feng3d.oav({ exclude: true })
-        ], Image.prototype, "geometry", void 0);
-        __decorate([
-            feng3d.oav({ exclude: true })
-        ], Image.prototype, "castShadows", void 0);
-        __decorate([
-            feng3d.oav({ exclude: true })
-        ], Image.prototype, "receiveShadows", void 0);
         __decorate([
             feng3d.oav()
         ], Image.prototype, "width", void 0);
@@ -286,7 +365,7 @@ var feng3d;
             feng3d.serialize
         ], Image.prototype, "color", void 0);
         return Image;
-    }(feng3d.Renderable));
+    }(feng3d.Component));
     feng3d.Image = Image;
 })(feng3d || (feng3d = {}));
 var feng3d;
@@ -1631,6 +1710,7 @@ var feng3d;
         }
         else {
             g.addComponent(feng3d.Transform2D);
+            g.addComponent(feng3d.CanvasRenderable);
             if (type == "Image") {
                 g.addComponent(feng3d.Image);
             }
@@ -1639,6 +1719,17 @@ var feng3d;
             }
         }
         return g;
+    });
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    feng3d.View.prototype;
+    feng3d.functionwrap.extendFunction(feng3d.View.prototype, "render", function (r, interval) {
+        var _this = this;
+        this.scene.getComponentsInChildren(feng3d.Canvas).forEach(function (canvas) {
+            canvas.layout(_this.canvas.width, _this.canvas.height);
+            feng3d.canvasRenderer.draw(_this.gl, canvas);
+        });
     });
 })(feng3d || (feng3d = {}));
 //# sourceMappingURL=feng2d.js.map

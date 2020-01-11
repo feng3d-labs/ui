@@ -26,12 +26,6 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
-    interface ShaderMacro {
-        /**
-         * 是否为UI
-         */
-        IS_UI: boolean;
-    }
     /**
      * 2D变换
      *
@@ -85,15 +79,50 @@ declare namespace feng3d {
          */
         get matrix(): Matrix3x3;
         set matrix(v: Matrix3x3);
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
         private readonly _position;
         private readonly _scale;
         protected readonly _matrix: Matrix3x3;
         private _positionChanged;
         private _rotationChanged;
         private _scaleChanged;
-        private _invalidateTransform;
         private _onTransformChanged;
+    }
+}
+declare namespace feng3d {
+    /**
+     * 前向渲染器
+
+     */
+    var canvasRenderer: CanvasRenderer;
+    /**
+     * 前向渲染器
+     */
+    class CanvasRenderer {
+        /**
+         * 渲染
+         */
+        draw(gl: GL, canvas: Canvas): void;
+    }
+}
+declare namespace feng3d {
+    /**
+     * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
+     */
+    class CanvasRenderable extends Behaviour {
+        readonly renderAtomic: RenderAtomic;
+        geometry: QuadGeometry;
+        material: Material;
+        /**
+         * 渲染前执行函数
+         *
+         * 可用于渲染前收集渲染数据，或者更新显示效果等
+         *
+         * @param gl
+         * @param renderAtomic
+         * @param scene
+         * @param camera
+         */
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
 }
 declare namespace feng3d {
@@ -109,18 +138,29 @@ declare namespace feng3d {
          * 画布是在世界或覆盖模式?
          */
         renderMode: UIRenderMode;
+        width: number;
+        height: number;
         init(): void;
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        /**
+         * 更新布局
+         *
+         * @param width 画布宽度
+         * @param height 画布高度
+         */
+        layout(width: number, height: number): void;
+        /**
+         * 投影矩阵
+         *
+         * 渲染前自动更新
+         */
+        projection: Matrix4x4;
     }
 }
 declare namespace feng3d {
     /**
      * 图片组件
      */
-    class Image extends Renderable {
-        geometry: QuadGeometry;
-        castShadows: boolean;
-        receiveShadows: boolean;
+    class Image extends Component {
         width: number;
         height: number;
         /**
@@ -135,7 +175,6 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
-        material: Material;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
 }
@@ -685,5 +724,7 @@ declare namespace feng3d {
         Image: GameObject;
         Text: GameObject;
     }
+}
+declare namespace feng3d {
 }
 //# sourceMappingURL=feng2d.d.ts.map
