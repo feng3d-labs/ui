@@ -23,6 +23,7 @@
         // 事件模块
         "src/enums/UIRenderMode.ts",
         //
+        "src/core/Transform2D.ts",
         "src/Canvas.ts",
         "src/Image.ts",
         //
