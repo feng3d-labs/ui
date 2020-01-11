@@ -3,7 +3,7 @@ namespace feng3d
     /**
      * 文本组件
      */
-    export class Text extends Renderable
+    export class Text extends Component
     {
         @oav({ exclude: true })
         geometry = Geometry.getDefault("Quad");

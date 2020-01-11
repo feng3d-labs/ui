@@ -4,11 +4,6 @@ namespace feng3d
 
     functionwrap.extendFunction(View.prototype, "render", function (r, interval)
     {
-        this.scene.getComponentsInChildren(Canvas).forEach(canvas =>
-        {
-            canvas.layout(this.canvas.width, this.canvas.height);
-
-            canvasRenderer.draw(this.gl, canvas);
-        });
+        CanvasRenderer.draw(this.gl, this.scene);
     });
 }

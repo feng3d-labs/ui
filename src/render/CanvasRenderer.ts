@@ -2,36 +2,63 @@ namespace feng3d
 {
 
     /**
-     * 前向渲染器
-
+     * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    export var canvasRenderer: CanvasRenderer;
-
-    /**
-     * 前向渲染器
-     */
-    export class CanvasRenderer
+    export class CanvasRenderer extends Behaviour
     {
+        readonly renderAtomic = new RenderAtomic();
+
+        geometry = Geometry.getDefault("Quad");
+
+        material = Material.getDefault("Default-Image");
+
+        /**
+         * 渲染前执行函数
+         * 
+         * 可用于渲染前收集渲染数据，或者更新显示效果等
+         * 
+         * @param gl 
+         * @param renderAtomic 
+         * @param scene 
+         * @param camera 
+         */
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        {
+            //
+            this.geometry.beforeRender(renderAtomic);
+            this.material.beforeRender(renderAtomic);
+
+            this.gameObject.components.forEach(element =>
+            {
+                if (element != this)
+                    element.beforeRender(gl, renderAtomic, scene, camera);
+            });
+        }
+
         /**
          * 渲染
          */
-        draw(gl: GL, canvas: Canvas)
+        static draw(gl: GL, scene: Scene)
         {
-            var renderables = canvas.getComponentsInChildren(CanvasRenderable);
-
-            renderables.forEach(renderable =>
+            var canvasList = scene.getComponentsInChildren(Canvas).filter(v => v.isVisibleAndEnabled);
+            canvasList.forEach(canvas =>
             {
-                //绘制
-                var renderAtomic = renderable.renderAtomic;
+                canvas.layout(gl.canvas.width, gl.canvas.height);
 
-                renderAtomic.uniforms.u_viewProjection = canvas.projection;
+                var renderables = canvas.getComponentsInChildren(CanvasRenderer).filter(v => v.isVisibleAndEnabled);
+                renderables.forEach(renderable =>
+                {
+                    //绘制
+                    var renderAtomic = renderable.renderAtomic;
 
-                renderable.beforeRender(gl, renderAtomic, null, null);
+                    renderAtomic.uniforms.u_viewProjection = canvas.projection;
 
-                gl.render(renderAtomic);
+                    renderable.beforeRender(gl, renderAtomic, null, null);
+
+                    gl.render(renderAtomic);
+                });
+
             });
         }
     }
-
-    canvasRenderer = new CanvasRenderer();
 }

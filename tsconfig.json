@@ -25,7 +25,6 @@
         //
         "src/core/Transform2D.ts",
         "src/render/CanvasRenderer.ts",
-        "src/CanvasRenderable.ts",
         "src/Canvas.ts",
         "src/Image.ts",
         //

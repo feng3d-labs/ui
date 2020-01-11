@@ -90,25 +90,9 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     /**
-     * 前向渲染器
-
-     */
-    var canvasRenderer: CanvasRenderer;
-    /**
-     * 前向渲染器
-     */
-    class CanvasRenderer {
-        /**
-         * 渲染
-         */
-        draw(gl: GL, canvas: Canvas): void;
-    }
-}
-declare namespace feng3d {
-    /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    class CanvasRenderable extends Behaviour {
+    class CanvasRenderer extends Behaviour {
         readonly renderAtomic: RenderAtomic;
         geometry: QuadGeometry;
         material: Material;
@@ -123,6 +107,10 @@ declare namespace feng3d {
          * @param camera
          */
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        /**
+         * 渲染
+         */
+        static draw(gl: GL, scene: Scene): void;
     }
 }
 declare namespace feng3d {
@@ -678,7 +666,7 @@ declare namespace feng3d {
     /**
      * 文本组件
      */
-    class Text extends Renderable {
+    class Text extends Component {
         geometry: QuadGeometry;
         castShadows: boolean;
         receiveShadows: boolean;
