@@ -13,5 +13,17 @@ namespace feng3d
          * 画布是在世界或覆盖模式?
          */
         renderMode = UIRenderMode.ScreenSpaceOverlay;
+
+        init()
+        {
+            this.transform.hideFlags = this.transform.hideFlags | HideFlags.Hide;
+            this.gameObject.hideFlags = this.gameObject.hideFlags | HideFlags.DontTransform;
+        }
+
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        {
+            gl.canvas.width;
+            gl.canvas.height;
+        }
     }
 }

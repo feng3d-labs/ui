@@ -49,6 +49,156 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * 2D变换
+     *
+     * 提供了比Transform更加适用于2D元素的API
+     *
+     * 通过修改Transform的数值实现
+     */
+    var Transform2D = /** @class */ (function (_super) {
+        __extends(Transform2D, _super);
+        /**
+         * 创建一个实体，该类为虚类
+         */
+        function Transform2D() {
+            var _this = _super.call(this) || this;
+            /**
+             * 本地旋转
+             */
+            _this.rotation = 0;
+            _this._position = new feng3d.Vector2();
+            _this._scale = new feng3d.Vector2(1, 1);
+            _this._matrix = new feng3d.Matrix3x3();
+            feng3d.watcher.watch(_this._position, "x", _this._positionChanged, _this);
+            feng3d.watcher.watch(_this._position, "y", _this._positionChanged, _this);
+            feng3d.watcher.watch(_this, "rotation", _this._rotationChanged, _this);
+            feng3d.watcher.watch(_this._scale, "x", _this._scaleChanged, _this);
+            feng3d.watcher.watch(_this._scale, "y", _this._scaleChanged, _this);
+            return _this;
+        }
+        Object.defineProperty(Transform2D.prototype, "single", {
+            get: function () { return true; },
+            enumerable: true,
+            configurable: true
+        });
+        Transform2D.prototype.init = function () {
+            this.on("transformChanged", this._onTransformChanged, this);
+            this._onTransformChanged();
+        };
+        Object.defineProperty(Transform2D.prototype, "x", {
+            /**
+             * X轴坐标。
+             */
+            get: function () { return this._position.x; },
+            set: function (v) { this._position.x = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "y", {
+            /**
+             * Y轴坐标。
+             */
+            get: function () { return this._position.y; },
+            set: function (v) { this._position.y = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "sx", {
+            /**
+             * X轴缩放。
+             */
+            get: function () { return this._scale.x; },
+            set: function (v) { this._scale.x = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "sy", {
+            /**
+             * Y轴缩放。
+             */
+            get: function () { return this._scale.y; },
+            set: function (v) { this._scale.y = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "position", {
+            /**
+             * 本地位移
+             */
+            get: function () { return this._position; },
+            set: function (v) { this._position.copy(v); },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "scale", {
+            /**
+             * 本地缩放
+             */
+            get: function () { return this._scale; },
+            set: function (v) { this._scale.copy(v); },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "matrix", {
+            /**
+             * 本地变换矩阵
+             */
+            get: function () {
+                this.transform.matrix.toMatrix3x3(this._matrix);
+                return this._matrix;
+            },
+            set: function (v) {
+                var mat = v.toMatrix4x4();
+                this.transform.matrix = mat;
+            },
+            enumerable: true,
+            configurable: true
+        });
+        Transform2D.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+            renderAtomic.shaderMacro.IS_UI = true;
+        };
+        Transform2D.prototype._positionChanged = function (object, property, oldvalue) {
+            if (!Math.equals(object[property], oldvalue))
+                this._invalidateTransform();
+        };
+        Transform2D.prototype._rotationChanged = function (object, property, oldvalue) {
+            if (!Math.equals(object[property], oldvalue))
+                this._invalidateTransform();
+        };
+        Transform2D.prototype._scaleChanged = function (object, property, oldvalue) {
+            if (!Math.equals(object[property], oldvalue))
+                this._invalidateTransform();
+        };
+        Transform2D.prototype._invalidateTransform = function () {
+            this.transform.x = this.x;
+            this.transform.y = this.y;
+            this.transform.rz = this.rotation;
+            this.transform.sx = this.sx;
+            this.transform.sy = this.sy;
+        };
+        Transform2D.prototype._onTransformChanged = function () {
+            this.x = this.transform.x;
+            this.y = this.transform.y;
+            this.rotation = this.transform.rz;
+            this.sx = this.transform.sx;
+            this.sy = this.transform.sy;
+        };
+        __decorate([
+            feng3d.oav({ tooltip: "本地位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        ], Transform2D.prototype, "position", null);
+        __decorate([
+            feng3d.oav({ tooltip: "本地旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
+        ], Transform2D.prototype, "rotation", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "本地缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
+        ], Transform2D.prototype, "scale", null);
+        return Transform2D;
+    }(feng3d.Component));
+    feng3d.Transform2D = Transform2D;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
      * Element that can be used for screen rendering.
      *
      * 能够被用于屏幕渲染的元素
@@ -65,6 +215,14 @@ var feng3d;
             _this.renderMode = feng3d.UIRenderMode.ScreenSpaceOverlay;
             return _this;
         }
+        Canvas.prototype.init = function () {
+            this.transform.hideFlags = this.transform.hideFlags | feng3d.HideFlags.Hide;
+            this.gameObject.hideFlags = this.gameObject.hideFlags | feng3d.HideFlags.DontTransform;
+        };
+        Canvas.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+            gl.canvas.width;
+            gl.canvas.height;
+        };
         return Canvas;
     }(feng3d.Behaviour));
     feng3d.Canvas = Canvas;
@@ -1468,11 +1626,17 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     feng3d.functionwrap.extendFunction(feng3d.GameObject, "createPrimitive", function (g, type) {
-        if (type == "Image") {
-            g.addComponent(feng3d.Image);
+        if (type == "Canvas") {
+            g.addComponent(feng3d.Canvas);
         }
-        else if (type == "Text") {
-            g.addComponent(feng3d.Text);
+        else {
+            g.addComponent(feng3d.Transform2D);
+            if (type == "Image") {
+                g.addComponent(feng3d.Image);
+            }
+            else if (type == "Text") {
+                g.addComponent(feng3d.Text);
+            }
         }
         return g;
     });

@@ -26,6 +26,77 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
+    interface ShaderMacro {
+        /**
+         * 是否为UI
+         */
+        IS_UI: boolean;
+    }
+    /**
+     * 2D变换
+     *
+     * 提供了比Transform更加适用于2D元素的API
+     *
+     * 通过修改Transform的数值实现
+     */
+    class Transform2D extends Component {
+        get single(): boolean;
+        /**
+         * 创建一个实体，该类为虚类
+         */
+        constructor();
+        init(): void;
+        /**
+         * X轴坐标。
+         */
+        get x(): number;
+        set x(v: number);
+        /**
+         * Y轴坐标。
+         */
+        get y(): number;
+        set y(v: number);
+        /**
+         * X轴缩放。
+         */
+        get sx(): number;
+        set sx(v: number);
+        /**
+         * Y轴缩放。
+         */
+        get sy(): number;
+        set sy(v: number);
+        /**
+         * 本地位移
+         */
+        get position(): Vector2;
+        set position(v: Vector2);
+        /**
+         * 本地旋转
+         */
+        rotation: number;
+        /**
+         * 本地缩放
+         */
+        get scale(): Vector2;
+        set scale(v: Vector2);
+        /**
+         * 本地变换矩阵
+         */
+        get matrix(): Matrix3x3;
+        set matrix(v: Matrix3x3);
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        private readonly _position;
+        private readonly _scale;
+        protected readonly _matrix: Matrix3x3;
+        private _positionChanged;
+        private _rotationChanged;
+        private _scaleChanged;
+        private _invalidateTransform;
+        private _onTransformChanged;
+    }
+}
+declare namespace feng3d {
     /**
      * Element that can be used for screen rendering.
      *
@@ -38,6 +109,8 @@ declare namespace feng3d {
          * 画布是在世界或覆盖模式?
          */
         renderMode: UIRenderMode;
+        init(): void;
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
 }
 declare namespace feng3d {
@@ -608,9 +681,8 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
     interface PrimitiveGameObject {
+        Canvas: GameObject;
         Image: GameObject;
-    }
-    interface PrimitiveGameObject {
         Text: GameObject;
     }
 }

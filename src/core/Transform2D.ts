@@ -1,5 +1,13 @@
 namespace feng3d
 {
+    export interface ShaderMacro
+    {
+        /**
+         * 是否为UI
+         */
+        IS_UI: boolean;
+    }
+
     /**
      * 2D变换
      * 
@@ -25,51 +33,53 @@ namespace feng3d
             watcher.watch(this._scale, "y", this._scaleChanged, this);
         }
 
+        init()
+        {
+            this.on("transformChanged", this._onTransformChanged, this);
+            this._onTransformChanged();
+        }
+
         /**
          * X轴坐标。
          */
-        @serialize
         get x() { return this._position.x; }
         set x(v) { this._position.x = v; }
 
         /**
          * Y轴坐标。
          */
-        @serialize
         get y() { return this._position.y; }
         set y(v) { this._position.y = v; }
 
         /**
          * X轴缩放。
          */
-        @serialize
         get sx() { return this._scale.x; }
         set sx(v) { this._scale.x = v; }
 
         /**
          * Y轴缩放。
          */
-        @serialize
         get sy() { return this._scale.y; }
         set sy(v) { this._scale.y = v; }
 
         /**
          * 本地位移
          */
-        @oav({ tooltip: "本地位移" })
+        @oav({ tooltip: "本地位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         get position() { return this._position; }
         set position(v) { this._position.copy(v); }
 
         /**
          * 本地旋转
          */
-        @oav({ tooltip: "本地旋转", componentParam: { step: 0.001, stepScale: 30, stepDownup: 1 } })
+        @oav({ tooltip: "本地旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
         rotation = 0;
 
         /**
          * 本地缩放
          */
-        @oav({ tooltip: "本地缩放" })
+        @oav({ tooltip: "本地缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
         get scale() { return this._scale; }
         set scale(v) { this._scale.copy(v); }
 
@@ -88,30 +98,54 @@ namespace feng3d
             this.transform.matrix = mat;
         }
 
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        {
+            renderAtomic.shaderMacro.IS_UI = true;
+        }
+
         private readonly _position = new Vector2();
         private readonly _scale = new Vector2(1, 1);
 
         protected readonly _matrix = new Matrix3x3();
 
-        private _positionChanged(object: Vector2, property: "x" | "y", oldvalue: number)
+        private _positionChanged(object: Vector2, property: string, oldvalue: number)
         {
-            if (property == "x")
-                this.transform.x = object.x;
-            else
-                this.transform.y = object.y;
+            if (!Math.equals(object[property], oldvalue))
+                this._invalidateTransform();
         }
 
         private _rotationChanged(object: Transform2D, property: string, oldvalue: number)
         {
-            this.transform.rz = this.rotation;
+            if (!Math.equals(object[property], oldvalue))
+                this._invalidateTransform();
         }
 
-        private _scaleChanged(object: Vector2, property: "x" | "y", oldvalue: number)
+        private _scaleChanged(object: Vector2, property: string, oldvalue: number)
         {
-            if (property == "x")
-                this.transform.sx = object.x;
-            else
-                this.transform.sy = object.y;
+            if (!Math.equals(object[property], oldvalue))
+                this._invalidateTransform();
+        }
+
+        private _invalidateTransform()
+        {
+            this.transform.x = this.x;
+            this.transform.y = this.y;
+
+            this.transform.rz = this.rotation;
+
+            this.transform.sx = this.sx;
+            this.transform.sy = this.sy;
+        }
+
+        private _onTransformChanged()
+        {
+            this.x = this.transform.x;
+            this.y = this.transform.y;
+
+            this.rotation = this.transform.rz;
+
+            this.sx = this.transform.sx;
+            this.sy = this.transform.sy;
         }
     }
 }

@@ -2,13 +2,21 @@ namespace feng3d
 {
     functionwrap.extendFunction(GameObject, "createPrimitive", (g, type) =>
     {
-        if (type == "Image")
+        if (type == "Canvas")
         {
-            g.addComponent(Image)
-        }
-        else if (type == "Text")
+            g.addComponent(Canvas)
+        } else 
         {
-            g.addComponent(Text)
+            g.addComponent(Transform2D);
+
+            if (type == "Image")
+            {
+                g.addComponent(Image)
+            }
+            else if (type == "Text")
+            {
+                g.addComponent(Text)
+            }
         }
 
         return g;
@@ -16,10 +24,8 @@ namespace feng3d
 
     export interface PrimitiveGameObject
     {
+        Canvas: GameObject;
         Image: GameObject;
-    }
-    export interface PrimitiveGameObject
-    {
         Text: GameObject;
     }
 }
