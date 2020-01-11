@@ -106,6 +106,22 @@ namespace feng3d
         'pre-line' = 'pre-line',
     }
 
+    export interface TextStyleEventMap
+    {
+        /**
+         * 发生变化
+         */
+        changed
+    }
+
+    export interface TextStyle
+    {
+        once<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => void, thisObject?: any, priority?: number): void;
+        dispatch<K extends keyof TextStyleEventMap>(type: K, data?: TextStyleEventMap[K], bubbles?: boolean): Event<TextStyleEventMap[K]>;
+        has<K extends keyof TextStyleEventMap>(type: K): boolean;
+        on<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any, priority?: number, once?: boolean): void;
+        off<K extends keyof TextStyleEventMap>(type?: K, listener?: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any): void;
+    }
     /**
      * 文本样式
      * 
@@ -113,15 +129,14 @@ namespace feng3d
      * 
      * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextStyle.js
      */
-    export class TextStyle
+    export class TextStyle extends EventDispatcher
     {
-        styleID = 0;
-
         /**
          * @param style 样式参数
          */
         constructor(style?: Partial<TextStyle>)
         {
+            super();
             serialization.setValue(this, style);
         }
 
@@ -363,7 +378,7 @@ namespace feng3d
          */
         invalidate()
         {
-            this.styleID++;
+            this.dispatch("changed");
         }
 
         /**

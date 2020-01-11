@@ -13,7 +13,7 @@ namespace feng3d
         {
             super();
 
-            this.positions = [0, 1, 1, 1, 1, 0, 0, 0];
+            this.positions = [0, 0, 1, 0, 1, 1, 0, 1];
             this.uvs = [0, 0, 1, 0, 1, 1, 0, 1];
             this.indices = [0, 1, 2, 0, 2, 3];
 

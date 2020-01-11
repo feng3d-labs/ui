@@ -10,7 +10,8 @@ namespace feng3d
 
         geometry = Geometry.getDefault("Default-UIGeometry");
 
-        material = Material.getDefault("Default-Image");
+        @oav()
+        material = Material.getDefault("Default-UIMaterial");
 
         /**
          * 渲染前执行函数

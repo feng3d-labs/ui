@@ -51,7 +51,7 @@ namespace feng3d
     
     `,
         cls: UIUniforms,
-        renderParams: { cullFace: CullFace.NONE, enableBlend: true },
+        renderParams: { enableBlend: true, depthMask: false },
     };
 
     export interface Uniforms extends UIUniforms

@@ -160,6 +160,36 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
+    interface UniformsTypes {
+        ui: UIUniforms;
+    }
+    class UIUniforms {
+        __class__: "feng3d.ImageUniforms";
+        /**
+         * 颜色
+         */
+        u_color: Color4;
+        /**
+         * 纹理数据
+         */
+        s_texture: Texture2D;
+    }
+    interface Uniforms extends UIUniforms {
+    }
+    interface DefaultMaterial {
+        "Default-UIMaterial": Material;
+    }
+}
+declare namespace feng3d {
+    interface PrimitiveGameObject {
+        Canvas: GameObject;
+        Image: GameObject;
+        Text: GameObject;
+    }
+}
+declare namespace feng3d {
+}
+declare namespace feng3d {
     /**
      * 图片组件
      */
@@ -271,6 +301,19 @@ declare namespace feng3d {
         'pre' = "pre",
         'pre-line' = "pre-line"
     }
+    interface TextStyleEventMap {
+        /**
+         * 发生变化
+         */
+        changed: any;
+    }
+    interface TextStyle {
+        once<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => void, thisObject?: any, priority?: number): void;
+        dispatch<K extends keyof TextStyleEventMap>(type: K, data?: TextStyleEventMap[K], bubbles?: boolean): Event<TextStyleEventMap[K]>;
+        has<K extends keyof TextStyleEventMap>(type: K): boolean;
+        on<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any, priority?: number, once?: boolean): void;
+        off<K extends keyof TextStyleEventMap>(type?: K, listener?: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any): void;
+    }
     /**
      * 文本样式
      *
@@ -278,8 +321,7 @@ declare namespace feng3d {
      *
      * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextStyle.js
      */
-    class TextStyle {
-        styleID: number;
+    class TextStyle extends EventDispatcher {
         /**
          * @param style 样式参数
          */
@@ -682,52 +724,17 @@ declare namespace feng3d {
      * 文本组件
      */
     class Text extends Component {
-        geometry: QuadGeometry;
-        castShadows: boolean;
-        receiveShadows: boolean;
         width: number;
         height: number;
         text: string;
         isAutoSize: boolean;
-        /**
-         * The source texture of the Image element.
-         *
-         * 图像元素的源纹理。
-         */
-        image: Texture2D;
-        material: Material;
         style: TextStyle;
+        private _image;
+        private _canvas;
+        private _invalid;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        invalidate(): void;
+        private _styleChanged;
     }
-}
-declare namespace feng3d {
-    interface UniformsTypes {
-        image: ImageUniforms;
-    }
-    class ImageUniforms {
-        __class__: "feng3d.ImageUniforms";
-        /**
-         * 颜色
-         */
-        u_color: Color4;
-        /**
-         * 纹理数据
-         */
-        s_texture: Texture2D;
-    }
-    interface Uniforms extends ImageUniforms {
-    }
-    interface DefaultMaterial {
-        "Default-Image": Material;
-    }
-}
-declare namespace feng3d {
-    interface PrimitiveGameObject {
-        Canvas: GameObject;
-        Image: GameObject;
-        Text: GameObject;
-    }
-}
-declare namespace feng3d {
 }
 //# sourceMappingURL=feng2d.d.ts.map

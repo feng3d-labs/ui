@@ -204,7 +204,7 @@ var feng3d;
         __extends(UIGeometry, _super);
         function UIGeometry() {
             var _this = _super.call(this) || this;
-            _this.positions = [0, 1, 1, 1, 1, 0, 0, 0];
+            _this.positions = [0, 0, 1, 0, 1, 1, 0, 1];
             _this.uvs = [0, 0, 1, 0, 1, 1, 0, 1];
             _this.indices = [0, 1, 2, 0, 2, 3];
             _this._attributes.a_position.size = 2;
@@ -228,7 +228,7 @@ var feng3d;
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.renderAtomic = new feng3d.RenderAtomic();
             _this.geometry = feng3d.Geometry.getDefault("Default-UIGeometry");
-            _this.material = feng3d.Material.getDefault("Default-Image");
+            _this.material = feng3d.Material.getDefault("Default-UIMaterial");
             return _this;
         }
         /**
@@ -268,6 +268,9 @@ var feng3d;
                 });
             });
         };
+        __decorate([
+            feng3d.oav()
+        ], CanvasRenderer.prototype, "material", void 0);
         return CanvasRenderer;
     }(feng3d.Behaviour));
     feng3d.CanvasRenderer = CanvasRenderer;
@@ -321,7 +324,7 @@ var feng3d;
             this.transform.sx = 1;
             this.transform.sy = 1;
             this.transform.sz = 1;
-            this.projection.identity().appendScale(2 / width, 2 / height, 1).appendTranslation(-1, -1, 0);
+            this.projection.identity().appendScale(2 / width, -2 / height, 1).appendTranslation(-1, 1, 0);
         };
         __decorate([
             feng3d.oav({ editable: false })
@@ -332,6 +335,64 @@ var feng3d;
         return Canvas;
     }(feng3d.Behaviour));
     feng3d.Canvas = Canvas;
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    var UIUniforms = /** @class */ (function () {
+        function UIUniforms() {
+            /**
+             * 颜色
+             */
+            this.u_color = new feng3d.Color4();
+            /**
+             * 纹理数据
+             */
+            this.s_texture = feng3d.Texture2D.default;
+        }
+        __decorate([
+            feng3d.serialize,
+            feng3d.oav()
+        ], UIUniforms.prototype, "u_color", void 0);
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], UIUniforms.prototype, "s_texture", void 0);
+        return UIUniforms;
+    }());
+    feng3d.UIUniforms = UIUniforms;
+    feng3d.shaderConfig.shaders["ui"] = {
+        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    varying vec2 v_uv;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    void main() \n    {\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n        v_uv = a_uv;\n    }\n    ",
+        fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    \n    uniform vec4 u_color;\n    \n    void main() {\n    \n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
+        cls: UIUniforms,
+        renderParams: { enableBlend: true, depthMask: false },
+    };
+    feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    feng3d.functionwrap.extendFunction(feng3d.GameObject, "createPrimitive", function (g, type) {
+        if (type == "Canvas") {
+            g.addComponent(feng3d.Canvas);
+        }
+        else {
+            g.addComponent(feng3d.Transform2D);
+            g.addComponent(feng3d.CanvasRenderer);
+            if (type == "Image") {
+                g.addComponent(feng3d.Image);
+            }
+            else if (type == "Text") {
+                g.addComponent(feng3d.Text);
+            }
+        }
+        return g;
+    });
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    feng3d.View.prototype;
+    feng3d.functionwrap.extendFunction(feng3d.View.prototype, "render", function (r, interval) {
+        feng3d.CanvasRenderer.draw(this.gl, this.scene);
+    });
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
@@ -753,102 +814,103 @@ var feng3d;
      *
      * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextStyle.js
      */
-    var TextStyle = /** @class */ (function () {
+    var TextStyle = /** @class */ (function (_super) {
+        __extends(TextStyle, _super);
         /**
          * @param style 样式参数
          */
         function TextStyle(style) {
-            this.styleID = 0;
+            var _this = _super.call(this) || this;
             /**
              * 字体。
              */
-            this.fontFamily = FontFamily.Arial;
+            _this.fontFamily = FontFamily.Arial;
             /**
              * 字体尺寸。
              */
-            this.fontSize = 26;
+            _this.fontSize = 26;
             /**
              * 字体样式。
              */
-            this.fontStyle = FontStyle.normal;
+            _this.fontStyle = FontStyle.normal;
             /**
              * 字体变体。
              */
-            this.fontVariant = FontVariant.normal;
+            _this.fontVariant = FontVariant.normal;
             /**
              * 字型粗细。
              */
-            this.fontWeight = FontWeight.normal;
+            _this.fontWeight = FontWeight.normal;
             /**
              * 用于填充文本的颜色。
              * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
              */
-            this.fill = new feng3d.Color4(0, 0, 0, 1);
+            _this.fill = new feng3d.Color4(0, 0, 0, 1);
             // fill = new MinMaxGradient();
             /**
              * 如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。
              */
-            this.fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
+            _this.fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;
             /**
              * 如果填充是一个颜色数组来创建渐变，这个数组可以设置停止点
              */
-            this.fillGradientStops = [];
+            _this.fillGradientStops = [];
             /**
              * 将用于文本笔划的画布填充样式。
              */
-            this.stroke = new feng3d.Color4(0, 0, 0, 1);
+            _this.stroke = new feng3d.Color4(0, 0, 0, 1);
             /**
              * 一个表示笔画厚度的数字。
              */
-            this.strokeThickness = 0;
+            _this.strokeThickness = 0;
             /**
              * lineJoin属性设置创建的角的类型，它可以解决带尖刺的文本问题。
              */
-            this.lineJoin = CanvasLineJoin.miter;
+            _this.lineJoin = CanvasLineJoin.miter;
             /**
              * 当使用“miter”lineJoin模式时，miter限制使用。这可以减少或增加呈现文本的尖锐性。
              */
-            this.miterLimit = 10;
+            _this.miterLimit = 10;
             /**
              * 字母之间的间距，默认为0
              */
-            this.letterSpacing = 0;
+            _this.letterSpacing = 0;
             /**
              * 呈现文本的基线。
              */
-            this.textBaseline = CanvasTextBaseline.alphabetic;
+            _this.textBaseline = CanvasTextBaseline.alphabetic;
             /**
              * 是否为文本设置一个投影。
              */
-            this.dropShadow = false;
+            _this.dropShadow = false;
             /**
              * 投影颜色。
              */
-            this.dropShadowColor = new feng3d.Color4(0, 0, 0, 1);
+            _this.dropShadowColor = new feng3d.Color4(0, 0, 0, 1);
             /**
              * 投影角度。
              */
-            this.dropShadowAngle = 30;
+            _this.dropShadowAngle = 30;
             /**
              * 阴影模糊半径。
              */
-            this.dropShadowBlur = 0;
+            _this.dropShadowBlur = 0;
             /**
              * 投影距离。
              */
-            this.dropShadowDistance = 5;
+            _this.dropShadowDistance = 5;
             /**
              * 是否应使用自动换行。
              */
-            this.wordWrap = false;
+            _this.wordWrap = false;
             /**
              * 能否把单词分多行。
              */
-            this.breakWords = false;
+            _this.breakWords = false;
             /**
              * 多行文本对齐方式。
              */
-            this.align = TextAlign.left;
+            _this.align = TextAlign.left;
             /**
              * 如何处理换行与空格。
              * Default is 'pre' (preserve, preserve).
@@ -859,34 +921,35 @@ var feng3d;
              * 'pre'        | Preserve      |   Preserve
              * 'pre-line'   | Preserve      |   Collapse
              */
-            this.whiteSpace = WhiteSpaceHandle.pre;
+            _this.whiteSpace = WhiteSpaceHandle.pre;
             /**
              * 文本的换行宽度。
              */
-            this.wordWrapWidth = 100;
+            _this.wordWrapWidth = 100;
             /**
              * 行高。
              */
-            this.lineHeight = 0;
+            _this.lineHeight = 0;
             /**
              * 行距。
              */
-            this.leading = 0;
+            _this.leading = 0;
             /**
              * 内边距，用于文字被裁减问题。
              */
-            this.padding = 0;
+            _this.padding = 0;
             /**
              * 是否修剪透明边界。
              */
-            this.trim = false;
-            feng3d.serialization.setValue(this, style);
+            _this.trim = false;
+            feng3d.serialization.setValue(_this, style);
+            return _this;
         }
         /**
          * 使数据失效
          */
         TextStyle.prototype.invalidate = function () {
-            this.styleID++;
+            this.dispatch("changed");
         };
         /**
          *
@@ -1052,7 +1115,7 @@ var feng3d;
             feng3d.serialize
         ], TextStyle.prototype, "trim", void 0);
         return TextStyle;
-    }());
+    }(feng3d.EventDispatcher));
     feng3d.TextStyle = TextStyle;
 })(feng3d || (feng3d = {}));
 var feng3d;
@@ -1616,47 +1679,41 @@ var feng3d;
         __extends(Text, _super);
         function Text() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.geometry = feng3d.Geometry.getDefault("Quad");
-            _this.castShadows = false;
-            _this.receiveShadows = false;
             _this.width = 100;
             _this.height = 30;
             _this.text = "Hello 🌷 world\nHello 🌷 world";
             _this.isAutoSize = false;
-            /**
-             * The source texture of the Image element.
-             *
-             * 图像元素的源纹理。
-             */
-            _this.image = new feng3d.Texture2D();
-            // @oav({ exclude: true })
-            _this.material = feng3d.Material.getDefault("Default-Image");
             _this.style = new feng3d.TextStyle();
+            _this._image = new feng3d.Texture2D();
+            _this._invalid = true;
             return _this;
         }
         Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
-            // this.image["_pixels"] = this.getImagedata();
-            var canvas = feng3d.drawText(null, this.text, this.style);
-            this.image["_pixels"] = canvas;
-            this.image.invalidate();
+            var canvas = this._canvas;
+            if (!this._canvas || this._invalid) {
+                canvas = this._canvas = feng3d.drawText(this._canvas, this.text, this.style);
+                this._image["_pixels"] = canvas;
+                this._image.invalidate();
+                this._invalid = false;
+            }
             if (this.isAutoSize) {
                 this.width = canvas.width;
                 this.height = canvas.height;
             }
             this.transform.sx = this.width;
             this.transform.sy = this.height;
-            renderAtomic.uniforms.s_texture = this.image;
+            renderAtomic.uniforms.s_texture = this._image;
         };
-        __decorate([
-            feng3d.oav({ exclude: true })
-        ], Text.prototype, "geometry", void 0);
-        __decorate([
-            feng3d.oav({ exclude: true })
-        ], Text.prototype, "castShadows", void 0);
-        __decorate([
-            feng3d.oav({ exclude: true })
-        ], Text.prototype, "receiveShadows", void 0);
+        Text.prototype.invalidate = function () {
+            this._invalid = true;
+        };
+        Text.prototype._styleChanged = function (property, oldValue, newValue) {
+            if (oldValue)
+                oldValue.off("changed", this.invalidate, this);
+            if (newValue)
+                newValue.on("changed", this.invalidate, this);
+        };
         __decorate([
             feng3d.oav()
         ], Text.prototype, "width", void 0);
@@ -1665,7 +1722,8 @@ var feng3d;
         ], Text.prototype, "height", void 0);
         __decorate([
             feng3d.oav(),
-            feng3d.serialize
+            feng3d.serialize,
+            feng3d.watch("invalidate")
         ], Text.prototype, "text", void 0);
         __decorate([
             feng3d.oav(),
@@ -1673,72 +1731,11 @@ var feng3d;
         ], Text.prototype, "isAutoSize", void 0);
         __decorate([
             feng3d.oav(),
-            feng3d.serialize
-        ], Text.prototype, "image", void 0);
-        __decorate([
-            feng3d.oav(),
-            feng3d.serialize
+            feng3d.serialize,
+            feng3d.watch("_styleChanged")
         ], Text.prototype, "style", void 0);
         return Text;
     }(feng3d.Component));
     feng3d.Text = Text;
-})(feng3d || (feng3d = {}));
-var feng3d;
-(function (feng3d) {
-    var ImageUniforms = /** @class */ (function () {
-        function ImageUniforms() {
-            /**
-             * 颜色
-             */
-            this.u_color = new feng3d.Color4();
-            /**
-             * 纹理数据
-             */
-            this.s_texture = feng3d.Texture2D.default;
-        }
-        __decorate([
-            feng3d.serialize,
-            feng3d.oav()
-        ], ImageUniforms.prototype, "u_color", void 0);
-        __decorate([
-            feng3d.oav(),
-            feng3d.serialize
-        ], ImageUniforms.prototype, "s_texture", void 0);
-        return ImageUniforms;
-    }());
-    feng3d.ImageUniforms = ImageUniforms;
-    feng3d.shaderConfig.shaders["image"] = {
-        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    varying vec2 v_uv;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    void main() \n    {\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n        v_uv = a_uv;\n    }\n    ",
-        fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    \n    uniform vec4 u_color;\n    \n    void main() {\n    \n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
-        cls: ImageUniforms,
-        renderParams: { cullFace: feng3d.CullFace.NONE, enableBlend: true },
-    };
-    feng3d.Material.setDefault("Default-Image", { shaderName: "image" });
-})(feng3d || (feng3d = {}));
-var feng3d;
-(function (feng3d) {
-    feng3d.functionwrap.extendFunction(feng3d.GameObject, "createPrimitive", function (g, type) {
-        if (type == "Canvas") {
-            g.addComponent(feng3d.Canvas);
-        }
-        else {
-            g.addComponent(feng3d.Transform2D);
-            g.addComponent(feng3d.CanvasRenderer);
-            if (type == "Image") {
-                g.addComponent(feng3d.Image);
-            }
-            else if (type == "Text") {
-                g.addComponent(feng3d.Text);
-            }
-        }
-        return g;
-    });
-})(feng3d || (feng3d = {}));
-var feng3d;
-(function (feng3d) {
-    feng3d.View.prototype;
-    feng3d.functionwrap.extendFunction(feng3d.View.prototype, "render", function (r, interval) {
-        feng3d.CanvasRenderer.draw(this.gl, this.scene);
-    });
 })(feng3d || (feng3d = {}));
 //# sourceMappingURL=feng2d.js.map

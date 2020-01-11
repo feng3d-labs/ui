@@ -49,7 +49,7 @@ namespace feng3d
             this.transform.sy = 1;
             this.transform.sz = 1;
 
-            this.projection.identity().appendScale(2 / width, 2 / height, 1).appendTranslation(-1, -1, 0);
+            this.projection.identity().appendScale(2 / width, -2 / height, 1).appendTranslation(-1, 1, 0);
         }
 
         /**
