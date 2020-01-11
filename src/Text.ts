@@ -5,15 +5,6 @@ namespace feng3d
      */
     export class Text extends Component
     {
-        @oav({ exclude: true })
-        geometry = Geometry.getDefault("Quad");
-
-        @oav({ exclude: true })
-        castShadows = false;
-
-        @oav({ exclude: true })
-        receiveShadows = false;
-
         @oav()
         width = 100;
 
@@ -33,12 +24,7 @@ namespace feng3d
          * 
          * 图像元素的源纹理。
          */
-        @oav()
-        @serialize
-        image = new Texture2D();
-
-        // @oav({ exclude: true })
-        material = Material.getDefault("Default-Image");
+        private _image = new Texture2D();
 
         @oav()
         @serialize
@@ -48,10 +34,9 @@ namespace feng3d
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
-            // this.image["_pixels"] = this.getImagedata();
             var canvas = drawText(null, this.text, this.style);
-            this.image["_pixels"] = canvas;
-            this.image.invalidate();
+            this._image["_pixels"] = canvas;
+            this._image.invalidate();
 
             if (this.isAutoSize)
             {
@@ -62,7 +47,7 @@ namespace feng3d
             this.transform.sx = this.width;
             this.transform.sy = this.height;
 
-            renderAtomic.uniforms.s_texture = this.image;
+            renderAtomic.uniforms.s_texture = this._image;
         }
     }
 }

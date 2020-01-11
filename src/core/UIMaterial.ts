@@ -1,8 +1,8 @@
 namespace feng3d
 {
 
-    export interface UniformsTypes { image: ImageUniforms }
-    export class ImageUniforms
+    export interface UniformsTypes { ui: UIUniforms }
+    export class UIUniforms
     {
         __class__: "feng3d.ImageUniforms";
         /** 
@@ -20,7 +20,7 @@ namespace feng3d
         s_texture = Texture2D.default;
     }
 
-    shaderConfig.shaders["image"] = {
+    shaderConfig.shaders["ui"] = {
         vertex: `
     attribute vec2 a_position;
     attribute vec2 a_uv;
@@ -50,18 +50,18 @@ namespace feng3d
     }
     
     `,
-        cls: ImageUniforms,
+        cls: UIUniforms,
         renderParams: { cullFace: CullFace.NONE, enableBlend: true },
     };
 
-    export interface Uniforms extends ImageUniforms
+    export interface Uniforms extends UIUniforms
     {
     }
 
     export interface DefaultMaterial
     {
-        "Default-Image": Material;
+        "Default-UIMaterial": Material;
     }
 
-    Material.setDefault("Default-Image", { shaderName: "image" });
+    Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
 }

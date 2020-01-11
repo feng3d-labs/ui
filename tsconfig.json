@@ -25,8 +25,13 @@
         //
         "src/core/Transform2D.ts",
         "src/core/UIGeometry.ts",
-        "src/render/CanvasRenderer.ts",
-        "src/Canvas.ts",
+        "src/core/CanvasRenderer.ts",
+        "src/core/Canvas.ts",
+        "src/core/UIMaterial.ts",
+        //
+        "src/polyfill/GameObject.ts",
+        "src/polyfill/View.ts",
+        //
         "src/Image.ts",
         //
         "src/text/drawText.ts",
@@ -35,9 +40,5 @@
         "src/TextTexture.ts",
         "src/Text.ts",
         //
-        "src/materials/ImageMaterial.ts",
-        //
-        "src/polyfill/GameObject.ts",
-        "src/polyfill/View.ts",
     ],
 }
