@@ -9,6 +9,22 @@ namespace feng3d
      */
     export class Transform2D extends Component
     {
+        get single() { return true; }
+
+		/**
+		 * 创建一个实体，该类为虚类
+		 */
+        constructor()
+        {
+            super();
+
+            watcher.watch(this._position, "x", this._positionChanged, this);
+            watcher.watch(this._position, "y", this._positionChanged, this);
+            watcher.watch(this, "rotation", this._rotationChanged, this);
+            watcher.watch(this._scale, "x", this._scaleChanged, this);
+            watcher.watch(this._scale, "y", this._scaleChanged, this);
+        }
+
         /**
          * X轴坐标。
          */
@@ -76,5 +92,26 @@ namespace feng3d
         private readonly _scale = new Vector2(1, 1);
 
         protected readonly _matrix = new Matrix3x3();
+
+        private _positionChanged(object: Vector2, property: "x" | "y", oldvalue: number)
+        {
+            if (property == "x")
+                this.transform.x = object.x;
+            else
+                this.transform.y = object.y;
+        }
+
+        private _rotationChanged(object: Transform2D, property: string, oldvalue: number)
+        {
+            this.transform.rz = this.rotation;
+        }
+
+        private _scaleChanged(object: Vector2, property: "x" | "y", oldvalue: number)
+        {
+            if (property == "x")
+                this.transform.sx = object.x;
+            else
+                this.transform.sy = object.y;
+        }
     }
 }
