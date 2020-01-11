@@ -198,6 +198,28 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     /**
+     * UI几何体
+     */
+    var UIGeometry = /** @class */ (function (_super) {
+        __extends(UIGeometry, _super);
+        function UIGeometry() {
+            var _this = _super.call(this) || this;
+            _this.positions = [0, 1, 1, 1, 1, 0, 0, 0];
+            _this.uvs = [0, 0, 1, 0, 1, 1, 0, 1];
+            _this.indices = [0, 1, 2, 0, 2, 3];
+            _this._attributes.a_position.size = 2;
+            _this.normals = feng3d.geometryUtils.createVertexNormals(_this.indices, _this.positions, true);
+            _this.tangents = feng3d.geometryUtils.createVertexTangents(_this.indices, _this.positions, _this.uvs, true);
+            return _this;
+        }
+        return UIGeometry;
+    }(feng3d.Geometry));
+    feng3d.UIGeometry = UIGeometry;
+    feng3d.Geometry.setDefault("Default-UIGeometry", new UIGeometry());
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
     var CanvasRenderer = /** @class */ (function (_super) {
@@ -205,7 +227,7 @@ var feng3d;
         function CanvasRenderer() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
             _this.renderAtomic = new feng3d.RenderAtomic();
-            _this.geometry = feng3d.Geometry.getDefault("Quad");
+            _this.geometry = feng3d.Geometry.getDefault("Default-UIGeometry");
             _this.material = feng3d.Material.getDefault("Default-Image");
             return _this;
         }
@@ -1686,7 +1708,7 @@ var feng3d;
     }());
     feng3d.ImageUniforms = ImageUniforms;
     feng3d.shaderConfig.shaders["image"] = {
-        vertex: "\n    attribute vec3 a_position;\n    attribute vec2 a_uv;\n    \n    varying vec2 v_uv;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    void main() \n    {\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(a_position, 1.0);\n        v_uv = a_uv;\n    }\n    ",
+        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    varying vec2 v_uv;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    void main() \n    {\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n        v_uv = a_uv;\n    }\n    ",
         fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    \n    uniform vec4 u_color;\n    \n    void main() {\n    \n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
         cls: ImageUniforms,
         renderParams: { cullFace: feng3d.CullFace.NONE, enableBlend: true },

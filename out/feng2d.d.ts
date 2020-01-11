@@ -89,12 +89,27 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
+    interface GeometryTypes {
+        QuadGeometry: QuadGeometry;
+    }
+    /**
+     * UI几何体
+     */
+    class UIGeometry extends Geometry {
+        __class__: "feng3d.UIGeometry";
+        constructor();
+    }
+    interface DefaultGeometry {
+        "Default-UIGeometry": UIGeometry;
+    }
+}
+declare namespace feng3d {
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
     class CanvasRenderer extends Behaviour {
         readonly renderAtomic: RenderAtomic;
-        geometry: QuadGeometry;
+        geometry: UIGeometry;
         material: Material;
         /**
          * 渲染前执行函数

@@ -8,7 +8,7 @@ namespace feng3d
     {
         readonly renderAtomic = new RenderAtomic();
 
-        geometry = Geometry.getDefault("Quad");
+        geometry = Geometry.getDefault("Default-UIGeometry");
 
         material = Material.getDefault("Default-Image");
 

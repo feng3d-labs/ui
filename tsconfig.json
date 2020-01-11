@@ -24,6 +24,7 @@
         "src/enums/UIRenderMode.ts",
         //
         "src/core/Transform2D.ts",
+        "src/core/UIGeometry.ts",
         "src/render/CanvasRenderer.ts",
         "src/Canvas.ts",
         "src/Image.ts",
