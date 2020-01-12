@@ -29,6 +29,7 @@
         "src/core/Canvas.ts",
         "src/core/UIMaterial.ts",
         //
+        "src/polyfill/Component.ts",
         "src/polyfill/GameObject.ts",
         "src/polyfill/View.ts",
         //
@@ -37,7 +38,6 @@
         "src/text/drawText.ts",
         "src/text/TextStyle.ts",
         "src/text/TextMetrics.ts",
-        "src/TextTexture.ts",
         "src/Text.ts",
         //
     ],

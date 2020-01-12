@@ -5,12 +5,6 @@ namespace feng3d
      */
     export class Image extends Component
     {
-        @oav()
-        width = 1;
-
-        @oav()
-        height = 1;
-
         /**
          * The source texture of the Image element.
          * 
@@ -29,6 +23,9 @@ namespace feng3d
         @serialize
         color = new Color4();
 
+        @oav({ tooltip: "是否自动设置图片尺寸。" })
+        isAutoSize = true;
+
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
@@ -37,5 +34,15 @@ namespace feng3d
             renderAtomic.uniforms.u_color = this.color;
         }
 
+        /**
+         * 重置图片尺寸。
+         */
+        @oav({ tooltip: "重置图片尺寸。" })
+        resetSize()
+        {
+            var imagesize = this.image.getSize();
+            this.transform2D.width = imagesize.x;
+            this.transform2D.height = imagesize.y;
+        }
     }
 }

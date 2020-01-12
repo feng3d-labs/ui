@@ -63,9 +63,10 @@ var feng3d;
         function Transform2D() {
             var _this = _super.call(this) || this;
             /**
-             * 本地旋转
+             * 旋转
              */
             _this.rotation = 0;
+            _this._size = new feng3d.Vector2(1, 1);
             _this._position = new feng3d.Vector2();
             _this._scale = new feng3d.Vector2(1, 1);
             _this._matrix = new feng3d.Matrix3x3();
@@ -123,19 +124,46 @@ var feng3d;
         });
         Object.defineProperty(Transform2D.prototype, "position", {
             /**
-             * 本地位移
+             * 位移
              */
             get: function () { return this._position; },
             set: function (v) { this._position.copy(v); },
             enumerable: true,
             configurable: true
         });
+        Object.defineProperty(Transform2D.prototype, "width", {
+            /**
+             * 宽度，不会影响到缩放值。
+             */
+            get: function () { return this._size.x; },
+            set: function (v) { this._size.x = v; },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "height", {
+            /**
+             * 高度，不会影响到缩放值。
+             */
+            get: function () { return this._size.y; },
+            set: function (v) { this._size.y = v; },
+            enumerable: true,
+            configurable: true
+        });
         Object.defineProperty(Transform2D.prototype, "scale", {
             /**
-             * 本地缩放
+             * 缩放
              */
             get: function () { return this._scale; },
             set: function (v) { this._scale.copy(v); },
+            enumerable: true,
+            configurable: true
+        });
+        Object.defineProperty(Transform2D.prototype, "size", {
+            /**
+             * 尺寸，宽高。
+             */
+            get: function () { return this._size; },
+            set: function (v) { this._size.copy(v); },
             enumerable: true,
             configurable: true
         });
@@ -154,6 +182,9 @@ var feng3d;
             enumerable: true,
             configurable: true
         });
+        Transform2D.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+            renderAtomic.uniforms.u_size = this.size;
+        };
         Transform2D.prototype._positionChanged = function (object, property, oldvalue) {
             if (!Math.equals(object[property], oldvalue)) {
                 if (property == "x")
@@ -183,14 +214,23 @@ var feng3d;
             this.sy = this.transform.sy;
         };
         __decorate([
-            feng3d.oav({ tooltip: "本地位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+            feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         ], Transform2D.prototype, "position", null);
         __decorate([
-            feng3d.oav({ tooltip: "本地旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
+            feng3d.oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        ], Transform2D.prototype, "width", null);
+        __decorate([
+            feng3d.oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        ], Transform2D.prototype, "height", null);
+        __decorate([
+            feng3d.oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
         ], Transform2D.prototype, "rotation", void 0);
         __decorate([
-            feng3d.oav({ tooltip: "本地缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
+            feng3d.oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
         ], Transform2D.prototype, "scale", null);
+        __decorate([
+            feng3d.serialize
+        ], Transform2D.prototype, "size", null);
         return Transform2D;
     }(feng3d.Component));
     feng3d.Transform2D = Transform2D;
@@ -341,6 +381,10 @@ var feng3d;
     var UIUniforms = /** @class */ (function () {
         function UIUniforms() {
             /**
+             * UI几何体尺寸，在shader中进行对几何体缩放。
+             */
+            this.u_size = new feng3d.Vector2(1, 1);
+            /**
              * 颜色
              */
             this.u_color = new feng3d.Color4();
@@ -361,12 +405,18 @@ var feng3d;
     }());
     feng3d.UIUniforms = UIUniforms;
     feng3d.shaderConfig.shaders["ui"] = {
-        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    varying vec2 v_uv;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    void main() \n    {\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(a_position, 0.0, 1.0);\n        v_uv = a_uv;\n    }\n    ",
+        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    uniform vec2 u_size;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    varying vec2 v_uv;\n\n    void main() \n    {\n        vec2 position = a_position * u_size;\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(position, 0.0, 1.0);\n        v_uv = a_uv;\n    }\n    ",
         fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    \n    uniform vec4 u_color;\n    \n    void main() {\n    \n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
         cls: UIUniforms,
         renderParams: { enableBlend: true, depthMask: false },
     };
     feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    Object.defineProperty(feng3d.Component.prototype, "transform2D", {
+        get: function () { return this._gameObject && this._gameObject.transform2D; },
+    });
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
@@ -386,6 +436,9 @@ var feng3d;
         }
         return g;
     });
+    Object.defineProperty(feng3d.GameObject.prototype, "transform2D", {
+        get: function () { return this.getComponent(feng3d.Transform2D); },
+    });
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
@@ -403,8 +456,6 @@ var feng3d;
         __extends(Image, _super);
         function Image() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.width = 1;
-            _this.height = 1;
             /**
              * The source texture of the Image element.
              *
@@ -417,6 +468,7 @@ var feng3d;
              * 为该图像着色。
              */
             _this.color = new feng3d.Color4();
+            _this.isAutoSize = true;
             return _this;
         }
         Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
@@ -424,12 +476,14 @@ var feng3d;
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
         };
-        __decorate([
-            feng3d.oav()
-        ], Image.prototype, "width", void 0);
-        __decorate([
-            feng3d.oav()
-        ], Image.prototype, "height", void 0);
+        /**
+         * 重置图片尺寸。
+         */
+        Image.prototype.resetSize = function () {
+            var imagesize = this.image.getSize();
+            this.transform2D.width = imagesize.x;
+            this.transform2D.height = imagesize.y;
+        };
         __decorate([
             feng3d.oav(),
             feng3d.serialize
@@ -438,6 +492,12 @@ var feng3d;
             feng3d.oav(),
             feng3d.serialize
         ], Image.prototype, "color", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "是否自动设置图片尺寸。" })
+        ], Image.prototype, "isAutoSize", void 0);
+        __decorate([
+            feng3d.oav({ tooltip: "重置图片尺寸。" })
+        ], Image.prototype, "resetSize", null);
         return Image;
     }(feng3d.Component));
     feng3d.Image = Image;

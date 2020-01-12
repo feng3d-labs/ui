@@ -23,6 +23,19 @@ namespace feng3d
         return g;
     });
 
+    export interface GameObject
+    {
+        /**
+         * 游戏对象上的2D变换。
+         */
+        transform2D: Transform2D;
+    }
+
+    Object.defineProperty(GameObject.prototype, "transform2D",
+        {
+            get: function () { return this.getComponent(Transform2D); },
+        });
+
     export interface PrimitiveGameObject
     {
         Canvas: GameObject;

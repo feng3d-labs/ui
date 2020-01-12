@@ -61,24 +61,41 @@ declare namespace feng3d {
         get sy(): number;
         set sy(v: number);
         /**
-         * 本地位移
+         * 位移
          */
         get position(): Vector2;
         set position(v: Vector2);
         /**
-         * 本地旋转
+         * 宽度，不会影响到缩放值。
+         */
+        get width(): number;
+        set width(v: number);
+        /**
+         * 高度，不会影响到缩放值。
+         */
+        get height(): number;
+        set height(v: number);
+        /**
+         * 旋转
          */
         rotation: number;
         /**
-         * 本地缩放
+         * 缩放
          */
         get scale(): Vector2;
         set scale(v: Vector2);
+        /**
+         * 尺寸，宽高。
+         */
+        get size(): Vector2;
+        set size(v: Vector2);
+        private _size;
         /**
          * 本地变换矩阵
          */
         get matrix(): Matrix3x3;
         set matrix(v: Matrix3x3);
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
         private readonly _position;
         private readonly _scale;
         protected readonly _matrix: Matrix3x3;
@@ -166,6 +183,10 @@ declare namespace feng3d {
     class UIUniforms {
         __class__: "feng3d.ImageUniforms";
         /**
+         * UI几何体尺寸，在shader中进行对几何体缩放。
+         */
+        u_size: Vector2;
+        /**
          * 颜色
          */
         u_color: Color4;
@@ -181,6 +202,20 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
+    interface Component {
+        /**
+         * 游戏对象上的2D变换。
+         */
+        transform2D: Transform2D;
+    }
+}
+declare namespace feng3d {
+    interface GameObject {
+        /**
+         * 游戏对象上的2D变换。
+         */
+        transform2D: Transform2D;
+    }
     interface PrimitiveGameObject {
         Canvas: GameObject;
         Image: GameObject;
@@ -194,8 +229,6 @@ declare namespace feng3d {
      * 图片组件
      */
     class Image extends Component {
-        width: number;
-        height: number;
         /**
          * The source texture of the Image element.
          *
@@ -208,7 +241,12 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
+        isAutoSize: boolean;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        /**
+         * 重置图片尺寸。
+         */
+        resetSize(): void;
     }
 }
 declare namespace feng3d {

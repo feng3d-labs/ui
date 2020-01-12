@@ -56,24 +56,46 @@ namespace feng3d
         set sy(v) { this._scale.y = v; }
 
         /**
-         * 本地位移
+         * 位移
          */
-        @oav({ tooltip: "本地位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        @oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         get position() { return this._position; }
         set position(v) { this._position.copy(v); }
 
         /**
-         * 本地旋转
+         * 宽度，不会影响到缩放值。
          */
-        @oav({ tooltip: "本地旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
+        @oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        get width() { return this._size.x; }
+        set width(v) { this._size.x = v; }
+
+        /**
+         * 高度，不会影响到缩放值。
+         */
+        @oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        get height() { return this._size.y; }
+        set height(v) { this._size.y = v; }
+
+        /**
+         * 旋转
+         */
+        @oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
         rotation = 0;
 
         /**
-         * 本地缩放
+         * 缩放
          */
-        @oav({ tooltip: "本地缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
+        @oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
         get scale() { return this._scale; }
         set scale(v) { this._scale.copy(v); }
+
+        /**
+         * 尺寸，宽高。
+         */
+        @serialize
+        get size() { return this._size; }
+        set size(v) { this._size.copy(v); }
+        private _size = new Vector2(1, 1);
 
         /**
          * 本地变换矩阵
@@ -88,6 +110,11 @@ namespace feng3d
         {
             var mat = v.toMatrix4x4();
             this.transform.matrix = mat;
+        }
+
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        {
+            renderAtomic.uniforms.u_size = this.size;
         }
 
         private readonly _position = new Vector2();
