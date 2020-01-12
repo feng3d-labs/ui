@@ -515,6 +515,8 @@ var feng3d;
     function drawText(canvas, _text, style, resolution) {
         if (resolution === void 0) { resolution = 1; }
         canvas = canvas || document.createElement("canvas");
+        if (style.fontSize < 1)
+            style.fontSize = 1;
         var _font = style.toFontString();
         var context = canvas.getContext('2d');
         var measured = feng3d.TextMetrics.measureText(_text || ' ', style, style.wordWrap, canvas);

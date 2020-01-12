@@ -12,6 +12,8 @@ namespace feng3d
     {
         canvas = canvas || document.createElement("canvas");
 
+        if (style.fontSize < 1) style.fontSize = 1;
+
         var _font = style.toFontString();
 
         const context = canvas.getContext('2d');
