@@ -23,9 +23,6 @@ namespace feng3d
         @serialize
         color = new Color4();
 
-        @oav({ tooltip: "是否自动设置图片尺寸。" })
-        isAutoSize = true;
-
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);

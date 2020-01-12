@@ -241,7 +241,6 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
-        isAutoSize: boolean;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
         /**
          * 重置图片尺寸。
@@ -762,10 +761,14 @@ declare namespace feng3d {
      * 文本组件
      */
     class Text extends Component {
-        width: number;
-        height: number;
+        /**
+         * 文本内容。
+         */
         text: string;
-        isAutoSize: boolean;
+        /**
+         * 是否根据文本自动调整宽高。
+         */
+        autoSize: boolean;
         style: TextStyle;
         private _image;
         private _canvas;

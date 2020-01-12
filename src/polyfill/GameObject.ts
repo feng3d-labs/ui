@@ -7,15 +7,19 @@ namespace feng3d
             g.addComponent(Canvas)
         } else 
         {
-            g.addComponent(Transform2D);
+            var transform2D = g.addComponent(Transform2D);
             g.addComponent(CanvasRenderer);
 
             if (type == "Image")
             {
+                transform2D.width = 100;
+                transform2D.height = 100;
                 g.addComponent(Image)
             }
             else if (type == "Text")
             {
+                transform2D.width = 160;
+                transform2D.height = 30;
                 g.addComponent(Text)
             }
         }

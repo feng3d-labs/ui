@@ -5,20 +5,20 @@ namespace feng3d
      */
     export class Text extends Component
     {
-        @oav()
-        width = 100;
-
-        @oav()
-        height = 30;
-
+        /**
+         * 文本内容。
+         */
         @oav()
         @serialize
         @watch("invalidate")
         text = "Hello 🌷 world\nHello 🌷 world";
 
-        @oav()
+        /**
+         * 是否根据文本自动调整宽高。
+         */
+        @oav({ tooltip: "是否根据文本自动调整宽高。" })
         @serialize
-        isAutoSize = false;
+        autoSize = true;
 
         @oav()
         @serialize
@@ -43,14 +43,11 @@ namespace feng3d
                 this._invalid = false;
             }
 
-            if (this.isAutoSize)
+            if (this.autoSize)
             {
-                this.width = canvas.width;
-                this.height = canvas.height;
+                this.transform2D.width = canvas.width;
+                this.transform2D.height = canvas.height;
             }
-
-            this.transform.sx = this.width;
-            this.transform.sy = this.height;
 
             renderAtomic.uniforms.s_texture = this._image;
         }

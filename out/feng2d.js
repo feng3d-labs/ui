@@ -425,12 +425,16 @@ var feng3d;
             g.addComponent(feng3d.Canvas);
         }
         else {
-            g.addComponent(feng3d.Transform2D);
+            var transform2D = g.addComponent(feng3d.Transform2D);
             g.addComponent(feng3d.CanvasRenderer);
             if (type == "Image") {
+                transform2D.width = 100;
+                transform2D.height = 100;
                 g.addComponent(feng3d.Image);
             }
             else if (type == "Text") {
+                transform2D.width = 160;
+                transform2D.height = 30;
                 g.addComponent(feng3d.Text);
             }
         }
@@ -468,7 +472,6 @@ var feng3d;
              * 为该图像着色。
              */
             _this.color = new feng3d.Color4();
-            _this.isAutoSize = true;
             return _this;
         }
         Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
@@ -492,9 +495,6 @@ var feng3d;
             feng3d.oav(),
             feng3d.serialize
         ], Image.prototype, "color", void 0);
-        __decorate([
-            feng3d.oav({ tooltip: "是否自动设置图片尺寸。" })
-        ], Image.prototype, "isAutoSize", void 0);
         __decorate([
             feng3d.oav({ tooltip: "重置图片尺寸。" })
         ], Image.prototype, "resetSize", null);
@@ -1739,10 +1739,14 @@ var feng3d;
         __extends(Text, _super);
         function Text() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.width = 100;
-            _this.height = 30;
+            /**
+             * 文本内容。
+             */
             _this.text = "Hello 🌷 world\nHello 🌷 world";
-            _this.isAutoSize = false;
+            /**
+             * 是否根据文本自动调整宽高。
+             */
+            _this.autoSize = true;
             _this.style = new feng3d.TextStyle();
             _this._image = new feng3d.Texture2D();
             _this._invalid = true;
@@ -1757,12 +1761,10 @@ var feng3d;
                 this._image.invalidate();
                 this._invalid = false;
             }
-            if (this.isAutoSize) {
-                this.width = canvas.width;
-                this.height = canvas.height;
+            if (this.autoSize) {
+                this.transform2D.width = canvas.width;
+                this.transform2D.height = canvas.height;
             }
-            this.transform.sx = this.width;
-            this.transform.sy = this.height;
             renderAtomic.uniforms.s_texture = this._image;
         };
         Text.prototype.invalidate = function () {
@@ -1775,20 +1777,14 @@ var feng3d;
                 newValue.on("changed", this.invalidate, this);
         };
         __decorate([
-            feng3d.oav()
-        ], Text.prototype, "width", void 0);
-        __decorate([
-            feng3d.oav()
-        ], Text.prototype, "height", void 0);
-        __decorate([
             feng3d.oav(),
             feng3d.serialize,
             feng3d.watch("invalidate")
         ], Text.prototype, "text", void 0);
         __decorate([
-            feng3d.oav(),
+            feng3d.oav({ tooltip: "是否根据文本自动调整宽高。" }),
             feng3d.serialize
-        ], Text.prototype, "isAutoSize", void 0);
+        ], Text.prototype, "autoSize", void 0);
         __decorate([
             feng3d.oav(),
             feng3d.serialize,
