@@ -63,6 +63,16 @@ namespace feng3d
         set position(v) { this._position.copy(v); }
 
         /**
+         * 无缩放宽度
+         */
+        noScaleWidth = 1;
+
+        /**
+         * 无缩放高度
+         */
+        noScaleHeight = 1;
+
+        /**
          * 宽度，不会影响到缩放值。
          */
         @oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })

@@ -28,6 +28,7 @@ namespace feng3d
         'cursive' = 'cursive',
         'fantasy' = 'fantasy',
         'system-ui' = 'system-ui',
+        '宋体' = '宋体',
     }
 
     /**

@@ -63,6 +63,14 @@ var feng3d;
         function Transform2D() {
             var _this = _super.call(this) || this;
             /**
+             * 无缩放宽度
+             */
+            _this.noScaleWidth = 1;
+            /**
+             * 无缩放高度
+             */
+            _this.noScaleHeight = 1;
+            /**
              * 旋转
              */
             _this.rotation = 0;
@@ -799,6 +807,7 @@ var feng3d;
         FontFamily["cursive"] = "cursive";
         FontFamily["fantasy"] = "fantasy";
         FontFamily["system-ui"] = "system-ui";
+        FontFamily["\u5B8B\u4F53"] = "\u5B8B\u4F53";
     })(FontFamily = feng3d.FontFamily || (feng3d.FontFamily = {}));
     /**
      * 字体样式。

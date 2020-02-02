@@ -66,6 +66,14 @@ declare namespace feng3d {
         get position(): Vector2;
         set position(v: Vector2);
         /**
+         * 无缩放宽度
+         */
+        noScaleWidth: number;
+        /**
+         * 无缩放高度
+         */
+        noScaleHeight: number;
+        /**
          * 宽度，不会影响到缩放值。
          */
         get width(): number;
@@ -283,7 +291,8 @@ declare namespace feng3d {
         'monospace' = "monospace",
         'cursive' = "cursive",
         'fantasy' = "fantasy",
-        'system-ui' = "system-ui"
+        'system-ui' = "system-ui",
+        '宋体' = "\u5B8B\u4F53"
     }
     /**
      * 字体样式。
