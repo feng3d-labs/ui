@@ -737,6 +737,8 @@ declare namespace feng3d {
          *
          * @param font - String representing the style of the font
          * @return Font properties object
+         *
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
          */
         static measureFont(font: string): IFontMetrics;
         /**

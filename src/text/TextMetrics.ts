@@ -92,7 +92,7 @@ namespace feng3d
         /**
          * Baseline multiplier for calculate font metrics.
          */
-        static BASELINE_MULTIPLIER = 1.4;
+        static BASELINE_MULTIPLIER = 2;
 
         /**
          * Cache of new line chars.
@@ -653,6 +653,8 @@ namespace feng3d
          *
          * @param font - String representing the style of the font
          * @return Font properties object
+         * 
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
          */
         static measureFont(font: string)
         {
@@ -672,7 +674,7 @@ namespace feng3d
             const metricsString = TextMetrics.METRICS_STRING + TextMetrics.BASELINE_SYMBOL;
             const width = Math.ceil(context.measureText(metricsString).width);
             let baseline = Math.ceil(context.measureText(TextMetrics.BASELINE_SYMBOL).width);
-            const height = 2 * baseline;
+            const height = 3 * baseline;
 
             baseline = baseline * TextMetrics.BASELINE_MULTIPLIER | 0;
 

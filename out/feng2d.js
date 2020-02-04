@@ -1601,6 +1601,8 @@ var feng3d;
          *
          * @param font - String representing the style of the font
          * @return Font properties object
+         *
+         * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/textBaseline
          */
         TextMetrics.measureFont = function (font) {
             // as this method is used for preparing assets, don't recalculate things if we don't need to
@@ -1614,7 +1616,7 @@ var feng3d;
             var metricsString = TextMetrics.METRICS_STRING + TextMetrics.BASELINE_SYMBOL;
             var width = Math.ceil(context.measureText(metricsString).width);
             var baseline = Math.ceil(context.measureText(TextMetrics.BASELINE_SYMBOL).width);
-            var height = 2 * baseline;
+            var height = 3 * baseline;
             baseline = baseline * TextMetrics.BASELINE_MULTIPLIER | 0;
             canvas.width = width;
             canvas.height = height;
@@ -1710,7 +1712,7 @@ var feng3d;
         /**
          * Baseline multiplier for calculate font metrics.
          */
-        TextMetrics.BASELINE_MULTIPLIER = 1.4;
+        TextMetrics.BASELINE_MULTIPLIER = 2;
         /**
          * Cache of new line chars.
          */
