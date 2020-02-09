@@ -113,6 +113,20 @@ declare namespace feng2d {
         private _onTransformChanged;
     }
 }
+declare namespace feng3d {
+    interface GameObject {
+        /**
+         * 游戏对象上的2D变换。
+         */
+        transform2D: feng2d.Transform2D;
+    }
+    interface Component {
+        /**
+         * 游戏对象上的2D变换。
+         */
+        transform2D: feng2d.Transform2D;
+    }
+}
 declare namespace feng2d {
     /**
      * UI几何体
@@ -186,6 +200,14 @@ declare namespace feng2d {
         projection: feng3d.Matrix4x4;
     }
 }
+declare namespace feng3d {
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
+    interface PrimitiveGameObject {
+        Canvas: GameObject;
+    }
+}
 declare namespace feng2d {
     class UIUniforms {
         __class__: "feng2d.ImageUniforms";
@@ -222,30 +244,6 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
-}
-declare namespace feng3d {
-    interface Component {
-        /**
-         * 游戏对象上的2D变换。
-         */
-        transform2D: feng2d.Transform2D;
-    }
-}
-declare namespace feng3d {
-    interface GameObject {
-        /**
-         * 游戏对象上的2D变换。
-         */
-        transform2D: feng2d.Transform2D;
-    }
-    /**
-     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
-     */
-    interface PrimitiveGameObject {
-        Canvas: GameObject;
-        Image: GameObject;
-        Text: GameObject;
-    }
 }
 declare namespace feng3d {
 }
@@ -295,6 +293,14 @@ declare namespace feng2d {
          */
         autoSize: boolean;
         beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
+    }
+}
+declare namespace feng3d {
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
+    interface PrimitiveGameObject {
+        Image: GameObject;
     }
 }
 declare namespace feng2d {
@@ -838,6 +844,14 @@ declare namespace feng2d {
         beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         invalidate(): void;
         private _styleChanged;
+    }
+}
+declare namespace feng3d {
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
+    interface PrimitiveGameObject {
+        Text: GameObject;
     }
 }
 //# sourceMappingURL=feng2d.d.ts.map

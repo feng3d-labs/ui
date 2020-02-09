@@ -87,3 +87,26 @@ namespace feng2d
         }
     }
 }
+
+namespace feng3d
+{
+
+    // 注册游戏原始对象
+    GameObject.registerPrimitive("Text", (g) =>
+    {
+        var transform2D = g.addComponent(feng2d.Transform2D);
+        g.addComponent(feng2d.CanvasRenderer);
+
+        transform2D.width = 160;
+        transform2D.height = 30;
+        g.addComponent(feng2d.Text)
+    });
+
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
+    export interface PrimitiveGameObject
+    {
+        Text: GameObject;
+    }
+}

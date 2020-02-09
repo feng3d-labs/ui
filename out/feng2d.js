@@ -243,6 +243,15 @@ var feng2d;
     }(feng3d.Component));
     feng2d.Transform2D = Transform2D;
 })(feng2d || (feng2d = {}));
+var feng3d;
+(function (feng3d) {
+    Object.defineProperty(feng3d.GameObject.prototype, "transform2D", {
+        get: function () { return this.getComponent(feng2d.Transform2D); },
+    });
+    Object.defineProperty(feng3d.Component.prototype, "transform2D", {
+        get: function () { return this._gameObject && this._gameObject.transform2D; },
+    });
+})(feng3d || (feng3d = {}));
 var feng2d;
 (function (feng2d) {
     /**
@@ -325,7 +334,6 @@ var feng2d;
 })(feng2d || (feng2d = {}));
 var feng2d;
 (function (feng2d) {
-    var oav = feng3d.oav;
     /**
      * Element that can be used for screen rendering.
      *
@@ -376,15 +384,22 @@ var feng2d;
             this.projection.identity().appendScale(2 / width, -2 / height, 1).appendTranslation(-1, 1, 0);
         };
         __decorate([
-            oav({ editable: false })
+            feng3d.oav({ editable: false })
         ], Canvas.prototype, "width", void 0);
         __decorate([
-            oav({ editable: false })
+            feng3d.oav({ editable: false })
         ], Canvas.prototype, "height", void 0);
         return Canvas;
     }(feng3d.Behaviour));
     feng2d.Canvas = Canvas;
 })(feng2d || (feng2d = {}));
+var feng3d;
+(function (feng3d) {
+    // 注册游戏原始对象
+    feng3d.GameObject.registerPrimitive("Canvas", function (g) {
+        g.addComponent(feng2d.Canvas);
+    });
+})(feng3d || (feng3d = {}));
 var feng2d;
 (function (feng2d) {
     var UIUniforms = /** @class */ (function () {
@@ -435,43 +450,6 @@ var feng3d;
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
-    Object.defineProperty(feng3d.Component.prototype, "transform2D", {
-        get: function () { return this._gameObject && this._gameObject.transform2D; },
-    });
-})(feng3d || (feng3d = {}));
-var feng3d;
-(function (feng3d) {
-    feng3d.functionwrap.extendFunction(feng3d.GameObject, "createPrimitive", function (g, type) {
-        if (type == "Canvas") {
-            g.addComponent(feng2d.Canvas);
-        }
-        else {
-            var transform2D = g.addComponent(feng2d.Transform2D);
-            g.addComponent(feng2d.CanvasRenderer);
-            if (type == "Image") {
-                transform2D.width = 100;
-                transform2D.height = 100;
-                g.addComponent(feng2d.Image);
-            }
-            else if (type == "Rect") {
-                transform2D.width = 100;
-                transform2D.height = 100;
-                g.addComponent(feng2d.Rect);
-            }
-            else if (type == "Text") {
-                transform2D.width = 160;
-                transform2D.height = 30;
-                g.addComponent(feng2d.Text);
-            }
-        }
-        return g;
-    });
-    Object.defineProperty(feng3d.GameObject.prototype, "transform2D", {
-        get: function () { return this.getComponent(feng2d.Transform2D); },
-    });
-})(feng3d || (feng3d = {}));
-var feng3d;
-(function (feng3d) {
     feng3d.functionwrap.extendFunction(feng3d.View.prototype, "render", function (r, interval) {
         feng2d.CanvasRenderer.draw(this.gl, this.scene);
     });
@@ -505,6 +483,17 @@ var feng2d;
     }(feng3d.Component));
     feng2d.Rect = Rect;
 })(feng2d || (feng2d = {}));
+var feng3d;
+(function (feng3d) {
+    // 注册游戏原始对象
+    feng3d.GameObject.registerPrimitive("Rect", function (g) {
+        var transform2D = g.addComponent(feng2d.Transform2D);
+        g.addComponent(feng2d.CanvasRenderer);
+        transform2D.width = 100;
+        transform2D.height = 100;
+        g.addComponent(feng2d.Rect);
+    });
+})(feng3d || (feng3d = {}));
 var feng2d;
 (function (feng2d) {
     /**
@@ -560,6 +549,17 @@ var feng2d;
     }(feng3d.Component));
     feng2d.Image = Image;
 })(feng2d || (feng2d = {}));
+var feng3d;
+(function (feng3d) {
+    // 注册游戏原始对象
+    feng3d.GameObject.registerPrimitive("Image", function (g) {
+        var transform2D = g.addComponent(feng2d.Transform2D);
+        g.addComponent(feng2d.CanvasRenderer);
+        transform2D.width = 100;
+        transform2D.height = 100;
+        g.addComponent(feng2d.Image);
+    });
+})(feng3d || (feng3d = {}));
 var feng2d;
 (function (feng2d) {
     /**
@@ -1876,4 +1876,15 @@ var feng2d;
     }(feng3d.Component));
     feng2d.Text = Text;
 })(feng2d || (feng2d = {}));
+var feng3d;
+(function (feng3d) {
+    // 注册游戏原始对象
+    feng3d.GameObject.registerPrimitive("Text", function (g) {
+        var transform2D = g.addComponent(feng2d.Transform2D);
+        g.addComponent(feng2d.CanvasRenderer);
+        transform2D.width = 160;
+        transform2D.height = 30;
+        g.addComponent(feng2d.Text);
+    });
+})(feng3d || (feng3d = {}));
 //# sourceMappingURL=feng2d.js.map

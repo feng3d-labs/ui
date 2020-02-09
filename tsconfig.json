@@ -30,8 +30,6 @@
         "src/core/UIMaterial.ts",
         //
         "src/polyfill/ClassUtils.ts",
-        "src/polyfill/Component.ts",
-        "src/polyfill/GameObject.ts",
         "src/polyfill/View.ts",
         //
         "src/Rect.ts",

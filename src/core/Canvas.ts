@@ -1,7 +1,5 @@
 namespace feng2d
 {
-    var oav = feng3d.oav;
-
     /**
      * Element that can be used for screen rendering.
      * 
@@ -16,10 +14,10 @@ namespace feng2d
          */
         renderMode = UIRenderMode.ScreenSpaceOverlay;
 
-        @oav({ editable: false })
+        @feng3d.oav({ editable: false })
         width = 1;
 
-        @oav({ editable: false })
+        @feng3d.oav({ editable: false })
         height = 1;
 
         init()
@@ -60,5 +58,22 @@ namespace feng2d
          * 渲染前自动更新
          */
         projection = new feng3d.Matrix4x4();
+    }
+}
+
+namespace feng3d
+{
+    // 注册游戏原始对象
+    GameObject.registerPrimitive("Canvas", (g) =>
+    {
+        g.addComponent(feng2d.Canvas)
+    });
+
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
+    export interface PrimitiveGameObject
+    {
+        Canvas: GameObject;
     }
 }

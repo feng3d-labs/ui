@@ -174,3 +174,33 @@ namespace feng2d
         }
     }
 }
+
+namespace feng3d
+{
+
+    export interface GameObject
+    {
+        /**
+         * 游戏对象上的2D变换。
+         */
+        transform2D: feng2d.Transform2D;
+    }
+
+    Object.defineProperty(GameObject.prototype, "transform2D",
+        {
+            get: function () { return this.getComponent(feng2d.Transform2D); },
+        });
+
+    export interface Component
+    {
+        /**
+         * 游戏对象上的2D变换。
+         */
+        transform2D: feng2d.Transform2D;
+    }
+
+    Object.defineProperty(Component.prototype, "transform2D",
+        {
+            get: function () { return this._gameObject && this._gameObject.transform2D; },
+        });
+}
