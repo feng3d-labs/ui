@@ -194,7 +194,7 @@ namespace feng3d
         /**
          * 如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。
          */
-        @oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。" })
+        @oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。", component: "OAVEnum", componentParam: { enumClass: TEXT_GRADIENT } })
         @watch("invalidate")
         @serialize
         fillGradientType = TEXT_GRADIENT.LINEAR_VERTICAL;

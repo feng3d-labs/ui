@@ -400,6 +400,14 @@ var feng3d;
              * 纹理数据
              */
             this.s_texture = feng3d.Texture2D.default;
+            /**
+             * 控制图片的显示区域。
+             */
+            this.u_uvRect = new feng3d.Vector4(0, 0, 1, 1);
+            /**
+             * 遮罩，控制显示区域。
+             */
+            this.u_mask = new feng3d.Vector4(0, 0, 4096, 4096);
         }
         __decorate([
             feng3d.serialize,
@@ -413,8 +421,8 @@ var feng3d;
     }());
     feng3d.UIUniforms = UIUniforms;
     feng3d.shaderConfig.shaders["ui"] = {
-        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    uniform vec2 u_size;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    varying vec2 v_uv;\n\n    void main() \n    {\n        vec2 position = a_position * u_size;\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(position, 0.0, 1.0);\n        v_uv = a_uv;\n    }\n    ",
-        fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    \n    uniform vec4 u_color;\n    \n    void main() {\n    \n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
+        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    uniform vec4 u_uvRect;\n    uniform vec2 u_size;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    varying vec2 v_uv;\n    varying vec2 v_globalPosition;\n\n    void main() \n    {\n        vec2 position = a_position * u_size;\n        vec4 globalPosition = u_modelMatrix * vec4(position, 0.0, 1.0);\n        gl_Position = u_viewProjection * globalPosition;\n        v_uv = u_uvRect.xy + a_uv * u_uvRect.zw;\n        v_globalPosition = globalPosition.xy;\n    }\n    ",
+        fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    varying vec2 v_globalPosition;\n    \n    uniform vec4 u_color;\n    uniform vec4 u_mask;\n    \n    void main() \n    {\n        if(v_globalPosition.x < u_mask.x || v_globalPosition.x > u_mask.x + u_mask.z || v_globalPosition.y < u_mask.y || v_globalPosition.y > u_mask.y + u_mask.w)\n            discard;\n\n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
         cls: UIUniforms,
         renderParams: { enableBlend: true, depthMask: false },
     };
@@ -1076,7 +1084,7 @@ var feng3d;
             feng3d.serialize
         ], TextStyle.prototype, "fill", void 0);
         __decorate([
-            feng3d.oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。" }),
+            feng3d.oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。", component: "OAVEnum", componentParam: { enumClass: TEXT_GRADIENT } }),
             feng3d.watch("invalidate"),
             feng3d.serialize
         ], TextStyle.prototype, "fillGradientType", void 0);
@@ -1761,6 +1769,14 @@ var feng3d;
              */
             _this.autoSize = true;
             _this.style = new feng3d.TextStyle();
+            /**
+             * 显示图片的区域，(0, 0, 1, 1)表示完整显示图片。
+             */
+            _this._uvRect = new feng3d.Vector4(0, 0, 1, 1);
+            /**
+             * 遮罩，控制显示区域。
+             */
+            _this._mask = new feng3d.Vector4(0, 0, 4096, 4096);
             _this._image = new feng3d.Texture2D();
             _this._invalid = true;
             return _this;
@@ -1778,7 +1794,16 @@ var feng3d;
                 this.transform2D.width = canvas.width;
                 this.transform2D.height = canvas.height;
             }
+            // 调整缩放使得更改尺寸时文字不被缩放。
+            this._uvRect.z = this.transform2D.width / canvas.width;
+            this._uvRect.w = this.transform2D.height / canvas.height;
+            // 只显示有文字的区域
+            this._mask.z = canvas.width;
+            this._mask.w = canvas.height;
+            //
             renderAtomic.uniforms.s_texture = this._image;
+            renderAtomic.uniforms.u_uvRect = this._uvRect;
+            renderAtomic.uniforms.u_mask = this._mask;
         };
         Text.prototype.invalidate = function () {
             this._invalid = true;

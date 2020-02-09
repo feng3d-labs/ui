@@ -202,6 +202,14 @@ declare namespace feng3d {
          * 纹理数据
          */
         s_texture: Texture2D;
+        /**
+         * 控制图片的显示区域。
+         */
+        u_uvRect: Vector4;
+        /**
+         * 遮罩，控制显示区域。
+         */
+        u_mask: Vector4;
     }
     interface Uniforms extends UIUniforms {
     }
@@ -781,6 +789,14 @@ declare namespace feng3d {
          */
         autoSize: boolean;
         style: TextStyle;
+        /**
+         * 显示图片的区域，(0, 0, 1, 1)表示完整显示图片。
+         */
+        private _uvRect;
+        /**
+         * 遮罩，控制显示区域。
+         */
+        private _mask;
         private _image;
         private _canvas;
         private _invalid;

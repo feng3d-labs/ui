@@ -25,6 +25,16 @@ namespace feng3d
         @watch("_styleChanged")
         style = new TextStyle();
 
+        /**
+         * 显示图片的区域，(0, 0, 1, 1)表示完整显示图片。
+         */
+        private _uvRect = new Vector4(0, 0, 1, 1);
+
+        /**
+         * 遮罩，控制显示区域。
+         */
+        private _mask = new Vector4(0, 0, 4096, 4096);
+
         private _image = new Texture2D();
         private _canvas: HTMLCanvasElement;
         private _invalid = true;
@@ -49,7 +59,18 @@ namespace feng3d
                 this.transform2D.height = canvas.height;
             }
 
+            // 调整缩放使得更改尺寸时文字不被缩放。
+            this._uvRect.z = this.transform2D.width / canvas.width;
+            this._uvRect.w = this.transform2D.height / canvas.height;
+
+            // 只显示有文字的区域
+            this._mask.z = canvas.width;
+            this._mask.w = canvas.height;
+
+            //
             renderAtomic.uniforms.s_texture = this._image;
+            renderAtomic.uniforms.u_uvRect = this._uvRect;
+            renderAtomic.uniforms.u_mask = this._mask;
         }
 
         invalidate()
