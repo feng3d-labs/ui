@@ -232,6 +232,9 @@ declare namespace feng3d {
          */
         transform2D: Transform2D;
     }
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
     interface PrimitiveGameObject {
         Canvas: GameObject;
         Image: GameObject;
@@ -239,6 +242,26 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
+}
+declare namespace feng3d {
+    /**
+     * 矩形纯色组件
+     *
+     * 用于填充UI中背景等颜色。
+     */
+    class Rect extends Component {
+        /**
+         * 填充颜色。
+         */
+        color: Color4;
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+    }
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
+    interface PrimitiveGameObject {
+        Rect: GameObject;
+    }
 }
 declare namespace feng3d {
     /**

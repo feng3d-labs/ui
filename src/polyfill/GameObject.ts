@@ -15,6 +15,11 @@ namespace feng3d
                 transform2D.width = 100;
                 transform2D.height = 100;
                 g.addComponent(Image)
+            } else if (type == "Rect")
+            {
+                transform2D.width = 100;
+                transform2D.height = 100;
+                g.addComponent(Rect)
             }
             else if (type == "Text")
             {
@@ -40,6 +45,9 @@ namespace feng3d
             get: function () { return this.getComponent(Transform2D); },
         });
 
+    /**
+     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
+     */
     export interface PrimitiveGameObject
     {
         Canvas: GameObject;

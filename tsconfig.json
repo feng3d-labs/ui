@@ -33,6 +33,7 @@
         "src/polyfill/GameObject.ts",
         "src/polyfill/View.ts",
         //
+        "src/Rect.ts",
         "src/Image.ts",
         //
         "src/text/drawText.ts",

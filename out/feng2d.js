@@ -448,6 +448,11 @@ var feng3d;
                 transform2D.height = 100;
                 g.addComponent(feng3d.Image);
             }
+            else if (type == "Rect") {
+                transform2D.width = 100;
+                transform2D.height = 100;
+                g.addComponent(feng3d.Rect);
+            }
             else if (type == "Text") {
                 transform2D.width = 160;
                 transform2D.height = 30;
@@ -466,6 +471,35 @@ var feng3d;
     feng3d.functionwrap.extendFunction(feng3d.View.prototype, "render", function (r, interval) {
         feng3d.CanvasRenderer.draw(this.gl, this.scene);
     });
+})(feng3d || (feng3d = {}));
+var feng3d;
+(function (feng3d) {
+    /**
+     * 矩形纯色组件
+     *
+     * 用于填充UI中背景等颜色。
+     */
+    var Rect = /** @class */ (function (_super) {
+        __extends(Rect, _super);
+        function Rect() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            /**
+             * 填充颜色。
+             */
+            _this.color = new feng3d.Color4();
+            return _this;
+        }
+        Rect.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+            _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
+            renderAtomic.uniforms.u_color = this.color;
+        };
+        __decorate([
+            feng3d.oav(),
+            feng3d.serialize
+        ], Rect.prototype, "color", void 0);
+        return Rect;
+    }(feng3d.Component));
+    feng3d.Rect = Rect;
 })(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
