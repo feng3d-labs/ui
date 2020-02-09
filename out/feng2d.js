@@ -436,8 +436,8 @@ var feng2d;
     }());
     feng2d.UIUniforms = UIUniforms;
     feng3d.shaderConfig.shaders["ui"] = {
-        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    uniform vec4 u_uvRect;\n    uniform vec2 u_size;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    varying vec2 v_uv;\n    varying vec2 v_globalPosition;\n\n    void main() \n    {\n        vec2 position = a_position * u_size;\n        vec4 globalPosition = u_modelMatrix * vec4(position, 0.0, 1.0);\n        gl_Position = u_viewProjection * globalPosition;\n        v_uv = u_uvRect.xy + a_uv * u_uvRect.zw;\n        v_globalPosition = globalPosition.xy;\n    }\n    ",
-        fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    varying vec2 v_globalPosition;\n    \n    uniform vec4 u_color;\n    uniform vec4 u_mask;\n    \n    void main() \n    {\n        if(v_globalPosition.x < u_mask.x || v_globalPosition.x > u_mask.x + u_mask.z || v_globalPosition.y < u_mask.y || v_globalPosition.y > u_mask.y + u_mask.w)\n            discard;\n\n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
+        vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    uniform vec4 u_uvRect;\n    uniform vec2 u_size;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    varying vec2 v_uv;\n    varying vec2 v_position;\n\n    void main() \n    {\n        vec2 position = a_position * u_size;\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(position, 0.0, 1.0);\n        v_uv = u_uvRect.xy + a_uv * u_uvRect.zw;\n        v_position = position.xy;\n    }\n    ",
+        fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    varying vec2 v_position;\n    \n    uniform vec4 u_color;\n    uniform vec4 u_mask;\n    \n    void main() \n    {\n        if(v_position.x < u_mask.x || v_position.x > u_mask.x + u_mask.z || v_position.y < u_mask.y || v_position.y > u_mask.y + u_mask.w)\n            discard;\n\n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
         cls: UIUniforms,
         renderParams: { enableBlend: true, depthMask: false },
     };
@@ -555,6 +555,132 @@ var feng3d;
         transform2D.width = 100;
         transform2D.height = 100;
         g.addComponent(feng2d.Image);
+    });
+})(feng3d || (feng3d = {}));
+var feng2d;
+(function (feng2d) {
+    /**
+     * 按钮状态
+     */
+    var ButtonState;
+    (function (ButtonState) {
+        /**
+         * 弹起状态，默认状态。
+         */
+        ButtonState["up"] = "up";
+        /**
+         * 鼠标在按钮上状态。
+         */
+        ButtonState["over"] = "over";
+        /**
+         * 鼠标按下状态。
+         */
+        ButtonState["down"] = "down";
+        /**
+         * 选中时弹起状态。
+         */
+        ButtonState["selected_up"] = "selected_up";
+        /**
+         * 选中时鼠标在按钮上状态。
+         */
+        ButtonState["selected_over"] = "selected_over";
+        /**
+         * 选中时鼠标按下状态。
+         */
+        ButtonState["selected_down"] = "selected_down";
+        /**
+         * 禁用状态。
+         */
+        ButtonState["disabled"] = "disabled";
+    })(ButtonState = feng2d.ButtonState || (feng2d.ButtonState = {}));
+    /**
+     * 按钮
+     */
+    var Button = /** @class */ (function (_super) {
+        __extends(Button, _super);
+        function Button() {
+            var _this = _super !== null && _super.apply(this, arguments) || this;
+            /**
+             * 按钮所处状态。
+             */
+            _this.state = ButtonState.up;
+            /**
+             * 所有状态数据，每一个状态数据中记录了子对象的当前数据。
+             */
+            _this.allStateData = {};
+            _this._stateInvalid = true;
+            return _this;
+        }
+        /**
+         * 保存当前状态，例如在编辑器中编辑完按钮某一状态后调用该方法进行保存当前状态数据。
+         */
+        Button.prototype.saveState = function () {
+            var stateData = {};
+            // 出现相同名称时，只保存第一个数据
+            var childMap = {};
+            this.gameObject.children.forEach(function (child) {
+                if (childMap[child.name])
+                    return;
+                childMap[child.name] = child;
+            });
+            for (var childname in childMap) {
+                var jsonObj = feng3d.serialization.serialize(childMap[childname]);
+                feng3d.serialization.deleteCLASS_KEY(jsonObj);
+                stateData[childname] = jsonObj;
+            }
+            this.allStateData[this.state] = stateData;
+        };
+        Button.prototype._onStateChanged = function () {
+            this._stateInvalid = true;
+        };
+        /**
+         * 每帧执行
+         */
+        Button.prototype.update = function (interval) {
+            if (this._stateInvalid) {
+                this._updateState();
+                this._stateInvalid = false;
+            }
+        };
+        /**
+         * 更新状态
+         */
+        Button.prototype._updateState = function () {
+            var statedata = this.allStateData[this.state];
+            if (!statedata)
+                return;
+            var childMap = {};
+            this.gameObject.children.forEach(function (child) {
+                if (childMap[child.name])
+                    return;
+                childMap[child.name] = child;
+            });
+            for (var childname in childMap) {
+                childMap[childname] = feng3d.serialization.setValue(childMap[childname], statedata[childname]);
+            }
+        };
+        __decorate([
+            feng3d.oav({ block: "Layout", tooltip: "按钮所处状态。", component: "OAVEnum", componentParam: { enumClass: ButtonState } }),
+            feng3d.watch("_onStateChanged"),
+            feng3d.serialize
+        ], Button.prototype, "state", void 0);
+        __decorate([
+            feng3d.serialize
+        ], Button.prototype, "allStateData", void 0);
+        __decorate([
+            feng3d.oav()
+        ], Button.prototype, "saveState", null);
+        return Button;
+    }(feng3d.Behaviour));
+    feng2d.Button = Button;
+})(feng2d || (feng2d = {}));
+var feng3d;
+(function (feng3d) {
+    feng3d.GameObject.registerPrimitive("Button", function (g) {
+        var transform2D = g.addComponent(feng2d.Transform2D);
+        transform2D.width = 160;
+        transform2D.height = 30;
+        g.addComponent(feng2d.Button);
     });
 })(feng3d || (feng3d = {}));
 var feng2d;

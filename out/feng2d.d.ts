@@ -296,6 +296,73 @@ declare namespace feng3d {
 }
 declare namespace feng2d {
     /**
+     * 按钮状态
+     */
+    enum ButtonState {
+        /**
+         * 弹起状态，默认状态。
+         */
+        up = "up",
+        /**
+         * 鼠标在按钮上状态。
+         */
+        over = "over",
+        /**
+         * 鼠标按下状态。
+         */
+        down = "down",
+        /**
+         * 选中时弹起状态。
+         */
+        selected_up = "selected_up",
+        /**
+         * 选中时鼠标在按钮上状态。
+         */
+        selected_over = "selected_over",
+        /**
+         * 选中时鼠标按下状态。
+         */
+        selected_down = "selected_down",
+        /**
+         * 禁用状态。
+         */
+        disabled = "disabled"
+    }
+    /**
+     * 按钮
+     */
+    class Button extends feng3d.Behaviour {
+        /**
+         * 按钮所处状态。
+         */
+        state: ButtonState;
+        /**
+         * 所有状态数据，每一个状态数据中记录了子对象的当前数据。
+         */
+        allStateData: {};
+        private _stateInvalid;
+        /**
+         * 保存当前状态，例如在编辑器中编辑完按钮某一状态后调用该方法进行保存当前状态数据。
+         */
+        saveState(): void;
+        private _onStateChanged;
+        /**
+         * 每帧执行
+         */
+        update(interval?: number): void;
+        /**
+         * 更新状态
+         */
+        private _updateState;
+    }
+}
+declare namespace feng3d {
+    interface PrimitiveGameObject {
+        Button: GameObject;
+    }
+}
+declare namespace feng2d {
+    /**
      * 绘制文本
      *
      * @param canvas 画布

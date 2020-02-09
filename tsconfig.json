@@ -34,6 +34,7 @@
         //
         "src/Rect.ts",
         "src/Image.ts",
+        "src/Button.ts",
         //
         "src/text/drawText.ts",
         "src/text/TextStyle.ts",

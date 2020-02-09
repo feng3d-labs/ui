@@ -45,15 +45,14 @@ namespace feng2d
     uniform mat4 u_viewProjection;
     
     varying vec2 v_uv;
-    varying vec2 v_globalPosition;
+    varying vec2 v_position;
 
     void main() 
     {
         vec2 position = a_position * u_size;
-        vec4 globalPosition = u_modelMatrix * vec4(position, 0.0, 1.0);
-        gl_Position = u_viewProjection * globalPosition;
+        gl_Position = u_viewProjection * u_modelMatrix * vec4(position, 0.0, 1.0);
         v_uv = u_uvRect.xy + a_uv * u_uvRect.zw;
-        v_globalPosition = globalPosition.xy;
+        v_position = position.xy;
     }
     `,
         fragment: `
@@ -61,14 +60,14 @@ namespace feng2d
 
     uniform sampler2D s_texture;
     varying vec2 v_uv;
-    varying vec2 v_globalPosition;
+    varying vec2 v_position;
     
     uniform vec4 u_color;
     uniform vec4 u_mask;
     
     void main() 
     {
-        if(v_globalPosition.x < u_mask.x || v_globalPosition.x > u_mask.x + u_mask.z || v_globalPosition.y < u_mask.y || v_globalPosition.y > u_mask.y + u_mask.w)
+        if(v_position.x < u_mask.x || v_position.x > u_mask.x + u_mask.z || v_position.y < u_mask.y || v_position.y > u_mask.y + u_mask.w)
             discard;
 
         vec4 color = texture2D(s_texture, v_uv);
