@@ -1,4 +1,43 @@
-declare namespace feng3d {
+declare namespace feng2d {
+    const EventDispatcher: typeof feng3d.EventDispatcher;
+    type EventDispatcher = feng3d.EventDispatcher;
+    const Vector2: typeof feng3d.Vector2;
+    type Vector2 = feng3d.Vector2;
+    const Vector4: typeof feng3d.Vector4;
+    type Vector4 = feng3d.Vector4;
+    const Color4: typeof feng3d.Color4;
+    type Color4 = feng3d.Color4;
+    const Matrix3x3: typeof feng3d.Matrix3x3;
+    type Matrix3x3 = feng3d.Matrix3x3;
+    const Matrix4x4: typeof feng3d.Matrix4x4;
+    type Matrix4x4 = feng3d.Matrix4x4;
+    const watcher: feng3d.Watcher;
+    const oav: typeof feng3d.oav;
+    const watch: typeof feng3d.watch;
+    const serialize: typeof feng3d.serialize;
+    const serialization: feng3d.Serialization;
+    const shaderConfig: feng3d.ShaderConfig;
+    const GL: typeof feng3d.GL;
+    type GL = feng3d.GL;
+    const Texture2D: typeof feng3d.Texture2D;
+    type Texture2D = feng3d.Texture2D;
+    const RenderAtomic: typeof feng3d.RenderAtomic;
+    type RenderAtomic = feng3d.RenderAtomic;
+    const Component: typeof feng3d.Component;
+    type Component = feng3d.Component;
+    const Behaviour: typeof feng3d.Behaviour;
+    type Behaviour = feng3d.Behaviour;
+    const Scene: typeof feng3d.Scene;
+    type Scene = feng3d.Scene;
+    const Camera: typeof feng3d.Camera;
+    type Camera = feng3d.Camera;
+    const geometryUtils: feng3d.GeometryUtils;
+    const Geometry: typeof feng3d.Geometry;
+    type Geometry = feng3d.Geometry;
+    const Material: typeof feng3d.Material;
+    type Material = feng3d.Material;
+}
+declare namespace feng2d {
     /**
      * UIRenderMode for the Canvas.
      *
@@ -25,7 +64,7 @@ declare namespace feng3d {
         WorldSpace = 2
     }
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * 2D变换
      *
@@ -63,8 +102,8 @@ declare namespace feng3d {
         /**
          * 位移
          */
-        get position(): Vector2;
-        set position(v: Vector2);
+        get position(): feng3d.Vector2;
+        set position(v: feng3d.Vector2);
         /**
          * 无缩放宽度
          */
@@ -90,52 +129,54 @@ declare namespace feng3d {
         /**
          * 缩放
          */
-        get scale(): Vector2;
-        set scale(v: Vector2);
+        get scale(): feng3d.Vector2;
+        set scale(v: feng3d.Vector2);
         /**
          * 尺寸，宽高。
          */
-        get size(): Vector2;
-        set size(v: Vector2);
+        get size(): feng3d.Vector2;
+        set size(v: feng3d.Vector2);
         private _size;
         /**
          * 本地变换矩阵
          */
-        get matrix(): Matrix3x3;
-        set matrix(v: Matrix3x3);
+        get matrix(): feng3d.Matrix3x3;
+        set matrix(v: feng3d.Matrix3x3);
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
         private readonly _position;
         private readonly _scale;
-        protected readonly _matrix: Matrix3x3;
+        protected readonly _matrix: feng3d.Matrix3x3;
         private _positionChanged;
         private _rotationChanged;
         private _scaleChanged;
         private _onTransformChanged;
     }
 }
-declare namespace feng3d {
-    interface GeometryTypes {
-        QuadGeometry: QuadGeometry;
-    }
+declare namespace feng2d {
     /**
      * UI几何体
      */
     class UIGeometry extends Geometry {
-        __class__: "feng3d.UIGeometry";
+        __class__: "feng2d.UIGeometry";
         constructor();
-    }
-    interface DefaultGeometry {
-        "Default-UIGeometry": UIGeometry;
     }
 }
 declare namespace feng3d {
+    interface GeometryTypes {
+        UIGeometry: feng2d.UIGeometry;
+    }
+    interface DefaultGeometry {
+        "Default-UIGeometry": feng2d.UIGeometry;
+    }
+}
+declare namespace feng2d {
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
     class CanvasRenderer extends Behaviour {
-        readonly renderAtomic: RenderAtomic;
+        readonly renderAtomic: feng3d.RenderAtomic;
         geometry: UIGeometry;
-        material: Material;
+        material: feng3d.Material;
         /**
          * 渲染前执行函数
          *
@@ -153,7 +194,7 @@ declare namespace feng3d {
         static draw(gl: GL, scene: Scene): void;
     }
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * Element that can be used for screen rendering.
      *
@@ -181,37 +222,39 @@ declare namespace feng3d {
          *
          * 渲染前自动更新
          */
-        projection: Matrix4x4;
+        projection: feng3d.Matrix4x4;
+    }
+}
+declare namespace feng2d {
+    class UIUniforms {
+        __class__: "feng2d.ImageUniforms";
+        /**
+         * UI几何体尺寸，在shader中进行对几何体缩放。
+         */
+        u_size: feng3d.Vector2;
+        /**
+         * 颜色
+         */
+        u_color: feng3d.Color4;
+        /**
+         * 纹理数据
+         */
+        s_texture: feng3d.Texture2D;
+        /**
+         * 控制图片的显示区域。
+         */
+        u_uvRect: feng3d.Vector4;
+        /**
+         * 遮罩，控制显示区域。
+         */
+        u_mask: feng3d.Vector4;
     }
 }
 declare namespace feng3d {
     interface UniformsTypes {
-        ui: UIUniforms;
+        ui: feng2d.UIUniforms;
     }
-    class UIUniforms {
-        __class__: "feng3d.ImageUniforms";
-        /**
-         * UI几何体尺寸，在shader中进行对几何体缩放。
-         */
-        u_size: Vector2;
-        /**
-         * 颜色
-         */
-        u_color: Color4;
-        /**
-         * 纹理数据
-         */
-        s_texture: Texture2D;
-        /**
-         * 控制图片的显示区域。
-         */
-        u_uvRect: Vector4;
-        /**
-         * 遮罩，控制显示区域。
-         */
-        u_mask: Vector4;
-    }
-    interface Uniforms extends UIUniforms {
+    interface Uniforms extends feng2d.UIUniforms {
     }
     interface DefaultMaterial {
         "Default-UIMaterial": Material;
@@ -222,7 +265,7 @@ declare namespace feng3d {
         /**
          * 游戏对象上的2D变换。
          */
-        transform2D: Transform2D;
+        transform2D: feng2d.Transform2D;
     }
 }
 declare namespace feng3d {
@@ -230,7 +273,7 @@ declare namespace feng3d {
         /**
          * 游戏对象上的2D变换。
          */
-        transform2D: Transform2D;
+        transform2D: feng2d.Transform2D;
     }
     /**
      * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
@@ -243,7 +286,7 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * 矩形纯色组件
      *
@@ -253,9 +296,11 @@ declare namespace feng3d {
         /**
          * 填充颜色。
          */
-        color: Color4;
+        color: feng3d.Color4;
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
+}
+declare namespace feng3d {
     /**
      * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
      */
@@ -263,7 +308,7 @@ declare namespace feng3d {
         Rect: GameObject;
     }
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * 图片组件
      *
@@ -275,13 +320,13 @@ declare namespace feng3d {
          *
          * 图像元素的源纹理。
          */
-        image: Texture2D;
+        image: feng3d.Texture2D;
         /**
          * Tinting color for this Image.
          *
          * 为该图像着色。
          */
-        color: Color4;
+        color: feng3d.Color4;
         /**
          * 是否根据图片实际尺寸自动调整宽高。
          */
@@ -289,7 +334,7 @@ declare namespace feng3d {
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * 绘制文本
      *
@@ -300,7 +345,7 @@ declare namespace feng3d {
      */
     function drawText(canvas: HTMLCanvasElement, _text: string, style: TextStyle, resolution?: number): HTMLCanvasElement;
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * 文本上渐变方向。
      */
@@ -387,11 +432,11 @@ declare namespace feng3d {
         changed: any;
     }
     interface TextStyle {
-        once<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => void, thisObject?: any, priority?: number): void;
-        dispatch<K extends keyof TextStyleEventMap>(type: K, data?: TextStyleEventMap[K], bubbles?: boolean): Event<TextStyleEventMap[K]>;
+        once<K extends keyof TextStyleEventMap>(type: K, listener: (event: feng3d.Event<TextStyleEventMap[K]>) => void, thisObject?: any, priority?: number): void;
+        dispatch<K extends keyof TextStyleEventMap>(type: K, data?: TextStyleEventMap[K], bubbles?: boolean): feng3d.Event<TextStyleEventMap[K]>;
         has<K extends keyof TextStyleEventMap>(type: K): boolean;
-        on<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any, priority?: number, once?: boolean): void;
-        off<K extends keyof TextStyleEventMap>(type?: K, listener?: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any): void;
+        on<K extends keyof TextStyleEventMap>(type: K, listener: (event: feng3d.Event<TextStyleEventMap[K]>) => any, thisObject?: any, priority?: number, once?: boolean): void;
+        off<K extends keyof TextStyleEventMap>(type?: K, listener?: (event: feng3d.Event<TextStyleEventMap[K]>) => any, thisObject?: any): void;
     }
     /**
      * 文本样式
@@ -400,7 +445,7 @@ declare namespace feng3d {
      *
      * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextStyle.js
      */
-    class TextStyle extends EventDispatcher {
+    class TextStyle extends feng3d.EventDispatcher {
         /**
          * @param style 样式参数
          */
@@ -429,7 +474,7 @@ declare namespace feng3d {
          * 用于填充文本的颜色。
          * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
          */
-        fill: Color4;
+        fill: feng3d.Color4;
         /**
          * 如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。
          */
@@ -441,7 +486,7 @@ declare namespace feng3d {
         /**
          * 将用于文本笔划的画布填充样式。
          */
-        stroke: Color4;
+        stroke: feng3d.Color4;
         /**
          * 一个表示笔画厚度的数字。
          */
@@ -469,7 +514,7 @@ declare namespace feng3d {
         /**
          * 投影颜色。
          */
-        dropShadowColor: Color4;
+        dropShadowColor: feng3d.Color4;
         /**
          * 投影角度。
          */
@@ -536,7 +581,7 @@ declare namespace feng3d {
         toFontString(): string;
     }
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * 文本度量
      *
@@ -800,7 +845,7 @@ declare namespace feng3d {
     }
     export {};
 }
-declare namespace feng3d {
+declare namespace feng2d {
     /**
      * 文本组件
      *

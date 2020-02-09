@@ -1,4 +1,4 @@
-namespace feng3d
+namespace feng2d
 {
     /**
      * UIRenderMode for the Canvas.

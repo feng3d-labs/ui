@@ -1,13 +1,12 @@
-namespace feng3d
+namespace feng2d
 {
-    export interface GeometryTypes { QuadGeometry: QuadGeometry }
 
     /**
      * UI几何体
      */
     export class UIGeometry extends Geometry
     {
-        __class__: "feng3d.UIGeometry";
+        __class__: "feng2d.UIGeometry";
 
         constructor()
         {
@@ -24,9 +23,15 @@ namespace feng3d
         }
     }
 
+    Geometry.setDefault("Default-UIGeometry", new UIGeometry());
+}
+
+namespace feng3d
+{
+    export interface GeometryTypes { UIGeometry: feng2d.UIGeometry }
+
     export interface DefaultGeometry
     {
-        "Default-UIGeometry": UIGeometry;
+        "Default-UIGeometry": feng2d.UIGeometry;
     }
-    Geometry.setDefault("Default-UIGeometry", new UIGeometry());
 }

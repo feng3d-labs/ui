@@ -4,28 +4,28 @@ namespace feng3d
     {
         if (type == "Canvas")
         {
-            g.addComponent(Canvas)
+            g.addComponent(feng2d.Canvas)
         } else 
         {
-            var transform2D = g.addComponent(Transform2D);
-            g.addComponent(CanvasRenderer);
+            var transform2D = g.addComponent(feng2d.Transform2D);
+            g.addComponent(feng2d.CanvasRenderer);
 
             if (type == "Image")
             {
                 transform2D.width = 100;
                 transform2D.height = 100;
-                g.addComponent(Image)
+                g.addComponent(feng2d.Image)
             } else if (type == "Rect")
             {
                 transform2D.width = 100;
                 transform2D.height = 100;
-                g.addComponent(Rect)
+                g.addComponent(feng2d.Rect)
             }
             else if (type == "Text")
             {
                 transform2D.width = 160;
                 transform2D.height = 30;
-                g.addComponent(Text)
+                g.addComponent(feng2d.Text)
             }
         }
 
@@ -37,12 +37,12 @@ namespace feng3d
         /**
          * 游戏对象上的2D变换。
          */
-        transform2D: Transform2D;
+        transform2D: feng2d.Transform2D;
     }
 
     Object.defineProperty(GameObject.prototype, "transform2D",
         {
-            get: function () { return this.getComponent(Transform2D); },
+            get: function () { return this.getComponent(feng2d.Transform2D); },
         });
 
     /**

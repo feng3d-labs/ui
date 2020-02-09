@@ -1,4 +1,4 @@
-namespace feng3d
+namespace feng2d
 {
     /**
      * 矩形纯色组件
@@ -21,7 +21,10 @@ namespace feng3d
             renderAtomic.uniforms.u_color = this.color;
         }
     }
+}
 
+namespace feng3d
+{
     /**
      * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
      */

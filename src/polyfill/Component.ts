@@ -5,7 +5,7 @@ namespace feng3d
         /**
          * 游戏对象上的2D变换。
          */
-        transform2D: Transform2D;
+        transform2D: feng2d.Transform2D;
     }
 
     Object.defineProperty(Component.prototype, "transform2D",

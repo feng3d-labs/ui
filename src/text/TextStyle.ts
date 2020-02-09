@@ -1,4 +1,4 @@
-namespace feng3d
+namespace feng2d
 {
 
     /**
@@ -117,11 +117,11 @@ namespace feng3d
 
     export interface TextStyle
     {
-        once<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => void, thisObject?: any, priority?: number): void;
-        dispatch<K extends keyof TextStyleEventMap>(type: K, data?: TextStyleEventMap[K], bubbles?: boolean): Event<TextStyleEventMap[K]>;
+        once<K extends keyof TextStyleEventMap>(type: K, listener: (event: feng3d.Event<TextStyleEventMap[K]>) => void, thisObject?: any, priority?: number): void;
+        dispatch<K extends keyof TextStyleEventMap>(type: K, data?: TextStyleEventMap[K], bubbles?: boolean): feng3d.Event<TextStyleEventMap[K]>;
         has<K extends keyof TextStyleEventMap>(type: K): boolean;
-        on<K extends keyof TextStyleEventMap>(type: K, listener: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any, priority?: number, once?: boolean): void;
-        off<K extends keyof TextStyleEventMap>(type?: K, listener?: (event: Event<TextStyleEventMap[K]>) => any, thisObject?: any): void;
+        on<K extends keyof TextStyleEventMap>(type: K, listener: (event: feng3d.Event<TextStyleEventMap[K]>) => any, thisObject?: any, priority?: number, once?: boolean): void;
+        off<K extends keyof TextStyleEventMap>(type?: K, listener?: (event: feng3d.Event<TextStyleEventMap[K]>) => any, thisObject?: any): void;
     }
     /**
      * 文本样式
@@ -130,7 +130,7 @@ namespace feng3d
      * 
      * @see https://github.com/pixijs/pixi.js/blob/dev/packages/text/src/TextStyle.js
      */
-    export class TextStyle extends EventDispatcher
+    export class TextStyle extends feng3d.EventDispatcher
     {
         /**
          * @param style 样式参数

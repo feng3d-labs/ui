@@ -1,5 +1,7 @@
-namespace feng3d
+namespace feng2d
 {
+    var oav = feng3d.oav;
+
     /**
      * Element that can be used for screen rendering.
      * 
