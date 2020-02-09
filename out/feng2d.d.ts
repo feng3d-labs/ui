@@ -243,6 +243,8 @@ declare namespace feng3d {
 declare namespace feng3d {
     /**
      * 图片组件
+     *
+     * 用于显示图片
      */
     class Image extends Component {
         /**
@@ -257,11 +259,11 @@ declare namespace feng3d {
          * 为该图像着色。
          */
         color: Color4;
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
         /**
-         * 重置图片尺寸。
+         * 是否根据图片实际尺寸自动调整宽高。
          */
-        resetSize(): void;
+        autoSize: boolean;
+        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
     }
 }
 declare namespace feng3d {
@@ -778,6 +780,8 @@ declare namespace feng3d {
 declare namespace feng3d {
     /**
      * 文本组件
+     *
+     * 用于显示文字。
      */
     class Text extends Component {
         /**

@@ -2,6 +2,8 @@ namespace feng3d
 {
     /**
      * 文本组件
+     * 
+     * 用于显示文字。
      */
     export class Text extends Component
     {

@@ -2,6 +2,8 @@ namespace feng3d
 {
     /**
      * 图片组件
+     * 
+     * 用于显示图片
      */
     export class Image extends Component
     {
@@ -23,23 +25,26 @@ namespace feng3d
         @serialize
         color = new Color4();
 
+        /**
+         * 是否根据图片实际尺寸自动调整宽高。
+         */
+        @oav({ tooltip: "是否根据图片实际尺寸自动调整宽高。" })
+        @serialize
+        autoSize = true;
+
         beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
-        }
 
-        /**
-         * 重置图片尺寸。
-         */
-        @oav({ tooltip: "重置图片尺寸。" })
-        resetSize()
-        {
-            var imagesize = this.image.getSize();
-            this.transform2D.width = imagesize.x;
-            this.transform2D.height = imagesize.y;
+            if (this.autoSize)
+            {
+                var imagesize = this.image.getSize();
+                this.transform2D.width = imagesize.x;
+                this.transform2D.height = imagesize.y;
+            }
         }
     }
 }

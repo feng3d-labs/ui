@@ -471,6 +471,8 @@ var feng3d;
 (function (feng3d) {
     /**
      * 图片组件
+     *
+     * 用于显示图片
      */
     var Image = /** @class */ (function (_super) {
         __extends(Image, _super);
@@ -488,20 +490,21 @@ var feng3d;
              * 为该图像着色。
              */
             _this.color = new feng3d.Color4();
+            /**
+             * 是否根据图片实际尺寸自动调整宽高。
+             */
+            _this.autoSize = true;
             return _this;
         }
         Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
-        };
-        /**
-         * 重置图片尺寸。
-         */
-        Image.prototype.resetSize = function () {
-            var imagesize = this.image.getSize();
-            this.transform2D.width = imagesize.x;
-            this.transform2D.height = imagesize.y;
+            if (this.autoSize) {
+                var imagesize = this.image.getSize();
+                this.transform2D.width = imagesize.x;
+                this.transform2D.height = imagesize.y;
+            }
         };
         __decorate([
             feng3d.oav(),
@@ -512,8 +515,9 @@ var feng3d;
             feng3d.serialize
         ], Image.prototype, "color", void 0);
         __decorate([
-            feng3d.oav({ tooltip: "重置图片尺寸。" })
-        ], Image.prototype, "resetSize", null);
+            feng3d.oav({ tooltip: "是否根据图片实际尺寸自动调整宽高。" }),
+            feng3d.serialize
+        ], Image.prototype, "autoSize", void 0);
         return Image;
     }(feng3d.Component));
     feng3d.Image = Image;
@@ -1755,6 +1759,8 @@ var feng3d;
 (function (feng3d) {
     /**
      * 文本组件
+     *
+     * 用于显示文字。
      */
     var Text = /** @class */ (function (_super) {
         __extends(Text, _super);
