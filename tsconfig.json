@@ -21,8 +21,6 @@
     ],
     "files": [
         // 事件模块
-        "src/Feng3d.ts",
-        //
         "src/enums/UIRenderMode.ts",
         //
         "src/core/Transform2D.ts",
@@ -31,6 +29,7 @@
         "src/core/Canvas.ts",
         "src/core/UIMaterial.ts",
         //
+        "src/polyfill/ClassUtils.ts",
         "src/polyfill/Component.ts",
         "src/polyfill/GameObject.ts",
         "src/polyfill/View.ts",

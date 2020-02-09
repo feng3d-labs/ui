@@ -1,43 +1,4 @@
 declare namespace feng2d {
-    const EventDispatcher: typeof feng3d.EventDispatcher;
-    type EventDispatcher = feng3d.EventDispatcher;
-    const Vector2: typeof feng3d.Vector2;
-    type Vector2 = feng3d.Vector2;
-    const Vector4: typeof feng3d.Vector4;
-    type Vector4 = feng3d.Vector4;
-    const Color4: typeof feng3d.Color4;
-    type Color4 = feng3d.Color4;
-    const Matrix3x3: typeof feng3d.Matrix3x3;
-    type Matrix3x3 = feng3d.Matrix3x3;
-    const Matrix4x4: typeof feng3d.Matrix4x4;
-    type Matrix4x4 = feng3d.Matrix4x4;
-    const watcher: feng3d.Watcher;
-    const oav: typeof feng3d.oav;
-    const watch: typeof feng3d.watch;
-    const serialize: typeof feng3d.serialize;
-    const serialization: feng3d.Serialization;
-    const shaderConfig: feng3d.ShaderConfig;
-    const GL: typeof feng3d.GL;
-    type GL = feng3d.GL;
-    const Texture2D: typeof feng3d.Texture2D;
-    type Texture2D = feng3d.Texture2D;
-    const RenderAtomic: typeof feng3d.RenderAtomic;
-    type RenderAtomic = feng3d.RenderAtomic;
-    const Component: typeof feng3d.Component;
-    type Component = feng3d.Component;
-    const Behaviour: typeof feng3d.Behaviour;
-    type Behaviour = feng3d.Behaviour;
-    const Scene: typeof feng3d.Scene;
-    type Scene = feng3d.Scene;
-    const Camera: typeof feng3d.Camera;
-    type Camera = feng3d.Camera;
-    const geometryUtils: feng3d.GeometryUtils;
-    const Geometry: typeof feng3d.Geometry;
-    type Geometry = feng3d.Geometry;
-    const Material: typeof feng3d.Material;
-    type Material = feng3d.Material;
-}
-declare namespace feng2d {
     /**
      * UIRenderMode for the Canvas.
      *
@@ -72,7 +33,7 @@ declare namespace feng2d {
      *
      * 通过修改Transform的数值实现
      */
-    class Transform2D extends Component {
+    class Transform2D extends feng3d.Component {
         get single(): boolean;
         /**
          * 创建一个实体，该类为虚类
@@ -142,7 +103,7 @@ declare namespace feng2d {
          */
         get matrix(): feng3d.Matrix3x3;
         set matrix(v: feng3d.Matrix3x3);
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         private readonly _position;
         private readonly _scale;
         protected readonly _matrix: feng3d.Matrix3x3;
@@ -156,7 +117,7 @@ declare namespace feng2d {
     /**
      * UI几何体
      */
-    class UIGeometry extends Geometry {
+    class UIGeometry extends feng3d.Geometry {
         __class__: "feng2d.UIGeometry";
         constructor();
     }
@@ -173,7 +134,7 @@ declare namespace feng2d {
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    class CanvasRenderer extends Behaviour {
+    class CanvasRenderer extends feng3d.Behaviour {
         readonly renderAtomic: feng3d.RenderAtomic;
         geometry: UIGeometry;
         material: feng3d.Material;
@@ -187,11 +148,11 @@ declare namespace feng2d {
          * @param scene
          * @param camera
          */
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         /**
          * 渲染
          */
-        static draw(gl: GL, scene: Scene): void;
+        static draw(gl: feng3d.GL, scene: feng3d.Scene): void;
     }
 }
 declare namespace feng2d {
@@ -200,7 +161,7 @@ declare namespace feng2d {
      *
      * 能够被用于屏幕渲染的元素
      */
-    class Canvas extends Behaviour {
+    class Canvas extends feng3d.Behaviour {
         /**
          * Is the Canvas in World or Overlay mode?
          *
@@ -261,6 +222,8 @@ declare namespace feng3d {
     }
 }
 declare namespace feng3d {
+}
+declare namespace feng3d {
     interface Component {
         /**
          * 游戏对象上的2D变换。
@@ -292,12 +255,12 @@ declare namespace feng2d {
      *
      * 用于填充UI中背景等颜色。
      */
-    class Rect extends Component {
+    class Rect extends feng3d.Component {
         /**
          * 填充颜色。
          */
         color: feng3d.Color4;
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
     }
 }
 declare namespace feng3d {
@@ -314,7 +277,7 @@ declare namespace feng2d {
      *
      * 用于显示图片
      */
-    class Image extends Component {
+    class Image extends feng3d.Component {
         /**
          * The source texture of the Image element.
          *
@@ -331,7 +294,7 @@ declare namespace feng2d {
          * 是否根据图片实际尺寸自动调整宽高。
          */
         autoSize: boolean;
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
     }
 }
 declare namespace feng2d {
@@ -851,7 +814,7 @@ declare namespace feng2d {
      *
      * 用于显示文字。
      */
-    class Text extends Component {
+    class Text extends feng3d.Component {
         /**
          * 文本内容。
          */
@@ -872,7 +835,7 @@ declare namespace feng2d {
         private _image;
         private _canvas;
         private _invalid;
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera): void;
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         invalidate(): void;
         private _styleChanged;
     }

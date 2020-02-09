@@ -7,7 +7,7 @@ namespace feng2d
      * 
      * 通过修改Transform的数值实现
      */
-    export class Transform2D extends Component
+    export class Transform2D extends feng3d.Component
     {
         get single() { return true; }
 
@@ -18,11 +18,11 @@ namespace feng2d
         {
             super();
 
-            watcher.watch(this._position, "x", this._positionChanged, this);
-            watcher.watch(this._position, "y", this._positionChanged, this);
-            watcher.watch(this, "rotation", this._rotationChanged, this);
-            watcher.watch(this._scale, "x", this._scaleChanged, this);
-            watcher.watch(this._scale, "y", this._scaleChanged, this);
+            feng3d.watcher.watch(this._position, "x", this._positionChanged, this);
+            feng3d.watcher.watch(this._position, "y", this._positionChanged, this);
+            feng3d.watcher.watch(this, "rotation", this._rotationChanged, this);
+            feng3d.watcher.watch(this._scale, "x", this._scaleChanged, this);
+            feng3d.watcher.watch(this._scale, "y", this._scaleChanged, this);
         }
 
         init()
@@ -58,7 +58,7 @@ namespace feng2d
         /**
          * 位移
          */
-        @oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        @feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         get position() { return this._position; }
         set position(v) { this._position.copy(v); }
 
@@ -75,37 +75,37 @@ namespace feng2d
         /**
          * 宽度，不会影响到缩放值。
          */
-        @oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        @feng3d.oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         get width() { return this._size.x; }
         set width(v) { this._size.x = v; }
 
         /**
          * 高度，不会影响到缩放值。
          */
-        @oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        @feng3d.oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         get height() { return this._size.y; }
         set height(v) { this._size.y = v; }
 
         /**
          * 旋转
          */
-        @oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
+        @feng3d.oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
         rotation = 0;
 
         /**
          * 缩放
          */
-        @oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
+        @feng3d.oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
         get scale() { return this._scale; }
         set scale(v) { this._scale.copy(v); }
 
         /**
          * 尺寸，宽高。
          */
-        @serialize
+        @feng3d.serialize
         get size() { return this._size; }
         set size(v) { this._size.copy(v); }
-        private _size = new Vector2(1, 1);
+        private _size = new feng3d.Vector2(1, 1);
 
         /**
          * 本地变换矩阵
@@ -122,17 +122,17 @@ namespace feng2d
             this.transform.matrix = mat;
         }
 
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
             renderAtomic.uniforms.u_size = this.size;
         }
 
-        private readonly _position = new Vector2();
-        private readonly _scale = new Vector2(1, 1);
+        private readonly _position = new feng3d.Vector2();
+        private readonly _scale = new feng3d.Vector2(1, 1);
 
-        protected readonly _matrix = new Matrix3x3();
+        protected readonly _matrix = new feng3d.Matrix3x3();
 
-        private _positionChanged(object: Vector2, property: "x" | "y", oldvalue: number)
+        private _positionChanged(object: feng3d.Vector2, property: "x" | "y", oldvalue: number)
         {
             if (!Math.equals(object[property], oldvalue))
             {
@@ -151,7 +151,7 @@ namespace feng2d
             }
         }
 
-        private _scaleChanged(object: Vector2, property: string, oldvalue: number)
+        private _scaleChanged(object: feng3d.Vector2, property: string, oldvalue: number)
         {
             if (!Math.equals(object[property], oldvalue))
             {

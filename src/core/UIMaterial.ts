@@ -7,34 +7,34 @@ namespace feng2d
         /**
          * UI几何体尺寸，在shader中进行对几何体缩放。
          */
-        u_size = new Vector2(1, 1);
+        u_size = new feng3d.Vector2(1, 1);
 
         /** 
          * 颜色
          */
-        @serialize
-        @oav()
-        u_color = new Color4();
+        @feng3d.serialize
+        @feng3d.oav()
+        u_color = new feng3d.Color4();
 
         /**
          * 纹理数据
          */
-        @oav()
-        @serialize
-        s_texture = Texture2D.default;
+        @feng3d.oav()
+        @feng3d.serialize
+        s_texture = feng3d.Texture2D.default;
 
         /**
          * 控制图片的显示区域。
          */
-        u_uvRect = new Vector4(0, 0, 1, 1);
+        u_uvRect = new feng3d.Vector4(0, 0, 1, 1);
 
         /**
          * 遮罩，控制显示区域。
          */
-        u_mask = new Vector4(0, 0, 4096, 4096);
+        u_mask = new feng3d.Vector4(0, 0, 4096, 4096);
     }
 
-    shaderConfig.shaders["ui"] = {
+    feng3d.shaderConfig.shaders["ui"] = {
         vertex: `
     attribute vec2 a_position;
     attribute vec2 a_uv;
@@ -80,7 +80,7 @@ namespace feng2d
         renderParams: { enableBlend: true, depthMask: false },
     };
 
-    Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
+    feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
 }
 
 namespace feng3d

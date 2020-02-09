@@ -4,14 +4,14 @@ namespace feng2d
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    export class CanvasRenderer extends Behaviour
+    export class CanvasRenderer extends feng3d.Behaviour
     {
-        readonly renderAtomic = new RenderAtomic();
+        readonly renderAtomic = new feng3d.RenderAtomic();
 
-        geometry = Geometry.getDefault("Default-UIGeometry");
+        geometry = feng3d.Geometry.getDefault("Default-UIGeometry");
 
-        @oav()
-        material = Material.getDefault("Default-UIMaterial");
+        @feng3d.oav()
+        material = feng3d.Material.getDefault("Default-UIMaterial");
 
         /**
          * 渲染前执行函数
@@ -23,7 +23,7 @@ namespace feng2d
          * @param scene 
          * @param camera 
          */
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
             //
             this.geometry.beforeRender(renderAtomic);
@@ -39,7 +39,7 @@ namespace feng2d
         /**
          * 渲染
          */
-        static draw(gl: GL, scene: Scene)
+        static draw(gl: feng3d.GL, scene: feng3d.Scene)
         {
             var canvasList = scene.getComponentsInChildren(Canvas).filter(v => v.isVisibleAndEnabled);
             canvasList.forEach(canvas =>

@@ -5,43 +5,43 @@ namespace feng2d
      * 
      * 用于显示文字。
      */
-    export class Text extends Component
+    export class Text extends feng3d.Component
     {
         /**
          * 文本内容。
          */
-        @oav()
-        @serialize
-        @watch("invalidate")
+        @feng3d.oav()
+        @feng3d.serialize
+        @feng3d.watch("invalidate")
         text = "Hello 🌷 world\nHello 🌷 world";
 
         /**
          * 是否根据文本自动调整宽高。
          */
-        @oav({ tooltip: "是否根据文本自动调整宽高。" })
-        @serialize
+        @feng3d.oav({ tooltip: "是否根据文本自动调整宽高。" })
+        @feng3d.serialize
         autoSize = true;
 
-        @oav()
-        @serialize
-        @watch("_styleChanged")
+        @feng3d.oav()
+        @feng3d.serialize
+        @feng3d.watch("_styleChanged")
         style = new TextStyle();
 
         /**
          * 显示图片的区域，(0, 0, 1, 1)表示完整显示图片。
          */
-        private _uvRect = new Vector4(0, 0, 1, 1);
+        private _uvRect = new feng3d.Vector4(0, 0, 1, 1);
 
         /**
          * 遮罩，控制显示区域。
          */
-        private _mask = new Vector4(0, 0, 4096, 4096);
+        private _mask = new feng3d.Vector4(0, 0, 4096, 4096);
 
-        private _image = new Texture2D();
+        private _image = new feng3d.Texture2D();
         private _canvas: HTMLCanvasElement;
         private _invalid = true;
 
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 

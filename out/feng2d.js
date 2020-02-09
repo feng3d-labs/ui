@@ -19,32 +19,6 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 };
 var feng2d;
 (function (feng2d) {
-    // 从 feng3d 中引入对象，使得feng2d中少出现些 "feng3d."
-    feng2d.EventDispatcher = feng3d.EventDispatcher;
-    feng2d.Vector2 = feng3d.Vector2;
-    feng2d.Vector4 = feng3d.Vector4;
-    feng2d.Color4 = feng3d.Color4;
-    feng2d.Matrix3x3 = feng3d.Matrix3x3;
-    feng2d.Matrix4x4 = feng3d.Matrix4x4;
-    feng2d.watcher = feng3d.watcher;
-    feng2d.oav = feng3d.oav;
-    feng2d.watch = feng3d.watch;
-    feng2d.serialize = feng3d.serialize;
-    feng2d.serialization = feng3d.serialization;
-    feng2d.shaderConfig = feng3d.shaderConfig;
-    feng2d.GL = feng3d.GL;
-    feng2d.Texture2D = feng3d.Texture2D;
-    feng2d.RenderAtomic = feng3d.RenderAtomic;
-    feng2d.Component = feng3d.Component;
-    feng2d.Behaviour = feng3d.Behaviour;
-    feng2d.Scene = feng3d.Scene;
-    feng2d.Camera = feng3d.Camera;
-    feng2d.geometryUtils = feng3d.geometryUtils;
-    feng2d.Geometry = feng3d.Geometry;
-    feng2d.Material = feng3d.Material;
-})(feng2d || (feng2d = {}));
-var feng2d;
-(function (feng2d) {
     /**
      * UIRenderMode for the Canvas.
      *
@@ -100,15 +74,15 @@ var feng2d;
              * 旋转
              */
             _this.rotation = 0;
-            _this._size = new feng2d.Vector2(1, 1);
-            _this._position = new feng2d.Vector2();
-            _this._scale = new feng2d.Vector2(1, 1);
-            _this._matrix = new feng2d.Matrix3x3();
-            feng2d.watcher.watch(_this._position, "x", _this._positionChanged, _this);
-            feng2d.watcher.watch(_this._position, "y", _this._positionChanged, _this);
-            feng2d.watcher.watch(_this, "rotation", _this._rotationChanged, _this);
-            feng2d.watcher.watch(_this._scale, "x", _this._scaleChanged, _this);
-            feng2d.watcher.watch(_this._scale, "y", _this._scaleChanged, _this);
+            _this._size = new feng3d.Vector2(1, 1);
+            _this._position = new feng3d.Vector2();
+            _this._scale = new feng3d.Vector2(1, 1);
+            _this._matrix = new feng3d.Matrix3x3();
+            feng3d.watcher.watch(_this._position, "x", _this._positionChanged, _this);
+            feng3d.watcher.watch(_this._position, "y", _this._positionChanged, _this);
+            feng3d.watcher.watch(_this, "rotation", _this._rotationChanged, _this);
+            feng3d.watcher.watch(_this._scale, "x", _this._scaleChanged, _this);
+            feng3d.watcher.watch(_this._scale, "y", _this._scaleChanged, _this);
             return _this;
         }
         Object.defineProperty(Transform2D.prototype, "single", {
@@ -248,25 +222,25 @@ var feng2d;
             this.sy = this.transform.sy;
         };
         __decorate([
-            feng2d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+            feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         ], Transform2D.prototype, "position", null);
         __decorate([
-            feng2d.oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+            feng3d.oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         ], Transform2D.prototype, "width", null);
         __decorate([
-            feng2d.oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+            feng3d.oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
         ], Transform2D.prototype, "height", null);
         __decorate([
-            feng2d.oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
+            feng3d.oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
         ], Transform2D.prototype, "rotation", void 0);
         __decorate([
-            feng2d.oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
+            feng3d.oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
         ], Transform2D.prototype, "scale", null);
         __decorate([
-            feng2d.serialize
+            feng3d.serialize
         ], Transform2D.prototype, "size", null);
         return Transform2D;
-    }(feng2d.Component));
+    }(feng3d.Component));
     feng2d.Transform2D = Transform2D;
 })(feng2d || (feng2d = {}));
 var feng2d;
@@ -282,14 +256,14 @@ var feng2d;
             _this.uvs = [0, 0, 1, 0, 1, 1, 0, 1];
             _this.indices = [0, 1, 2, 0, 2, 3];
             _this._attributes.a_position.size = 2;
-            _this.normals = feng2d.geometryUtils.createVertexNormals(_this.indices, _this.positions, true);
-            _this.tangents = feng2d.geometryUtils.createVertexTangents(_this.indices, _this.positions, _this.uvs, true);
+            _this.normals = feng3d.geometryUtils.createVertexNormals(_this.indices, _this.positions, true);
+            _this.tangents = feng3d.geometryUtils.createVertexTangents(_this.indices, _this.positions, _this.uvs, true);
             return _this;
         }
         return UIGeometry;
-    }(feng2d.Geometry));
+    }(feng3d.Geometry));
     feng2d.UIGeometry = UIGeometry;
-    feng2d.Geometry.setDefault("Default-UIGeometry", new UIGeometry());
+    feng3d.Geometry.setDefault("Default-UIGeometry", new UIGeometry());
 })(feng2d || (feng2d = {}));
 var feng2d;
 (function (feng2d) {
@@ -300,9 +274,9 @@ var feng2d;
         __extends(CanvasRenderer, _super);
         function CanvasRenderer() {
             var _this = _super !== null && _super.apply(this, arguments) || this;
-            _this.renderAtomic = new feng2d.RenderAtomic();
-            _this.geometry = feng2d.Geometry.getDefault("Default-UIGeometry");
-            _this.material = feng2d.Material.getDefault("Default-UIMaterial");
+            _this.renderAtomic = new feng3d.RenderAtomic();
+            _this.geometry = feng3d.Geometry.getDefault("Default-UIGeometry");
+            _this.material = feng3d.Material.getDefault("Default-UIMaterial");
             return _this;
         }
         /**
@@ -343,10 +317,10 @@ var feng2d;
             });
         };
         __decorate([
-            feng2d.oav()
+            feng3d.oav()
         ], CanvasRenderer.prototype, "material", void 0);
         return CanvasRenderer;
-    }(feng2d.Behaviour));
+    }(feng3d.Behaviour));
     feng2d.CanvasRenderer = CanvasRenderer;
 })(feng2d || (feng2d = {}));
 var feng2d;
@@ -374,7 +348,7 @@ var feng2d;
              *
              * 渲染前自动更新
              */
-            _this.projection = new feng2d.Matrix4x4();
+            _this.projection = new feng3d.Matrix4x4();
             return _this;
         }
         Canvas.prototype.init = function () {
@@ -408,7 +382,7 @@ var feng2d;
             oav({ editable: false })
         ], Canvas.prototype, "height", void 0);
         return Canvas;
-    }(feng2d.Behaviour));
+    }(feng3d.Behaviour));
     feng2d.Canvas = Canvas;
 })(feng2d || (feng2d = {}));
 var feng2d;
@@ -418,43 +392,47 @@ var feng2d;
             /**
              * UI几何体尺寸，在shader中进行对几何体缩放。
              */
-            this.u_size = new feng2d.Vector2(1, 1);
+            this.u_size = new feng3d.Vector2(1, 1);
             /**
              * 颜色
              */
-            this.u_color = new feng2d.Color4();
+            this.u_color = new feng3d.Color4();
             /**
              * 纹理数据
              */
-            this.s_texture = feng2d.Texture2D.default;
+            this.s_texture = feng3d.Texture2D.default;
             /**
              * 控制图片的显示区域。
              */
-            this.u_uvRect = new feng2d.Vector4(0, 0, 1, 1);
+            this.u_uvRect = new feng3d.Vector4(0, 0, 1, 1);
             /**
              * 遮罩，控制显示区域。
              */
-            this.u_mask = new feng2d.Vector4(0, 0, 4096, 4096);
+            this.u_mask = new feng3d.Vector4(0, 0, 4096, 4096);
         }
         __decorate([
-            feng2d.serialize,
-            feng2d.oav()
+            feng3d.serialize,
+            feng3d.oav()
         ], UIUniforms.prototype, "u_color", void 0);
         __decorate([
-            feng2d.oav(),
-            feng2d.serialize
+            feng3d.oav(),
+            feng3d.serialize
         ], UIUniforms.prototype, "s_texture", void 0);
         return UIUniforms;
     }());
     feng2d.UIUniforms = UIUniforms;
-    feng2d.shaderConfig.shaders["ui"] = {
+    feng3d.shaderConfig.shaders["ui"] = {
         vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    uniform vec4 u_uvRect;\n    uniform vec2 u_size;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    varying vec2 v_uv;\n    varying vec2 v_globalPosition;\n\n    void main() \n    {\n        vec2 position = a_position * u_size;\n        vec4 globalPosition = u_modelMatrix * vec4(position, 0.0, 1.0);\n        gl_Position = u_viewProjection * globalPosition;\n        v_uv = u_uvRect.xy + a_uv * u_uvRect.zw;\n        v_globalPosition = globalPosition.xy;\n    }\n    ",
         fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    varying vec2 v_globalPosition;\n    \n    uniform vec4 u_color;\n    uniform vec4 u_mask;\n    \n    void main() \n    {\n        if(v_globalPosition.x < u_mask.x || v_globalPosition.x > u_mask.x + u_mask.z || v_globalPosition.y < u_mask.y || v_globalPosition.y > u_mask.y + u_mask.w)\n            discard;\n\n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
         cls: UIUniforms,
         renderParams: { enableBlend: true, depthMask: false },
     };
-    feng2d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
+    feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
 })(feng2d || (feng2d = {}));
+var feng3d;
+(function (feng3d) {
+    feng3d.classUtils.addClassNameSpace("feng2d");
+})(feng3d || (feng3d = {}));
 var feng3d;
 (function (feng3d) {
     Object.defineProperty(feng3d.Component.prototype, "transform2D", {
@@ -512,7 +490,7 @@ var feng2d;
             /**
              * 填充颜色。
              */
-            _this.color = new feng2d.Color4();
+            _this.color = new feng3d.Color4();
             return _this;
         }
         Rect.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
@@ -520,11 +498,11 @@ var feng2d;
             renderAtomic.uniforms.u_color = this.color;
         };
         __decorate([
-            feng2d.oav(),
-            feng2d.serialize
+            feng3d.oav(),
+            feng3d.serialize
         ], Rect.prototype, "color", void 0);
         return Rect;
-    }(feng2d.Component));
+    }(feng3d.Component));
     feng2d.Rect = Rect;
 })(feng2d || (feng2d = {}));
 var feng2d;
@@ -543,13 +521,13 @@ var feng2d;
              *
              * 图像元素的源纹理。
              */
-            _this.image = feng2d.Texture2D.default;
+            _this.image = feng3d.Texture2D.default;
             /**
              * Tinting color for this Image.
              *
              * 为该图像着色。
              */
-            _this.color = new feng2d.Color4();
+            _this.color = new feng3d.Color4();
             /**
              * 是否根据图片实际尺寸自动调整宽高。
              */
@@ -567,19 +545,19 @@ var feng2d;
             }
         };
         __decorate([
-            feng2d.oav(),
-            feng2d.serialize
+            feng3d.oav(),
+            feng3d.serialize
         ], Image.prototype, "image", void 0);
         __decorate([
-            feng2d.oav(),
-            feng2d.serialize
+            feng3d.oav(),
+            feng3d.serialize
         ], Image.prototype, "color", void 0);
         __decorate([
-            feng2d.oav({ tooltip: "是否根据图片实际尺寸自动调整宽高。" }),
-            feng2d.serialize
+            feng3d.oav({ tooltip: "是否根据图片实际尺寸自动调整宽高。" }),
+            feng3d.serialize
         ], Image.prototype, "autoSize", void 0);
         return Image;
-    }(feng2d.Component));
+    }(feng3d.Component));
     feng2d.Image = Image;
 })(feng2d || (feng2d = {}));
 var feng2d;
@@ -988,7 +966,7 @@ var feng2d;
              * 用于填充文本的颜色。
              * @see https://developer.mozilla.org/en-US/docs/Web/API/CanvasRenderingContext2D/fillStyle
              */
-            _this.fill = new feng2d.Color4(0, 0, 0, 1);
+            _this.fill = new feng3d.Color4(0, 0, 0, 1);
             // fill = new MinMaxGradient();
             /**
              * 如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。
@@ -1001,7 +979,7 @@ var feng2d;
             /**
              * 将用于文本笔划的画布填充样式。
              */
-            _this.stroke = new feng2d.Color4(0, 0, 0, 1);
+            _this.stroke = new feng3d.Color4(0, 0, 0, 1);
             /**
              * 一个表示笔画厚度的数字。
              */
@@ -1029,7 +1007,7 @@ var feng2d;
             /**
              * 投影颜色。
              */
-            _this.dropShadowColor = new feng2d.Color4(0, 0, 0, 1);
+            _this.dropShadowColor = new feng3d.Color4(0, 0, 0, 1);
             /**
              * 投影角度。
              */
@@ -1085,7 +1063,7 @@ var feng2d;
              * 是否修剪透明边界。
              */
             _this.trim = false;
-            feng2d.serialization.setValue(_this, style);
+            feng3d.serialization.setValue(_this, style);
             return _this;
         }
         /**
@@ -1118,144 +1096,144 @@ var feng2d;
             return this.fontStyle + " " + this.fontVariant + " " + this.fontWeight + " " + fontSizeString + " " + fontFamilies.join(',');
         };
         __decorate([
-            feng2d.oav({ block: "Font", tooltip: "字体。", component: "OAVEnum", componentParam: { enumClass: FontFamily } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Font", tooltip: "字体。", component: "OAVEnum", componentParam: { enumClass: FontFamily } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontFamily", void 0);
         __decorate([
-            feng2d.oav({ block: "Font", tooltip: "字体尺寸。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Font", tooltip: "字体尺寸。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontSize", void 0);
         __decorate([
-            feng2d.oav({ block: "Font", tooltip: "字体样式。", component: "OAVEnum", componentParam: { enumClass: FontStyle } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Font", tooltip: "字体样式。", component: "OAVEnum", componentParam: { enumClass: FontStyle } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontStyle", void 0);
         __decorate([
-            feng2d.oav({ block: "Font", tooltip: "字体变体。", component: "OAVEnum", componentParam: { enumClass: FontVariant } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Font", tooltip: "字体变体。", component: "OAVEnum", componentParam: { enumClass: FontVariant } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontVariant", void 0);
         __decorate([
-            feng2d.oav({ block: "Font", tooltip: "字型粗细。", component: "OAVEnum", componentParam: { enumClass: FontWeight } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Font", tooltip: "字型粗细。", component: "OAVEnum", componentParam: { enumClass: FontWeight } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fontWeight", void 0);
         __decorate([
-            feng2d.oav({ block: "Fill", tooltip: "用于填充文本的颜色。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Fill", tooltip: "用于填充文本的颜色。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fill", void 0);
         __decorate([
-            feng2d.oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。", component: "OAVEnum", componentParam: { enumClass: TEXT_GRADIENT } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Fill", tooltip: "如果填充是一个创建渐变的颜色数组，这可以改变渐变的方向。", component: "OAVEnum", componentParam: { enumClass: TEXT_GRADIENT } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fillGradientType", void 0);
         __decorate([
-            feng2d.oav({ block: "Fill" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Fill" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "fillGradientStops", void 0);
         __decorate([
-            feng2d.oav({ block: "Stroke", tooltip: "将用于文本笔划的画布填充样式。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Stroke", tooltip: "将用于文本笔划的画布填充样式。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "stroke", void 0);
         __decorate([
-            feng2d.oav({ block: "Stroke", tooltip: "一个表示笔画厚度的数字。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Stroke", tooltip: "一个表示笔画厚度的数字。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "strokeThickness", void 0);
         __decorate([
-            feng2d.oav({ block: "Stroke", tooltip: "lineJoin属性设置创建的角的类型，它可以解决带尖刺的文本问题。", component: "OAVEnum", componentParam: { enumClass: CanvasLineJoin } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Stroke", tooltip: "lineJoin属性设置创建的角的类型，它可以解决带尖刺的文本问题。", component: "OAVEnum", componentParam: { enumClass: CanvasLineJoin } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "lineJoin", void 0);
         __decorate([
-            feng2d.oav({ block: "Stroke", tooltip: "当使用“miter”lineJoin模式时，miter限制使用。这可以减少或增加呈现文本的尖锐性。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Stroke", tooltip: "当使用“miter”lineJoin模式时，miter限制使用。这可以减少或增加呈现文本的尖锐性。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "miterLimit", void 0);
         __decorate([
-            feng2d.oav({ block: "Layout", tooltip: "字母之间的间距，默认为0" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Layout", tooltip: "字母之间的间距，默认为0" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "letterSpacing", void 0);
         __decorate([
-            feng2d.oav({ block: "Layout", tooltip: "呈现文本的基线。", component: "OAVEnum", componentParam: { enumClass: CanvasTextBaseline } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Layout", tooltip: "呈现文本的基线。", component: "OAVEnum", componentParam: { enumClass: CanvasTextBaseline } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "textBaseline", void 0);
         __decorate([
-            feng2d.oav({ block: "Drop Shadow", tooltip: "是否为文本设置一个投影。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Drop Shadow", tooltip: "是否为文本设置一个投影。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadow", void 0);
         __decorate([
-            feng2d.oav({ block: "Drop Shadow", tooltip: "投影颜色。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Drop Shadow", tooltip: "投影颜色。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowColor", void 0);
         __decorate([
-            feng2d.oav({ block: "Drop Shadow", tooltip: "投影角度。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Drop Shadow", tooltip: "投影角度。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowAngle", void 0);
         __decorate([
-            feng2d.oav({ block: "Drop Shadow", tooltip: "阴影模糊半径。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Drop Shadow", tooltip: "阴影模糊半径。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowBlur", void 0);
         __decorate([
-            feng2d.oav({ block: "Drop Shadow", tooltip: "投影距离。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Drop Shadow", tooltip: "投影距离。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "dropShadowDistance", void 0);
         __decorate([
-            feng2d.oav({ block: "Multiline", tooltip: "是否应使用自动换行。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Multiline", tooltip: "是否应使用自动换行。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "wordWrap", void 0);
         __decorate([
-            feng2d.oav({ block: "Multiline" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Multiline" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "breakWords", void 0);
         __decorate([
-            feng2d.oav({ block: "Multiline", tooltip: "多行文本对齐方式。", component: "OAVEnum", componentParam: { enumClass: TextAlign } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Multiline", tooltip: "多行文本对齐方式。", component: "OAVEnum", componentParam: { enumClass: TextAlign } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "align", void 0);
         __decorate([
-            feng2d.oav({ block: "Multiline", tooltip: "如何处理换行与空格。", component: "OAVEnum", componentParam: { enumClass: WhiteSpaceHandle } }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Multiline", tooltip: "如何处理换行与空格。", component: "OAVEnum", componentParam: { enumClass: WhiteSpaceHandle } }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "whiteSpace", void 0);
         __decorate([
-            feng2d.oav({ block: "Multiline", tooltip: "文本的换行宽度。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Multiline", tooltip: "文本的换行宽度。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "wordWrapWidth", void 0);
         __decorate([
-            feng2d.oav({ block: "Multiline", tooltip: "行高。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Multiline", tooltip: "行高。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "lineHeight", void 0);
         __decorate([
-            feng2d.oav({ block: "Multiline", tooltip: "行距。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Multiline", tooltip: "行距。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "leading", void 0);
         __decorate([
-            feng2d.oav({ block: "Texture", tooltip: "内边距，用于文字被裁减问题。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Texture", tooltip: "内边距，用于文字被裁减问题。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "padding", void 0);
         __decorate([
-            feng2d.oav({ block: "Texture", tooltip: "是否修剪透明边界。" }),
-            feng2d.watch("invalidate"),
-            feng2d.serialize
+            feng3d.oav({ block: "Texture", tooltip: "是否修剪透明边界。" }),
+            feng3d.watch("invalidate"),
+            feng3d.serialize
         ], TextStyle.prototype, "trim", void 0);
         return TextStyle;
     }(feng3d.EventDispatcher));
@@ -1838,12 +1816,12 @@ var feng2d;
             /**
              * 显示图片的区域，(0, 0, 1, 1)表示完整显示图片。
              */
-            _this._uvRect = new feng2d.Vector4(0, 0, 1, 1);
+            _this._uvRect = new feng3d.Vector4(0, 0, 1, 1);
             /**
              * 遮罩，控制显示区域。
              */
-            _this._mask = new feng2d.Vector4(0, 0, 4096, 4096);
-            _this._image = new feng2d.Texture2D();
+            _this._mask = new feng3d.Vector4(0, 0, 4096, 4096);
+            _this._image = new feng3d.Texture2D();
             _this._invalid = true;
             return _this;
         }
@@ -1881,21 +1859,21 @@ var feng2d;
                 newValue.on("changed", this.invalidate, this);
         };
         __decorate([
-            feng2d.oav(),
-            feng2d.serialize,
-            feng2d.watch("invalidate")
+            feng3d.oav(),
+            feng3d.serialize,
+            feng3d.watch("invalidate")
         ], Text.prototype, "text", void 0);
         __decorate([
-            feng2d.oav({ tooltip: "是否根据文本自动调整宽高。" }),
-            feng2d.serialize
+            feng3d.oav({ tooltip: "是否根据文本自动调整宽高。" }),
+            feng3d.serialize
         ], Text.prototype, "autoSize", void 0);
         __decorate([
-            feng2d.oav(),
-            feng2d.serialize,
-            feng2d.watch("_styleChanged")
+            feng3d.oav(),
+            feng3d.serialize,
+            feng3d.watch("_styleChanged")
         ], Text.prototype, "style", void 0);
         return Text;
-    }(feng2d.Component));
+    }(feng3d.Component));
     feng2d.Text = Text;
 })(feng2d || (feng2d = {}));
 //# sourceMappingURL=feng2d.js.map

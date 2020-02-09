@@ -5,16 +5,16 @@ namespace feng2d
      * 
      * 用于填充UI中背景等颜色。
      */
-    export class Rect extends Component
+    export class Rect extends feng3d.Component
     {
         /**
          * 填充颜色。
          */
-        @oav()
-        @serialize
-        color = new Color4();
+        @feng3d.oav()
+        @feng3d.serialize
+        color = new feng3d.Color4();
 
-        beforeRender(gl: GL, renderAtomic: RenderAtomic, scene: Scene, camera: Camera)
+        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
             super.beforeRender(gl, renderAtomic, scene, camera);
 

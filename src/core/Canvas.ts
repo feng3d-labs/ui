@@ -7,7 +7,7 @@ namespace feng2d
      * 
      * 能够被用于屏幕渲染的元素
      */
-    export class Canvas extends Behaviour
+    export class Canvas extends feng3d.Behaviour
     {
         /**
          * Is the Canvas in World or Overlay mode?
@@ -59,6 +59,6 @@ namespace feng2d
          * 
          * 渲染前自动更新
          */
-        projection = new Matrix4x4();
+        projection = new feng3d.Matrix4x4();
     }
 }

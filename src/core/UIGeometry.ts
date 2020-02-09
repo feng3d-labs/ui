@@ -4,7 +4,7 @@ namespace feng2d
     /**
      * UI几何体
      */
-    export class UIGeometry extends Geometry
+    export class UIGeometry extends feng3d.Geometry
     {
         __class__: "feng2d.UIGeometry";
 
@@ -18,12 +18,12 @@ namespace feng2d
 
             this._attributes.a_position.size = 2;
 
-            this.normals = geometryUtils.createVertexNormals(this.indices, this.positions, true);
-            this.tangents = geometryUtils.createVertexTangents(this.indices, this.positions, this.uvs, true)
+            this.normals = feng3d.geometryUtils.createVertexNormals(this.indices, this.positions, true);
+            this.tangents = feng3d.geometryUtils.createVertexTangents(this.indices, this.positions, this.uvs, true)
         }
     }
 
-    Geometry.setDefault("Default-UIGeometry", new UIGeometry());
+    feng3d.Geometry.setDefault("Default-UIGeometry", new UIGeometry());
 }
 
 namespace feng3d
