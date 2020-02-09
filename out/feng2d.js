@@ -395,7 +395,6 @@ var feng2d;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
-    // 注册游戏原始对象
     feng3d.GameObject.registerPrimitive("Canvas", function (g) {
         g.addComponent(feng2d.Canvas);
     });
@@ -485,7 +484,6 @@ var feng2d;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
-    // 注册游戏原始对象
     feng3d.GameObject.registerPrimitive("Rect", function (g) {
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
@@ -551,7 +549,6 @@ var feng2d;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
-    // 注册游戏原始对象
     feng3d.GameObject.registerPrimitive("Image", function (g) {
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
@@ -1878,7 +1875,6 @@ var feng2d;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
-    // 注册游戏原始对象
     feng3d.GameObject.registerPrimitive("Text", function (g) {
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);

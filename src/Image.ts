@@ -51,7 +51,6 @@ namespace feng2d
 
 namespace feng3d
 {
-    // 注册游戏原始对象
     GameObject.registerPrimitive("Image", (g) =>
     {
         var transform2D = g.addComponent(feng2d.Transform2D);
@@ -62,9 +61,6 @@ namespace feng3d
         g.addComponent(feng2d.Image)
     });
 
-    /**
-     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
-     */
     export interface PrimitiveGameObject
     {
         Image: GameObject;

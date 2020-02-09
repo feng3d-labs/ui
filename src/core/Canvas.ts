@@ -63,15 +63,11 @@ namespace feng2d
 
 namespace feng3d
 {
-    // 注册游戏原始对象
     GameObject.registerPrimitive("Canvas", (g) =>
     {
         g.addComponent(feng2d.Canvas)
     });
 
-    /**
-     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
-     */
     export interface PrimitiveGameObject
     {
         Canvas: GameObject;

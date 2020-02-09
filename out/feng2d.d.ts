@@ -201,9 +201,6 @@ declare namespace feng2d {
     }
 }
 declare namespace feng3d {
-    /**
-     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
-     */
     interface PrimitiveGameObject {
         Canvas: GameObject;
     }
@@ -262,9 +259,6 @@ declare namespace feng2d {
     }
 }
 declare namespace feng3d {
-    /**
-     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
-     */
     interface PrimitiveGameObject {
         Rect: GameObject;
     }
@@ -296,9 +290,6 @@ declare namespace feng2d {
     }
 }
 declare namespace feng3d {
-    /**
-     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
-     */
     interface PrimitiveGameObject {
         Image: GameObject;
     }
@@ -847,9 +838,6 @@ declare namespace feng2d {
     }
 }
 declare namespace feng3d {
-    /**
-     * 原始游戏对象，可以通过GameObject.createPrimitive进行创建。
-     */
     interface PrimitiveGameObject {
         Text: GameObject;
     }
