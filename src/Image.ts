@@ -5,6 +5,7 @@ namespace feng2d
      * 
      * 用于显示图片
      */
+    @feng3d.AddComponentMenu("UI/Image")
     export class Image extends feng3d.Component
     {
         /**

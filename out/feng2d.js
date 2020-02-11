@@ -239,6 +239,9 @@ var feng2d;
         __decorate([
             feng3d.serialize
         ], Transform2D.prototype, "size", null);
+        Transform2D = __decorate([
+            feng3d.AddComponentMenu("Layout/Transform2D")
+        ], Transform2D);
         return Transform2D;
     }(feng3d.Component));
     feng2d.Transform2D = Transform2D;
@@ -288,6 +291,7 @@ var feng2d;
             _this.material = feng3d.Material.getDefault("Default-UIMaterial");
             return _this;
         }
+        CanvasRenderer_1 = CanvasRenderer;
         /**
          * 渲染前执行函数
          *
@@ -315,7 +319,7 @@ var feng2d;
             var canvasList = scene.getComponentsInChildren(feng2d.Canvas).filter(function (v) { return v.isVisibleAndEnabled; });
             canvasList.forEach(function (canvas) {
                 canvas.layout(gl.canvas.width, gl.canvas.height);
-                var renderables = canvas.getComponentsInChildren(CanvasRenderer).filter(function (v) { return v.isVisibleAndEnabled; });
+                var renderables = canvas.getComponentsInChildren(CanvasRenderer_1).filter(function (v) { return v.isVisibleAndEnabled; });
                 renderables.forEach(function (renderable) {
                     //绘制
                     var renderAtomic = renderable.renderAtomic;
@@ -325,9 +329,13 @@ var feng2d;
                 });
             });
         };
+        var CanvasRenderer_1;
         __decorate([
             feng3d.oav()
         ], CanvasRenderer.prototype, "material", void 0);
+        CanvasRenderer = CanvasRenderer_1 = __decorate([
+            feng3d.AddComponentMenu("Rendering/CanvasRenderer")
+        ], CanvasRenderer);
         return CanvasRenderer;
     }(feng3d.Behaviour));
     feng2d.CanvasRenderer = CanvasRenderer;
@@ -478,6 +486,9 @@ var feng2d;
             feng3d.oav(),
             feng3d.serialize
         ], Rect.prototype, "color", void 0);
+        Rect = __decorate([
+            feng3d.AddComponentMenu("UI/Rect")
+        ], Rect);
         return Rect;
     }(feng3d.Component));
     feng2d.Rect = Rect;
@@ -543,6 +554,9 @@ var feng2d;
             feng3d.oav({ tooltip: "是否根据图片实际尺寸自动调整宽高。" }),
             feng3d.serialize
         ], Image.prototype, "autoSize", void 0);
+        Image = __decorate([
+            feng3d.AddComponentMenu("UI/Image")
+        ], Image);
         return Image;
     }(feng3d.Component));
     feng2d.Image = Image;
@@ -670,6 +684,9 @@ var feng2d;
         __decorate([
             feng3d.oav()
         ], Button.prototype, "saveState", null);
+        Button = __decorate([
+            feng3d.AddComponentMenu("UI/Button")
+        ], Button);
         return Button;
     }(feng3d.Behaviour));
     feng2d.Button = Button;

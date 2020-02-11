@@ -4,6 +4,7 @@ namespace feng2d
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
+    @feng3d.AddComponentMenu("Rendering/CanvasRenderer")
     export class CanvasRenderer extends feng3d.Behaviour
     {
         readonly renderAtomic = new feng3d.RenderAtomic();

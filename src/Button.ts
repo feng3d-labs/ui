@@ -38,6 +38,7 @@ namespace feng2d
     /**
      * 按钮
      */
+    @feng3d.AddComponentMenu("UI/Button")
     export class Button extends feng3d.Behaviour
     {
         /**

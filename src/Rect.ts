@@ -5,6 +5,7 @@ namespace feng2d
      * 
      * 用于填充UI中背景等颜色。
      */
+    @feng3d.AddComponentMenu("UI/Rect")
     export class Rect extends feng3d.Component
     {
         /**
