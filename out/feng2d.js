@@ -675,8 +675,7 @@ var feng2d;
         };
         __decorate([
             feng3d.oav({ block: "Layout", tooltip: "按钮所处状态。", component: "OAVEnum", componentParam: { enumClass: ButtonState } }),
-            feng3d.watch("_onStateChanged"),
-            feng3d.serialize
+            feng3d.watch("_onStateChanged")
         ], Button.prototype, "state", void 0);
         __decorate([
             feng3d.serialize

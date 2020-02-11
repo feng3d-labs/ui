@@ -46,7 +46,6 @@ namespace feng2d
          */
         @feng3d.oav({ block: "Layout", tooltip: "按钮所处状态。", component: "OAVEnum", componentParam: { enumClass: ButtonState } })
         @feng3d.watch("_onStateChanged")
-        @feng3d.serialize
         state = ButtonState.up;
 
         /**
