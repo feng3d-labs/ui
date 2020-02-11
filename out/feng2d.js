@@ -1995,6 +1995,9 @@ var feng2d;
             feng3d.serialize,
             feng3d.watch("_styleChanged")
         ], Text.prototype, "style", void 0);
+        Text = __decorate([
+            feng3d.AddComponentMenu("UI/Text")
+        ], Text);
         return Text;
     }(feng3d.Component));
     feng2d.Text = Text;

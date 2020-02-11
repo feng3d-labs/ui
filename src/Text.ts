@@ -5,6 +5,7 @@ namespace feng2d
      * 
      * 用于显示文字。
      */
+    @feng3d.AddComponentMenu("UI/Text")
     export class Text extends feng3d.Component
     {
         /**
