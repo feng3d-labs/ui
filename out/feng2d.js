@@ -529,7 +529,7 @@ var feng2d;
             /**
              * 是否根据图片实际尺寸自动调整宽高。
              */
-            _this.autoSize = true;
+            _this.autoSize = false;
             return _this;
         }
         Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
