@@ -148,7 +148,7 @@ declare namespace feng2d {
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    class CanvasRenderer extends feng3d.Behaviour {
+    class CanvasRenderer extends feng3d.RayCastable {
         readonly renderAtomic: feng3d.RenderAtomic;
         geometry: UIGeometry;
         material: feng3d.Material;
@@ -164,9 +164,16 @@ declare namespace feng2d {
          */
         beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         /**
+          * 判断射线是否穿过对象
+          * @param ray3D
+          * @return
+          */
+        isIntersectingRay(view: feng3d.View): feng3d.PickingCollisionVO;
+        protected _updateBounds(): void;
+        /**
          * 渲染
          */
-        static draw(gl: feng3d.GL, scene: feng3d.Scene): void;
+        static draw(view: feng3d.View): void;
     }
 }
 declare namespace feng2d {
@@ -184,6 +191,16 @@ declare namespace feng2d {
         renderMode: UIRenderMode;
         width: number;
         height: number;
+        /**
+         * 获取鼠标射线（与鼠标重叠的摄像机射线）
+         */
+        mouseRay: feng3d.Ray3;
+        /**
+         * 投影矩阵
+         *
+         * 渲染前自动更新
+         */
+        projection: feng3d.Matrix4x4;
         init(): void;
         /**
          * 更新布局
@@ -193,11 +210,11 @@ declare namespace feng2d {
          */
         layout(width: number, height: number): void;
         /**
-         * 投影矩阵
+         * 计算鼠标射线
          *
-         * 渲染前自动更新
+         * @param view
          */
-        projection: feng3d.Matrix4x4;
+        calcMouseRay3D(view: feng3d.View): void;
     }
 }
 declare namespace feng3d {

@@ -20,6 +20,18 @@ namespace feng2d
         @feng3d.oav({ editable: false })
         height = 1;
 
+        /**
+		 * 获取鼠标射线（与鼠标重叠的摄像机射线）
+		 */
+        mouseRay = new feng3d.Ray3(new feng3d.Vector3(), new feng3d.Vector3(0, 0, 1));
+
+        /**
+         * 投影矩阵
+         * 
+         * 渲染前自动更新
+         */
+        projection = new feng3d.Matrix4x4();
+
         init()
         {
             // this.transform.hideFlags = this.transform.hideFlags | HideFlags.Hide;
@@ -53,11 +65,14 @@ namespace feng2d
         }
 
         /**
-         * 投影矩阵
+         * 计算鼠标射线
          * 
-         * 渲染前自动更新
+         * @param view 
          */
-        projection = new feng3d.Matrix4x4();
+        calcMouseRay3D(view: feng3d.View)
+        {
+            this.mouseRay.position.set(view.mousePos.x, view.mousePos.y, 0);
+        }
     }
 }
 

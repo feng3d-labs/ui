@@ -264,10 +264,9 @@ var feng2d;
         __extends(UIGeometry, _super);
         function UIGeometry() {
             var _this = _super.call(this) || this;
-            _this.positions = [0, 0, 1, 0, 1, 1, 0, 1];
+            _this.positions = [0, 0, 0, 1, 0, 0, 1, 1, 0, 0, 1, 0];
             _this.uvs = [0, 0, 1, 0, 1, 1, 0, 1];
             _this.indices = [0, 1, 2, 0, 2, 3];
-            _this._attributes.a_position.size = 2;
             _this.normals = feng3d.geometryUtils.createVertexNormals(_this.indices, _this.positions, true);
             _this.tangents = feng3d.geometryUtils.createVertexTangents(_this.indices, _this.positions, _this.uvs, true);
             return _this;
@@ -313,12 +312,52 @@ var feng2d;
             });
         };
         /**
+          * 判断射线是否穿过对象
+          * @param ray3D
+          * @return
+          */
+        CanvasRenderer.prototype.isIntersectingRay = function (view) {
+            var canvas = this.getComponentsInParents(feng2d.Canvas)[0];
+            var worldRay = canvas.mouseRay;
+            var localNormal = new feng3d.Vector3();
+            //转换到当前实体坐标系空间
+            var localRay = new feng3d.Ray3();
+            this.transform.worldToLocalMatrix.transformVector(worldRay.position, localRay.position);
+            this.transform.worldToLocalMatrix.deltaTransformVector(worldRay.direction, localRay.direction);
+            var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
+            localRay.position.divide(size);
+            localRay.direction.divide(size).normalize();
+            //检测射线与边界的碰撞
+            var rayEntryDistance = this.selfLocalBounds.rayIntersection(localRay.position, localRay.direction, localNormal);
+            if (rayEntryDistance < 0)
+                return null;
+            //保存碰撞数据
+            var pickingCollisionVO = {
+                gameObject: this.gameObject,
+                localNormal: localNormal,
+                localRay: localRay,
+                rayEntryDistance: rayEntryDistance,
+                ray3D: worldRay,
+                rayOriginIsInsideBounds: rayEntryDistance == 0,
+                geometry: this.geometry,
+                cullFace: feng3d.CullFace.NONE,
+            };
+            return pickingCollisionVO;
+        };
+        CanvasRenderer.prototype._updateBounds = function () {
+            this._selfLocalBounds = this.geometry.bounding;
+        };
+        /**
          * 渲染
          */
-        CanvasRenderer.draw = function (gl, scene) {
+        CanvasRenderer.draw = function (view) {
+            var gl = view.gl;
+            var scene = view.scene;
             var canvasList = scene.getComponentsInChildren(feng2d.Canvas).filter(function (v) { return v.isVisibleAndEnabled; });
             canvasList.forEach(function (canvas) {
                 canvas.layout(gl.canvas.width, gl.canvas.height);
+                // 更新鼠标射线
+                canvas.calcMouseRay3D(view);
                 var renderables = canvas.getComponentsInChildren(CanvasRenderer_1).filter(function (v) { return v.isVisibleAndEnabled; });
                 renderables.forEach(function (renderable) {
                     //绘制
@@ -337,7 +376,7 @@ var feng2d;
             feng3d.AddComponentMenu("Rendering/CanvasRenderer")
         ], CanvasRenderer);
         return CanvasRenderer;
-    }(feng3d.Behaviour));
+    }(feng3d.RayCastable));
     feng2d.CanvasRenderer = CanvasRenderer;
 })(feng2d || (feng2d = {}));
 var feng2d;
@@ -359,6 +398,10 @@ var feng2d;
             _this.renderMode = feng2d.UIRenderMode.ScreenSpaceOverlay;
             _this.width = 1;
             _this.height = 1;
+            /**
+             * 获取鼠标射线（与鼠标重叠的摄像机射线）
+             */
+            _this.mouseRay = new feng3d.Ray3(new feng3d.Vector3(), new feng3d.Vector3(0, 0, 1));
             /**
              * 投影矩阵
              *
@@ -390,6 +433,14 @@ var feng2d;
             this.transform.sy = 1;
             this.transform.sz = 1;
             this.projection.identity().appendScale(2 / width, -2 / height, 1).appendTranslation(-1, 1, 0);
+        };
+        /**
+         * 计算鼠标射线
+         *
+         * @param view
+         */
+        Canvas.prototype.calcMouseRay3D = function (view) {
+            this.mouseRay.position.set(view.mousePos.x, view.mousePos.y, 0);
         };
         __decorate([
             feng3d.oav({ editable: false })
@@ -458,7 +509,7 @@ var feng3d;
 var feng3d;
 (function (feng3d) {
     feng3d.functionwrap.extendFunction(feng3d.View.prototype, "render", function (r, interval) {
-        feng2d.CanvasRenderer.draw(this.gl, this.scene);
+        feng2d.CanvasRenderer.draw(this);
     });
 })(feng3d || (feng3d = {}));
 var feng2d;
