@@ -447,7 +447,7 @@ var feng2d;
         vertex: "\n    attribute vec2 a_position;\n    attribute vec2 a_uv;\n    \n    uniform vec4 u_uvRect;\n    uniform vec2 u_size;\n    uniform mat4 u_modelMatrix;\n    uniform mat4 u_viewProjection;\n    \n    varying vec2 v_uv;\n    varying vec2 v_position;\n\n    void main() \n    {\n        vec2 position = a_position * u_size;\n        gl_Position = u_viewProjection * u_modelMatrix * vec4(position, 0.0, 1.0);\n        v_uv = u_uvRect.xy + a_uv * u_uvRect.zw;\n        v_position = position.xy;\n    }\n    ",
         fragment: "\n    precision mediump float;\n\n    uniform sampler2D s_texture;\n    varying vec2 v_uv;\n    varying vec2 v_position;\n    \n    uniform vec4 u_color;\n    uniform vec4 u_mask;\n    \n    void main() \n    {\n        if(v_position.x < u_mask.x || v_position.x > u_mask.x + u_mask.z || v_position.y < u_mask.y || v_position.y > u_mask.y + u_mask.w)\n            discard;\n\n        vec4 color = texture2D(s_texture, v_uv);\n        gl_FragColor = color * u_color;\n    }\n    \n    ",
         cls: UIUniforms,
-        renderParams: { enableBlend: true, depthMask: false },
+        renderParams: { enableBlend: false },
     };
     feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
 })(feng2d || (feng2d = {}));
@@ -526,21 +526,20 @@ var feng2d;
              * 为该图像着色。
              */
             _this.color = new feng3d.Color4();
-            /**
-             * 是否根据图片实际尺寸自动调整宽高。
-             */
-            _this.autoSize = false;
             return _this;
         }
+        /**
+         * 使图片显示实际尺寸
+         */
+        Image.prototype.setNativeSize = function () {
+            var imagesize = this.image.getSize();
+            this.transform2D.width = imagesize.x;
+            this.transform2D.height = imagesize.y;
+        };
         Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
             _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
-            if (this.autoSize) {
-                var imagesize = this.image.getSize();
-                this.transform2D.width = imagesize.x;
-                this.transform2D.height = imagesize.y;
-            }
         };
         __decorate([
             feng3d.oav(),
@@ -551,9 +550,8 @@ var feng2d;
             feng3d.serialize
         ], Image.prototype, "color", void 0);
         __decorate([
-            feng3d.oav({ tooltip: "是否根据图片实际尺寸自动调整宽高。" }),
-            feng3d.serialize
-        ], Image.prototype, "autoSize", void 0);
+            feng3d.oav({ tooltip: "使图片显示实际尺寸", componentParam: { label: "ReSize" } })
+        ], Image.prototype, "setNativeSize", null);
         Image = __decorate([
             feng3d.AddComponentMenu("UI/Image")
         ], Image);

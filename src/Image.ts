@@ -27,11 +27,15 @@ namespace feng2d
         color = new feng3d.Color4();
 
         /**
-         * 是否根据图片实际尺寸自动调整宽高。
+         * 使图片显示实际尺寸
          */
-        @feng3d.oav({ tooltip: "是否根据图片实际尺寸自动调整宽高。" })
-        @feng3d.serialize
-        autoSize = false;
+        @feng3d.oav({ tooltip: "使图片显示实际尺寸", componentParam: { label: "ReSize" } })
+        setNativeSize()
+        {
+            var imagesize = this.image.getSize();
+            this.transform2D.width = imagesize.x;
+            this.transform2D.height = imagesize.y;
+        }
 
         beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
@@ -39,13 +43,6 @@ namespace feng2d
 
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
-
-            if (this.autoSize)
-            {
-                var imagesize = this.image.getSize();
-                this.transform2D.width = imagesize.x;
-                this.transform2D.height = imagesize.y;
-            }
         }
     }
 }

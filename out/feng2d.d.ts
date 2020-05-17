@@ -283,9 +283,9 @@ declare namespace feng2d {
          */
         color: feng3d.Color4;
         /**
-         * 是否根据图片实际尺寸自动调整宽高。
+         * 使图片显示实际尺寸
          */
-        autoSize: boolean;
+        setNativeSize(): void;
         beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
     }
 }
