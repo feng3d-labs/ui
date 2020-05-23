@@ -15,9 +15,9 @@ namespace feng2d
         @feng3d.serialize
         color = new feng3d.Color4();
 
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
-            super.beforeRender(gl, renderAtomic, scene, camera);
+            super.beforeRender(renderAtomic, scene, camera);
 
             renderAtomic.uniforms.u_color = this.color;
         }

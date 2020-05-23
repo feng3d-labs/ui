@@ -42,9 +42,9 @@ namespace feng2d
         private _canvas: HTMLCanvasElement;
         private _invalid = true;
 
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
-            super.beforeRender(gl, renderAtomic, scene, camera);
+            super.beforeRender(renderAtomic, scene, camera);
 
             var canvas = this._canvas;
 

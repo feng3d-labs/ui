@@ -123,7 +123,7 @@ namespace feng2d
             this.transform.matrix = mat;
         }
 
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
             renderAtomic.uniforms.u_size = this.size;
         }

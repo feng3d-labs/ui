@@ -190,7 +190,7 @@ var feng2d;
             enumerable: true,
             configurable: true
         });
-        Transform2D.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+        Transform2D.prototype.beforeRender = function (renderAtomic, scene, camera) {
             renderAtomic.uniforms.u_size = this.size;
         };
         Transform2D.prototype._positionChanged = function (object, property, oldvalue) {
@@ -301,14 +301,14 @@ var feng2d;
          * @param scene
          * @param camera
          */
-        CanvasRenderer.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
+        CanvasRenderer.prototype.beforeRender = function (renderAtomic, scene, camera) {
             var _this = this;
             //
             this.geometry.beforeRender(renderAtomic);
             this.material.beforeRender(renderAtomic);
             this.gameObject.components.forEach(function (element) {
                 if (element != _this)
-                    element.beforeRender(gl, renderAtomic, scene, camera);
+                    element.beforeRender(renderAtomic, scene, camera);
             });
         };
         /**
@@ -363,7 +363,7 @@ var feng2d;
                     //绘制
                     var renderAtomic = renderable.renderAtomic;
                     renderAtomic.uniforms.u_viewProjection = canvas.projection;
-                    renderable.beforeRender(gl, renderAtomic, null, null);
+                    renderable.beforeRender(renderAtomic, null, null);
                     gl.render(renderAtomic);
                 });
             });
@@ -529,8 +529,8 @@ var feng2d;
             _this.color = new feng3d.Color4();
             return _this;
         }
-        Rect.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
-            _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
+        Rect.prototype.beforeRender = function (renderAtomic, scene, camera) {
+            _super.prototype.beforeRender.call(this, renderAtomic, scene, camera);
             renderAtomic.uniforms.u_color = this.color;
         };
         __decorate([
@@ -587,8 +587,8 @@ var feng2d;
             this.transform2D.width = imagesize.x;
             this.transform2D.height = imagesize.y;
         };
-        Image.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
-            _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
+        Image.prototype.beforeRender = function (renderAtomic, scene, camera) {
+            _super.prototype.beforeRender.call(this, renderAtomic, scene, camera);
             renderAtomic.uniforms.s_texture = this.image;
             renderAtomic.uniforms.u_color = this.color;
         };
@@ -2013,8 +2013,8 @@ var feng2d;
             _this._invalid = true;
             return _this;
         }
-        Text.prototype.beforeRender = function (gl, renderAtomic, scene, camera) {
-            _super.prototype.beforeRender.call(this, gl, renderAtomic, scene, camera);
+        Text.prototype.beforeRender = function (renderAtomic, scene, camera) {
+            _super.prototype.beforeRender.call(this, renderAtomic, scene, camera);
             var canvas = this._canvas;
             if (!this._canvas || this._invalid) {
                 canvas = this._canvas = feng2d.drawText(this._canvas, this.text, this.style);

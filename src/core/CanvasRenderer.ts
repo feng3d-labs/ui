@@ -24,7 +24,7 @@ namespace feng2d
          * @param scene 
          * @param camera 
          */
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
             //
             this.geometry.beforeRender(renderAtomic);
@@ -33,7 +33,7 @@ namespace feng2d
             this.gameObject.components.forEach(element =>
             {
                 if (element != this)
-                    element.beforeRender(gl, renderAtomic, scene, camera);
+                    element.beforeRender(renderAtomic, scene, camera);
             });
         }
 
@@ -108,7 +108,7 @@ namespace feng2d
 
                     renderAtomic.uniforms.u_viewProjection = canvas.projection;
 
-                    renderable.beforeRender(gl, renderAtomic, null, null);
+                    renderable.beforeRender(renderAtomic, null, null);
 
                     gl.render(renderAtomic);
                 });

@@ -103,7 +103,7 @@ declare namespace feng2d {
          */
         get matrix(): feng3d.Matrix3x3;
         set matrix(v: feng3d.Matrix3x3);
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         private readonly _position;
         private readonly _scale;
         protected readonly _matrix: feng3d.Matrix3x3;
@@ -162,7 +162,7 @@ declare namespace feng2d {
          * @param scene
          * @param camera
          */
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         /**
           * 判断射线是否穿过对象
           * @param ray3D
@@ -272,7 +272,7 @@ declare namespace feng2d {
          * 填充颜色。
          */
         color: feng3d.Color4;
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
     }
 }
 declare namespace feng3d {
@@ -303,7 +303,7 @@ declare namespace feng2d {
          * 使图片显示实际尺寸
          */
         setNativeSize(): void;
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
     }
 }
 declare namespace feng3d {
@@ -916,7 +916,7 @@ declare namespace feng2d {
         private _image;
         private _canvas;
         private _invalid;
-        beforeRender(gl: feng3d.GL, renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
+        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         invalidate(): void;
         private _styleChanged;
     }
