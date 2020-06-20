@@ -87,7 +87,7 @@ var feng2d;
         }
         Object.defineProperty(Transform2D.prototype, "single", {
             get: function () { return true; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Transform2D.prototype.init = function () {
@@ -100,7 +100,7 @@ var feng2d;
              */
             get: function () { return this._position.x; },
             set: function (v) { this._position.x = v; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "y", {
@@ -109,7 +109,7 @@ var feng2d;
              */
             get: function () { return this._position.y; },
             set: function (v) { this._position.y = v; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "sx", {
@@ -118,7 +118,7 @@ var feng2d;
              */
             get: function () { return this._scale.x; },
             set: function (v) { this._scale.x = v; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "sy", {
@@ -127,7 +127,7 @@ var feng2d;
              */
             get: function () { return this._scale.y; },
             set: function (v) { this._scale.y = v; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "position", {
@@ -136,7 +136,7 @@ var feng2d;
              */
             get: function () { return this._position; },
             set: function (v) { this._position.copy(v); },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "width", {
@@ -145,7 +145,7 @@ var feng2d;
              */
             get: function () { return this._size.x; },
             set: function (v) { this._size.x = v; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "height", {
@@ -154,7 +154,7 @@ var feng2d;
              */
             get: function () { return this._size.y; },
             set: function (v) { this._size.y = v; },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "scale", {
@@ -163,7 +163,7 @@ var feng2d;
              */
             get: function () { return this._scale; },
             set: function (v) { this._scale.copy(v); },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "size", {
@@ -172,7 +172,7 @@ var feng2d;
              */
             get: function () { return this._size; },
             set: function (v) { this._size.copy(v); },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Object.defineProperty(Transform2D.prototype, "matrix", {
@@ -187,7 +187,7 @@ var feng2d;
                 var mat = v.toMatrix4x4();
                 this.transform.matrix = mat;
             },
-            enumerable: true,
+            enumerable: false,
             configurable: true
         });
         Transform2D.prototype.beforeRender = function (renderAtomic, scene, camera) {
