@@ -33,11 +33,6 @@ namespace feng2d
          */
         private _uvRect = new feng3d.Vector4(0, 0, 1, 1);
 
-        /**
-         * 遮罩，控制显示区域。
-         */
-        private _mask = new feng3d.Vector4(0, 0, 4096, 4096);
-
         private _image = new feng3d.Texture2D();
         private _canvas: HTMLCanvasElement;
         private _invalid = true;
@@ -51,7 +46,7 @@ namespace feng2d
             if (!this._canvas || this._invalid)
             {
                 canvas = this._canvas = drawText(this._canvas, this.text, this.style);
-                this._image["_pixels"] = canvas;
+                this._image["_pixels"] = canvas;this._image.wrapS
                 this._image.invalidate();
                 this._invalid = false;
             }
@@ -66,14 +61,9 @@ namespace feng2d
             this._uvRect.z = this.transform2D.width / canvas.width;
             this._uvRect.w = this.transform2D.height / canvas.height;
 
-            // 只显示有文字的区域
-            this._mask.z = canvas.width;
-            this._mask.w = canvas.height;
-
             //
             renderAtomic.uniforms.s_texture = this._image;
             renderAtomic.uniforms.u_uvRect = this._uvRect;
-            renderAtomic.uniforms.u_mask = this._mask;
         }
 
         invalidate()

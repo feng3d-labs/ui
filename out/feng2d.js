@@ -48,20 +48,25 @@ var feng2d;
          */
         constructor() {
             super();
+            this._rect = new feng3d.Vector4(0, 0, 100, 100);
+            this._position = new feng3d.Vector2();
+            this._size = new feng3d.Vector2(1, 1);
             /**
-             * 无缩放宽度
+             * The normalized position in the parent RectTransform that the upper right corner is anchored to.
              */
-            this.noScaleWidth = 1;
+            this.anchorMax = new feng3d.Vector2(0.5, 0.5);
             /**
-             * 无缩放高度
+             * The normalized position in the parent RectTransform that the lower left corner is anchored to.
              */
-            this.noScaleHeight = 1;
+            this.anchorMin = new feng3d.Vector2(0.5, 0.5);
+            /**
+             * The normalized position in this RectTransform that it rotates around.
+             */
+            this.pivot = new feng3d.Vector2(0, 0);
             /**
              * 旋转
              */
             this.rotation = 0;
-            this._size = new feng3d.Vector2(1, 1);
-            this._position = new feng3d.Vector2();
             this._scale = new feng3d.Vector2(1, 1);
             this._matrix = new feng3d.Matrix3x3();
             feng3d.watcher.watch(this._position, "x", this._positionChanged, this);
@@ -71,6 +76,13 @@ var feng2d;
             feng3d.watcher.watch(this._scale, "y", this._scaleChanged, this);
         }
         get single() { return true; }
+        /**
+         * 描述了2D对象在未经过变换前的位置与尺寸
+         */
+        get rect() {
+            this._rect.init(-this.pivot.x * this.size.x, -this.pivot.y * this.size.y, this.size.x, this.size.y);
+            return this._rect;
+        }
         init() {
             this.on("transformChanged", this._onTransformChanged, this);
             this._onTransformChanged();
@@ -85,16 +97,6 @@ var feng2d;
          */
         get y() { return this._position.y; }
         set y(v) { this._position.y = v; }
-        /**
-         * X轴缩放。
-         */
-        get sx() { return this._scale.x; }
-        set sx(v) { this._scale.x = v; }
-        /**
-         * Y轴缩放。
-         */
-        get sy() { return this._scale.y; }
-        set sy(v) { this._scale.y = v; }
         /**
          * 位移
          */
@@ -111,15 +113,25 @@ var feng2d;
         get height() { return this._size.y; }
         set height(v) { this._size.y = v; }
         /**
-         * 缩放
-         */
-        get scale() { return this._scale; }
-        set scale(v) { this._scale.copy(v); }
-        /**
          * 尺寸，宽高。
          */
         get size() { return this._size; }
         set size(v) { this._size.copy(v); }
+        /**
+         * X轴缩放。
+         */
+        get sx() { return this._scale.x; }
+        set sx(v) { this._scale.x = v; }
+        /**
+         * Y轴缩放。
+         */
+        get sy() { return this._scale.y; }
+        set sy(v) { this._scale.y = v; }
+        /**
+         * 缩放
+         */
+        get scale() { return this._scale; }
+        set scale(v) { this._scale.copy(v); }
         /**
          * 本地变换矩阵
          */
@@ -132,7 +144,7 @@ var feng2d;
             this.transform.matrix = mat;
         }
         beforeRender(renderAtomic, scene, camera) {
-            renderAtomic.uniforms.u_size = this.size;
+            renderAtomic.uniforms.u_rect = this.rect;
         }
         _positionChanged(object, property, oldvalue) {
             if (!Math.equals(object[property], oldvalue)) {
@@ -167,20 +179,19 @@ var feng2d;
         feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
     ], Transform2D.prototype, "position", null);
     __decorate([
-        feng3d.oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-    ], Transform2D.prototype, "width", null);
+        feng3d.oav({ tooltip: "尺寸，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
+        feng3d.serialize
+    ], Transform2D.prototype, "size", null);
     __decorate([
-        feng3d.oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-    ], Transform2D.prototype, "height", null);
+        feng3d.oav({ tooltip: "中心点" }),
+        feng3d.serialize
+    ], Transform2D.prototype, "pivot", void 0);
     __decorate([
         feng3d.oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
     ], Transform2D.prototype, "rotation", void 0);
     __decorate([
         feng3d.oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
     ], Transform2D.prototype, "scale", null);
-    __decorate([
-        feng3d.serialize
-    ], Transform2D.prototype, "size", null);
     Transform2D = __decorate([
         feng3d.AddComponentMenu("Layout/Transform2D")
     ], Transform2D);
@@ -394,7 +405,7 @@ var feng2d;
             /**
              * UI几何体尺寸，在shader中进行对几何体缩放。
              */
-            this.u_size = new feng3d.Vector2(1, 1);
+            this.u_rect = new feng3d.Vector4(0, 0, 100, 100);
             /**
              * 颜色
              */
@@ -407,10 +418,6 @@ var feng2d;
              * 控制图片的显示区域。
              */
             this.u_uvRect = new feng3d.Vector4(0, 0, 1, 1);
-            /**
-             * 遮罩，控制显示区域。
-             */
-            this.u_mask = new feng3d.Vector4(0, 0, 4096, 4096);
         }
     }
     __decorate([
@@ -428,7 +435,7 @@ var feng2d;
     attribute vec2 a_uv;
     
     uniform vec4 u_uvRect;
-    uniform vec2 u_size;
+    uniform vec4 u_rect;
     uniform mat4 u_modelMatrix;
     uniform mat4 u_viewProjection;
     
@@ -437,7 +444,7 @@ var feng2d;
 
     void main() 
     {
-        vec2 position = a_position * u_size;
+        vec2 position = u_rect.xy + a_position * u_rect.zw;
         gl_Position = u_viewProjection * u_modelMatrix * vec4(position, 0.0, 1.0);
         v_uv = u_uvRect.xy + a_uv * u_uvRect.zw;
         v_position = position.xy;
@@ -451,20 +458,16 @@ var feng2d;
     varying vec2 v_position;
     
     uniform vec4 u_color;
-    uniform vec4 u_mask;
     
     void main() 
     {
-        if(v_position.x < u_mask.x || v_position.x > u_mask.x + u_mask.z || v_position.y < u_mask.y || v_position.y > u_mask.y + u_mask.w)
-            discard;
-
         vec4 color = texture2D(s_texture, v_uv);
         gl_FragColor = color * u_color;
     }
     
     `,
         cls: UIUniforms,
-        renderParams: { enableBlend: false },
+        renderParams: { enableBlend: true },
     };
     feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
 })(feng2d || (feng2d = {}));
@@ -1950,10 +1953,6 @@ var feng2d;
              * 显示图片的区域，(0, 0, 1, 1)表示完整显示图片。
              */
             this._uvRect = new feng3d.Vector4(0, 0, 1, 1);
-            /**
-             * 遮罩，控制显示区域。
-             */
-            this._mask = new feng3d.Vector4(0, 0, 4096, 4096);
             this._image = new feng3d.Texture2D();
             this._invalid = true;
         }
@@ -1963,6 +1962,7 @@ var feng2d;
             if (!this._canvas || this._invalid) {
                 canvas = this._canvas = feng2d.drawText(this._canvas, this.text, this.style);
                 this._image["_pixels"] = canvas;
+                this._image.wrapS;
                 this._image.invalidate();
                 this._invalid = false;
             }
@@ -1973,13 +1973,9 @@ var feng2d;
             // 调整缩放使得更改尺寸时文字不被缩放。
             this._uvRect.z = this.transform2D.width / canvas.width;
             this._uvRect.w = this.transform2D.height / canvas.height;
-            // 只显示有文字的区域
-            this._mask.z = canvas.width;
-            this._mask.w = canvas.height;
             //
             renderAtomic.uniforms.s_texture = this._image;
             renderAtomic.uniforms.u_uvRect = this._uvRect;
-            renderAtomic.uniforms.u_mask = this._mask;
         }
         invalidate() {
             this._invalid = true;

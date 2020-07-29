@@ -36,6 +36,11 @@ declare namespace feng2d {
     class Transform2D extends feng3d.Component {
         get single(): boolean;
         /**
+         * 描述了2D对象在未经过变换前的位置与尺寸
+         */
+        get rect(): feng3d.Vector4;
+        private _rect;
+        /**
          * 创建一个实体，该类为虚类
          */
         constructor();
@@ -51,28 +56,11 @@ declare namespace feng2d {
         get y(): number;
         set y(v: number);
         /**
-         * X轴缩放。
-         */
-        get sx(): number;
-        set sx(v: number);
-        /**
-         * Y轴缩放。
-         */
-        get sy(): number;
-        set sy(v: number);
-        /**
          * 位移
          */
         get position(): feng3d.Vector2;
         set position(v: feng3d.Vector2);
-        /**
-         * 无缩放宽度
-         */
-        noScaleWidth: number;
-        /**
-         * 无缩放高度
-         */
-        noScaleHeight: number;
+        private readonly _position;
         /**
          * 宽度，不会影响到缩放值。
          */
@@ -84,28 +72,49 @@ declare namespace feng2d {
         get height(): number;
         set height(v: number);
         /**
-         * 旋转
-         */
-        rotation: number;
-        /**
-         * 缩放
-         */
-        get scale(): feng3d.Vector2;
-        set scale(v: feng3d.Vector2);
-        /**
          * 尺寸，宽高。
          */
         get size(): feng3d.Vector2;
         set size(v: feng3d.Vector2);
         private _size;
         /**
+         * The normalized position in the parent RectTransform that the upper right corner is anchored to.
+         */
+        anchorMax: feng3d.Vector2;
+        /**
+         * The normalized position in the parent RectTransform that the lower left corner is anchored to.
+         */
+        anchorMin: feng3d.Vector2;
+        /**
+         * The normalized position in this RectTransform that it rotates around.
+         */
+        pivot: feng3d.Vector2;
+        /**
+         * 旋转
+         */
+        rotation: number;
+        /**
+         * X轴缩放。
+         */
+        get sx(): number;
+        set sx(v: number);
+        /**
+         * Y轴缩放。
+         */
+        get sy(): number;
+        set sy(v: number);
+        /**
+         * 缩放
+         */
+        get scale(): feng3d.Vector2;
+        set scale(v: feng3d.Vector2);
+        private readonly _scale;
+        /**
          * 本地变换矩阵
          */
         get matrix(): feng3d.Matrix3x3;
         set matrix(v: feng3d.Matrix3x3);
         beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
-        private readonly _position;
-        private readonly _scale;
         protected readonly _matrix: feng3d.Matrix3x3;
         private _positionChanged;
         private _rotationChanged;
@@ -228,7 +237,7 @@ declare namespace feng2d {
         /**
          * UI几何体尺寸，在shader中进行对几何体缩放。
          */
-        u_size: feng3d.Vector2;
+        u_rect: feng3d.Vector4;
         /**
          * 颜色
          */
@@ -241,10 +250,6 @@ declare namespace feng2d {
          * 控制图片的显示区域。
          */
         u_uvRect: feng3d.Vector4;
-        /**
-         * 遮罩，控制显示区域。
-         */
-        u_mask: feng3d.Vector4;
     }
 }
 declare namespace feng3d {
@@ -909,10 +914,6 @@ declare namespace feng2d {
          * 显示图片的区域，(0, 0, 1, 1)表示完整显示图片。
          */
         private _uvRect;
-        /**
-         * 遮罩，控制显示区域。
-         */
-        private _mask;
         private _image;
         private _canvas;
         private _invalid;

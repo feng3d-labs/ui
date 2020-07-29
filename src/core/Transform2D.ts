@@ -12,6 +12,16 @@ namespace feng2d
     {
         get single() { return true; }
 
+        /**
+         * 描述了2D对象在未经过变换前的位置与尺寸
+         */
+        get rect()
+        {
+            this._rect.init(-this.pivot.x * this.size.x, -this.pivot.y * this.size.y, this.size.x, this.size.y);
+            return this._rect;
+        }
+        private _rect = new feng3d.Vector4(0, 0, 100, 100);
+
 		/**
 		 * 创建一个实体，该类为虚类
 		 */
@@ -45,6 +55,58 @@ namespace feng2d
         set y(v) { this._position.y = v; }
 
         /**
+         * 位移
+         */
+        @feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        get position() { return this._position; }
+        set position(v) { this._position.copy(v); }
+        private readonly _position = new feng3d.Vector2();
+
+        /**
+         * 宽度，不会影响到缩放值。
+         */
+        get width() { return this._size.x; }
+        set width(v) { this._size.x = v; }
+
+        /**
+         * 高度，不会影响到缩放值。
+         */
+        get height() { return this._size.y; }
+        set height(v) { this._size.y = v; }
+
+        /**
+         * 尺寸，宽高。
+         */
+        @feng3d.oav({ tooltip: "尺寸，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        @feng3d.serialize
+        get size() { return this._size; }
+        set size(v) { this._size.copy(v); }
+        private _size = new feng3d.Vector2(1, 1);
+
+        /**
+         * The normalized position in the parent RectTransform that the upper right corner is anchored to.
+         */
+        anchorMax = new feng3d.Vector2(0.5, 0.5);
+
+        /**
+         * The normalized position in the parent RectTransform that the lower left corner is anchored to.
+         */
+        anchorMin = new feng3d.Vector2(0.5, 0.5);
+
+        /**
+         * The normalized position in this RectTransform that it rotates around.
+         */
+        @feng3d.oav({ tooltip: "中心点" })
+        @feng3d.serialize
+        pivot = new feng3d.Vector2(0, 0);
+
+        /**
+         * 旋转
+         */
+        @feng3d.oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
+        rotation = 0;
+
+        /**
          * X轴缩放。
          */
         get sx() { return this._scale.x; }
@@ -57,56 +119,12 @@ namespace feng2d
         set sy(v) { this._scale.y = v; }
 
         /**
-         * 位移
-         */
-        @feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-        get position() { return this._position; }
-        set position(v) { this._position.copy(v); }
-
-        /**
-         * 无缩放宽度
-         */
-        noScaleWidth = 1;
-
-        /**
-         * 无缩放高度
-         */
-        noScaleHeight = 1;
-
-        /**
-         * 宽度，不会影响到缩放值。
-         */
-        @feng3d.oav({ tooltip: "宽度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-        get width() { return this._size.x; }
-        set width(v) { this._size.x = v; }
-
-        /**
-         * 高度，不会影响到缩放值。
-         */
-        @feng3d.oav({ tooltip: "高度，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-        get height() { return this._size.y; }
-        set height(v) { this._size.y = v; }
-
-        /**
-         * 旋转
-         */
-        @feng3d.oav({ tooltip: "旋转", componentParam: { step: 0.01, stepScale: 30, stepDownup: 50 } })
-        rotation = 0;
-
-        /**
          * 缩放
          */
         @feng3d.oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
         get scale() { return this._scale; }
         set scale(v) { this._scale.copy(v); }
-
-        /**
-         * 尺寸，宽高。
-         */
-        @feng3d.serialize
-        get size() { return this._size; }
-        set size(v) { this._size.copy(v); }
-        private _size = new feng3d.Vector2(1, 1);
+        private readonly _scale = new feng3d.Vector2(1, 1);
 
         /**
          * 本地变换矩阵
@@ -125,11 +143,8 @@ namespace feng2d
 
         beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
         {
-            renderAtomic.uniforms.u_size = this.size;
+            renderAtomic.uniforms.u_rect = this.rect;
         }
-
-        private readonly _position = new feng3d.Vector2();
-        private readonly _scale = new feng3d.Vector2(1, 1);
 
         protected readonly _matrix = new feng3d.Matrix3x3();
 
