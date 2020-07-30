@@ -14,12 +14,6 @@ namespace feng2d
          */
         renderMode = UIRenderMode.ScreenSpaceOverlay;
 
-        @feng3d.oav({ editable: false })
-        width = 1;
-
-        @feng3d.oav({ editable: false })
-        height = 1;
-
         /**
 		 * 获取鼠标射线（与鼠标重叠的摄像机射线）
 		 */
@@ -46,8 +40,8 @@ namespace feng2d
          */
         layout(width: number, height: number)
         {
-            this.width = width;
-            this.height = height;
+            this.transform2D.width = width;
+            this.transform2D.height = height;
 
             this.transform.x = 0;
             this.transform.y = 0;
@@ -80,6 +74,7 @@ namespace feng3d
 {
     GameObject.registerPrimitive("Canvas", (g) =>
     {
+        g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.Canvas)
     });
 

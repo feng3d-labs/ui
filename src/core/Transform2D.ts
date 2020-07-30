@@ -1,5 +1,13 @@
 namespace feng2d
 {
+    interface ILayout
+    {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+    }
+
     /**
      * 2D变换
      * 
@@ -84,14 +92,102 @@ namespace feng2d
         private _size = new feng3d.Vector2(1, 1);
 
         /**
-         * The normalized position in the parent RectTransform that the upper right corner is anchored to.
+         * 距离最小锚点应在位置的x轴正向偏移
          */
-        anchorMax = new feng3d.Vector2(0.5, 0.5);
+        get left()
+        {
+            return this.leftRightTopBottom.left;
+        }
 
         /**
-         * The normalized position in the parent RectTransform that the lower left corner is anchored to.
+         * 距离最大锚点应在位置的x轴负向偏移
          */
+        get right()
+        {
+            return this.leftRightTopBottom.right;
+        }
+
+        /**
+         * 距离最小锚点应在位置的y轴正向偏移
+         */
+        get top()
+        {
+            return this.leftRightTopBottom.top;
+        }
+
+        /**
+         * 距离最大锚点应在位置的y轴负向偏移
+         */
+        get bottom()
+        {
+            return this.leftRightTopBottom.bottom;
+        }
+
+        @feng3d.oav()
+        get leftRightTopBottom()
+        {
+            if (this._leftRightTopBottomInvalid)
+            {
+                // this._leftRightTopBottonInvalid = false;
+
+                this._updateLeftRightTopBottom();
+            }
+            return this._leftRightTopBottom;
+        }
+
+        private _leftRightTopBottom: ILayout = <any>{};
+        private _leftRightTopBottomInvalid = true;
+
+        private _updateLeftRightTopBottom()
+        {
+            this._leftRightTopBottom.left = 0;
+            this._leftRightTopBottom.right = 0;
+            this._leftRightTopBottom.top = 0;
+            this._leftRightTopBottom.bottom = 0;
+
+            var parentTransform2D = this.gameObject.parent?.transform2D;
+            if (!parentTransform2D) return;
+
+            // 当前对象显示区域
+            var rect = this.rect;
+            // 自身在父对象中的Layout
+            var selfLayout: ILayout = {
+                left: this.x + rect.x,
+                right: this.x + rect.x + rect.z,
+                top: this.y + rect.y,
+                bottom: this.y + rect.y + rect.w,
+            };
+            // 父对象显示区域
+            var parentRect = parentTransform2D.rect;
+            // 父对象显示区域宽高
+            var parentWidth = parentRect.z, parentHeight = parentRect.w;
+            // 锚点在父Transform2D中锚定的 leftRightTopBottom 位置。
+            var anchorLayout: ILayout = {
+                left: this.anchorMin.x * parentWidth,
+                right: this.anchorMax.x * parentWidth,
+                top: this.anchorMin.y * parentHeight,
+                bottom: this.anchorMax.y * parentHeight,
+            }
+            // 计算相对锚点的 ILayout
+            this._leftRightTopBottom.left = selfLayout.left - anchorLayout.left;
+            this._leftRightTopBottom.right = -(selfLayout.right - anchorLayout.right);
+            this._leftRightTopBottom.top = selfLayout.top - anchorLayout.top;
+            this._leftRightTopBottom.bottom = -(selfLayout.bottom - anchorLayout.bottom);
+        }
+
+        /**
+         * 最小锚点，父Transform2D中左上角锚定的规范化位置。
+         */
+        @feng3d.oav({ tooltip: "父Transform2D中左上角锚定的规范化位置。", componentParam: { step: 0.01, stepScale: 0.01, stepDownup: 0.01 } })
+        @feng3d.serialize
         anchorMin = new feng3d.Vector2(0.5, 0.5);
+
+        /**
+         * 最大锚点，父Transform2D中左上角锚定的规范化位置。
+         */
+        @feng3d.oav({ tooltip: "最大锚点，父Transform2D中左上角锚定的规范化位置。", componentParam: { step: 0.01, stepScale: 0.01, stepDownup: 0.01 } })
+        @feng3d.serialize
+        anchorMax = new feng3d.Vector2(0.5, 0.5);
 
         /**
          * The normalized position in this RectTransform that it rotates around.

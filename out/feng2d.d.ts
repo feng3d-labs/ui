@@ -26,6 +26,12 @@ declare namespace feng2d {
     }
 }
 declare namespace feng2d {
+    interface ILayout {
+        left: number;
+        right: number;
+        top: number;
+        bottom: number;
+    }
     /**
      * 2D变换
      *
@@ -33,7 +39,7 @@ declare namespace feng2d {
      *
      * 通过修改Transform的数值实现
      */
-    class Transform2D extends feng3d.Component {
+    export class Transform2D extends feng3d.Component {
         get single(): boolean;
         /**
          * 描述了2D对象在未经过变换前的位置与尺寸
@@ -78,13 +84,33 @@ declare namespace feng2d {
         set size(v: feng3d.Vector2);
         private _size;
         /**
-         * The normalized position in the parent RectTransform that the upper right corner is anchored to.
+         * 距离最小锚点应在位置的x轴正向偏移
          */
-        anchorMax: feng3d.Vector2;
+        get left(): number;
         /**
-         * The normalized position in the parent RectTransform that the lower left corner is anchored to.
+         * 距离最大锚点应在位置的x轴负向偏移
+         */
+        get right(): number;
+        /**
+         * 距离最小锚点应在位置的y轴正向偏移
+         */
+        get top(): number;
+        /**
+         * 距离最大锚点应在位置的y轴负向偏移
+         */
+        get bottom(): number;
+        get leftRightTopBottom(): ILayout;
+        private _leftRightTopBottom;
+        private _leftRightTopBottomInvalid;
+        private _updateLeftRightTopBottom;
+        /**
+         * 最小锚点，父Transform2D中左上角锚定的规范化位置。
          */
         anchorMin: feng3d.Vector2;
+        /**
+         * 最大锚点，父Transform2D中左上角锚定的规范化位置。
+         */
+        anchorMax: feng3d.Vector2;
         /**
          * The normalized position in this RectTransform that it rotates around.
          */
@@ -121,6 +147,7 @@ declare namespace feng2d {
         private _scaleChanged;
         private _onTransformChanged;
     }
+    export {};
 }
 declare namespace feng3d {
     interface GameObject {
@@ -198,8 +225,6 @@ declare namespace feng2d {
          * 画布是在世界或覆盖模式?
          */
         renderMode: UIRenderMode;
-        width: number;
-        height: number;
         /**
          * 获取鼠标射线（与鼠标重叠的摄像机射线）
          */

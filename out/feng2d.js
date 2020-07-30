@@ -51,14 +51,16 @@ var feng2d;
             this._rect = new feng3d.Vector4(0, 0, 100, 100);
             this._position = new feng3d.Vector2();
             this._size = new feng3d.Vector2(1, 1);
+            this._leftRightTopBottom = {};
+            this._leftRightTopBottomInvalid = true;
             /**
-             * The normalized position in the parent RectTransform that the upper right corner is anchored to.
-             */
-            this.anchorMax = new feng3d.Vector2(0.5, 0.5);
-            /**
-             * The normalized position in the parent RectTransform that the lower left corner is anchored to.
+             * 最小锚点，父Transform2D中左上角锚定的规范化位置。
              */
             this.anchorMin = new feng3d.Vector2(0.5, 0.5);
+            /**
+             * 最大锚点，父Transform2D中左上角锚定的规范化位置。
+             */
+            this.anchorMax = new feng3d.Vector2(0.5, 0.5);
             /**
              * The normalized position in this RectTransform that it rotates around.
              */
@@ -117,6 +119,72 @@ var feng2d;
          */
         get size() { return this._size; }
         set size(v) { this._size.copy(v); }
+        /**
+         * 距离最小锚点应在位置的x轴正向偏移
+         */
+        get left() {
+            return this.leftRightTopBottom.left;
+        }
+        /**
+         * 距离最大锚点应在位置的x轴负向偏移
+         */
+        get right() {
+            return this.leftRightTopBottom.right;
+        }
+        /**
+         * 距离最小锚点应在位置的y轴正向偏移
+         */
+        get top() {
+            return this.leftRightTopBottom.top;
+        }
+        /**
+         * 距离最大锚点应在位置的y轴负向偏移
+         */
+        get bottom() {
+            return this.leftRightTopBottom.bottom;
+        }
+        get leftRightTopBottom() {
+            if (this._leftRightTopBottomInvalid) {
+                // this._leftRightTopBottonInvalid = false;
+                this._updateLeftRightTopBottom();
+            }
+            return this._leftRightTopBottom;
+        }
+        _updateLeftRightTopBottom() {
+            var _a;
+            this._leftRightTopBottom.left = 0;
+            this._leftRightTopBottom.right = 0;
+            this._leftRightTopBottom.top = 0;
+            this._leftRightTopBottom.bottom = 0;
+            var parentTransform2D = (_a = this.gameObject.parent) === null || _a === void 0 ? void 0 : _a.transform2D;
+            if (!parentTransform2D)
+                return;
+            // 当前对象显示区域
+            var rect = this.rect;
+            // 自身在父对象中的Layout
+            var selfLayout = {
+                left: this.x + rect.x,
+                right: this.x + rect.x + rect.z,
+                top: this.y + rect.y,
+                bottom: this.y + rect.y + rect.w,
+            };
+            // 父对象显示区域
+            var parentRect = parentTransform2D.rect;
+            // 父对象显示区域宽高
+            var parentWidth = parentRect.z, parentHeight = parentRect.w;
+            // 锚点在父Transform2D中锚定的 leftRightTopBottom 位置。
+            var anchorLayout = {
+                left: this.anchorMin.x * parentWidth,
+                right: this.anchorMax.x * parentWidth,
+                top: this.anchorMin.y * parentHeight,
+                bottom: this.anchorMax.y * parentHeight,
+            };
+            // 计算相对锚点的 ILayout
+            this._leftRightTopBottom.left = selfLayout.left - anchorLayout.left;
+            this._leftRightTopBottom.right = -(selfLayout.right - anchorLayout.right);
+            this._leftRightTopBottom.top = selfLayout.top - anchorLayout.top;
+            this._leftRightTopBottom.bottom = -(selfLayout.bottom - anchorLayout.bottom);
+        }
         /**
          * X轴缩放。
          */
@@ -182,6 +250,17 @@ var feng2d;
         feng3d.oav({ tooltip: "尺寸，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
         feng3d.serialize
     ], Transform2D.prototype, "size", null);
+    __decorate([
+        feng3d.oav()
+    ], Transform2D.prototype, "leftRightTopBottom", null);
+    __decorate([
+        feng3d.oav({ tooltip: "父Transform2D中左上角锚定的规范化位置。", componentParam: { step: 0.01, stepScale: 0.01, stepDownup: 0.01 } }),
+        feng3d.serialize
+    ], Transform2D.prototype, "anchorMin", void 0);
+    __decorate([
+        feng3d.oav({ tooltip: "最大锚点，父Transform2D中左上角锚定的规范化位置。", componentParam: { step: 0.01, stepScale: 0.01, stepDownup: 0.01 } }),
+        feng3d.serialize
+    ], Transform2D.prototype, "anchorMax", void 0);
     __decorate([
         feng3d.oav({ tooltip: "中心点" }),
         feng3d.serialize
@@ -338,8 +417,6 @@ var feng2d;
              * 画布是在世界或覆盖模式?
              */
             this.renderMode = feng2d.UIRenderMode.ScreenSpaceOverlay;
-            this.width = 1;
-            this.height = 1;
             /**
              * 获取鼠标射线（与鼠标重叠的摄像机射线）
              */
@@ -362,8 +439,8 @@ var feng2d;
          * @param height 画布高度
          */
         layout(width, height) {
-            this.width = width;
-            this.height = height;
+            this.transform2D.width = width;
+            this.transform2D.height = height;
             this.transform.x = 0;
             this.transform.y = 0;
             this.transform.z = 0;
@@ -384,17 +461,12 @@ var feng2d;
             this.mouseRay.position.set(view.mousePos.x, view.mousePos.y, 0);
         }
     }
-    __decorate([
-        feng3d.oav({ editable: false })
-    ], Canvas.prototype, "width", void 0);
-    __decorate([
-        feng3d.oav({ editable: false })
-    ], Canvas.prototype, "height", void 0);
     feng2d.Canvas = Canvas;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
     feng3d.GameObject.registerPrimitive("Canvas", (g) => {
+        g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.Canvas);
     });
 })(feng3d || (feng3d = {}));
