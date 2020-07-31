@@ -51,8 +51,7 @@ var feng2d;
             this._rect = new feng3d.Vector4(0, 0, 100, 100);
             this._position = new feng3d.Vector2();
             this._size = new feng3d.Vector2(1, 1);
-            this._leftRightTopBottom = { left: 0, right: 0, top: 0, bottom: 0 };
-            this._leftRightTopBottomInvalid = true;
+            this._layout = { left: 0, right: 0, top: 0, bottom: 0 };
             /**
              * 最小锚点，父Transform2D中左上角锚定的规范化位置。
              */
@@ -75,8 +74,15 @@ var feng2d;
              * 布局是否失效
              */
             this._layoutInvalid = true;
-            feng3d.watcher.watch(this._position, "x", this._positionChanged, this);
-            feng3d.watcher.watch(this._position, "y", this._positionChanged, this);
+            feng3d.watcher.watch(this._position, "x", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._position, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._size, "x", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._size, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this.anchorMin, "x", this._invalidateLayout, this);
+            feng3d.watcher.watch(this.anchorMin, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this.anchorMax, "x", this._invalidateLayout, this);
+            feng3d.watcher.watch(this.anchorMax, "y", this._invalidateLayout, this);
+            //
             feng3d.watcher.watch(this, "rotation", this._rotationChanged, this);
             feng3d.watcher.watch(this._scale, "x", this._scaleChanged, this);
             feng3d.watcher.watch(this._scale, "y", this._scaleChanged, this);
@@ -127,67 +133,40 @@ var feng2d;
          * 距离最小锚点应在位置的x轴正向偏移
          */
         get left() {
-            return this.leftRightTopBottom.left;
+            return this.layout.left;
         }
         /**
          * 距离最大锚点应在位置的x轴负向偏移
          */
         get right() {
-            return this.leftRightTopBottom.right;
+            return this.layout.right;
         }
         /**
          * 距离最小锚点应在位置的y轴正向偏移
          */
         get top() {
-            return this.leftRightTopBottom.top;
+            return this.layout.top;
         }
         /**
          * 距离最大锚点应在位置的y轴负向偏移
          */
         get bottom() {
-            return this.leftRightTopBottom.bottom;
+            return this.layout.bottom;
         }
-        get leftRightTopBottom() {
-            if (this._leftRightTopBottomInvalid) {
-                this._updateLeftRightTopBottom();
-                // this._leftRightTopBottonInvalid = false;
+        get layout() {
+            if (this._layoutInvalid) {
+                this._updateLayout();
+                this._layoutInvalid = false;
             }
-            return this._leftRightTopBottom;
+            return this._layout;
         }
-        _updateLeftRightTopBottom() {
-            var _a;
-            this._leftRightTopBottom.left = 0;
-            this._leftRightTopBottom.right = 0;
-            this._leftRightTopBottom.top = 0;
-            this._leftRightTopBottom.bottom = 0;
-            var parentTransform2D = (_a = this.gameObject.parent) === null || _a === void 0 ? void 0 : _a.transform2D;
-            if (!parentTransform2D)
+        set layout(v) {
+            if (!v)
                 return;
-            // 当前对象显示区域
-            var rect = this.rect;
-            // 自身在父对象中的Layout
-            var selfLayout = {
-                left: this.x + rect.x,
-                right: this.x + rect.x + rect.z,
-                top: this.y + rect.y,
-                bottom: this.y + rect.y + rect.w,
-            };
-            // 父对象显示区域
-            var parentRect = parentTransform2D.rect;
-            // 父对象显示区域宽高
-            var parentWidth = parentRect.z, parentHeight = parentRect.w;
-            // 锚点在父Transform2D中锚定的 leftRightTopBottom 位置。
-            var anchorLayout = {
-                left: this.anchorMin.x * parentWidth,
-                right: this.anchorMax.x * parentWidth,
-                top: this.anchorMin.y * parentHeight,
-                bottom: this.anchorMax.y * parentHeight,
-            };
-            // 计算相对锚点的 ILayout
-            this._leftRightTopBottom.left = selfLayout.left - anchorLayout.left;
-            this._leftRightTopBottom.right = -(selfLayout.right - anchorLayout.right);
-            this._leftRightTopBottom.top = selfLayout.top - anchorLayout.top;
-            this._leftRightTopBottom.bottom = -(selfLayout.bottom - anchorLayout.bottom);
+            this._layout.left = v.left;
+            this._layout.right = v.right;
+            this._layout.top = v.top;
+            this._layout.bottom = v.bottom;
         }
         /**
          * X轴缩放。
@@ -219,15 +198,15 @@ var feng2d;
             renderAtomic.uniforms.u_rect = this.rect;
         }
         _updateLayout() {
-            var _a;
-            var parentTransform2D = (_a = this.gameObject.parent) === null || _a === void 0 ? void 0 : _a.transform2D;
+            var _a, _b;
+            var parentTransform2D = (_b = (_a = this.gameObject) === null || _a === void 0 ? void 0 : _a.parent) === null || _b === void 0 ? void 0 : _b.transform2D;
             if (!parentTransform2D)
                 return;
             // 3d 坐标
             var position3 = this.transform.position;
             var position = this._position;
             var size = this._size;
-            var leftRightTopBottom = this._leftRightTopBottom;
+            var leftRightTopBottom = this._layout;
             var anchorMin = this.anchorMin;
             var anchorMax = this.anchorMax;
             var pivot = this.pivot;
@@ -283,15 +262,6 @@ var feng2d;
             this._layoutInvalid = true;
             feng3d.ticker.onframe(this._updateLayout, this);
         }
-        _positionChanged(object, property, oldvalue) {
-            this._invalidateLayout();
-            if (!Math.equals(object[property], oldvalue)) {
-                if (property == "x")
-                    this.transform.x = object.x;
-                else
-                    this.transform.y = object.y;
-            }
-        }
         _rotationChanged(object, property, oldvalue) {
             if (!Math.equals(object[property], oldvalue)) {
                 this.transform.rz = this.rotation;
@@ -306,8 +276,6 @@ var feng2d;
             }
         }
         _onTransformChanged() {
-            this.x = this.transform.x;
-            this.y = this.transform.y;
             this.rotation = this.transform.rz;
             this.sx = this.transform.sx;
             this.sy = this.transform.sy;
@@ -321,8 +289,9 @@ var feng2d;
         feng3d.serialize
     ], Transform2D.prototype, "size", null);
     __decorate([
-        feng3d.oav()
-    ], Transform2D.prototype, "leftRightTopBottom", null);
+        feng3d.oav(),
+        feng3d.serialize
+    ], Transform2D.prototype, "layout", null);
     __decorate([
         feng3d.oav({ tooltip: "父Transform2D中左上角锚定的规范化位置。", componentParam: { step: 0.01, stepScale: 0.01, stepDownup: 0.01 } }),
         feng3d.serialize

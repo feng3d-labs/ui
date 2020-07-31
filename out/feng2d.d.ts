@@ -93,15 +93,19 @@ declare namespace feng2d {
          * 距离最大锚点应在位置的y轴负向偏移
          */
         get bottom(): number;
-        get leftRightTopBottom(): {
+        get layout(): {
             left: number;
             right: number;
             top: number;
             bottom: number;
         };
-        private _leftRightTopBottom;
-        private _leftRightTopBottomInvalid;
-        private _updateLeftRightTopBottom;
+        set layout(v: {
+            left: number;
+            right: number;
+            top: number;
+            bottom: number;
+        });
+        private _layout;
         /**
          * 最小锚点，父Transform2D中左上角锚定的规范化位置。
          */
@@ -147,7 +151,6 @@ declare namespace feng2d {
          */
         private _layoutInvalid;
         private _invalidateLayout;
-        private _positionChanged;
         private _rotationChanged;
         private _scaleChanged;
         private _onTransformChanged;
