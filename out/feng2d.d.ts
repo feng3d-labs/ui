@@ -26,12 +26,6 @@ declare namespace feng2d {
     }
 }
 declare namespace feng2d {
-    interface ILayout {
-        left: number;
-        right: number;
-        top: number;
-        bottom: number;
-    }
     /**
      * 2D变换
      *
@@ -39,7 +33,7 @@ declare namespace feng2d {
      *
      * 通过修改Transform的数值实现
      */
-    export class Transform2D extends feng3d.Component {
+    class Transform2D extends feng3d.Component {
         get single(): boolean;
         /**
          * 描述了2D对象在未经过变换前的位置与尺寸
@@ -99,7 +93,12 @@ declare namespace feng2d {
          * 距离最大锚点应在位置的y轴负向偏移
          */
         get bottom(): number;
-        get leftRightTopBottom(): ILayout;
+        get leftRightTopBottom(): {
+            left: number;
+            right: number;
+            top: number;
+            bottom: number;
+        };
         private _leftRightTopBottom;
         private _leftRightTopBottomInvalid;
         private _updateLeftRightTopBottom;
@@ -142,12 +141,17 @@ declare namespace feng2d {
         set matrix(v: feng3d.Matrix3x3);
         beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         protected readonly _matrix: feng3d.Matrix3x3;
+        private _updateLayout;
+        /**
+         * 布局是否失效
+         */
+        private _layoutInvalid;
+        private _invalidateLayout;
         private _positionChanged;
         private _rotationChanged;
         private _scaleChanged;
         private _onTransformChanged;
     }
-    export {};
 }
 declare namespace feng3d {
     interface GameObject {
