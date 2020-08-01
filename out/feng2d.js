@@ -54,38 +54,12 @@ var feng2d;
             this._layout = new feng3d.Vector4();
             this._anchorMin = new feng3d.Vector2(0.5, 0.5);
             this._anchorMax = new feng3d.Vector2(0.5, 0.5);
-            this._pivot = new feng3d.Vector2(0, 0);
+            this._pivot = new feng3d.Vector2(0.5, 0.5);
             this._rotation = 0;
             this._scale = new feng3d.Vector2(1, 1);
-            var watcher = feng3d.watcher;
-            watcher.watch(this._position, "x", this._invalidateLayout, this);
-            watcher.watch(this._position, "y", this._invalidateLayout, this);
-            watcher.watch(this._anchorMin, "x", this._invalidateLayout, this);
-            watcher.watch(this._anchorMin, "y", this._invalidateLayout, this);
-            watcher.watch(this._anchorMax, "x", this._invalidateLayout, this);
-            watcher.watch(this._anchorMax, "y", this._invalidateLayout, this);
-            //
-            watcher.watch(this._layout, "x", this._invalidateLayout, this);
-            watcher.watch(this._layout, "y", this._invalidateLayout, this);
-            watcher.watch(this._layout, "z", this._invalidateLayout, this);
-            watcher.watch(this._layout, "w", this._invalidateLayout, this);
-            //
-            watcher.watch(this._size, "x", this._invalidateLayout, this);
-            watcher.watch(this._size, "y", this._invalidateLayout, this);
-            watcher.watch(this._pivot, "x", this._invalidateLayout, this);
-            watcher.watch(this._pivot, "y", this._invalidateLayout, this);
-            //
-            watcher.watch(this, "_rotation", this._invalidateLayout, this);
-            watcher.watch(this._scale, "x", this._invalidateLayout, this);
-            watcher.watch(this._scale, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this, "transformLayout", this._onTransformLayoutChanged, this);
         }
         get single() { return true; }
-        get transformLayout() {
-            var _a;
-            if (!this._transformLayout)
-                this._transformLayout = (_a = this.gameObject) === null || _a === void 0 ? void 0 : _a.getComponent(feng3d.TransformLayout);
-            return this._transformLayout;
-        }
         /**
          * 描述了2D对象在未经过变换前的位置与尺寸
          */
@@ -97,110 +71,115 @@ var feng2d;
         /**
          * 位移
          */
-        get position() {
-            return this._position;
-        }
+        get position() { return this._position; }
         set position(v) { this._position.copy(v); }
         /**
          * 尺寸，宽高。
          */
-        get size() {
-            return this._size;
-        }
+        get size() { return this._size; }
         set size(v) { this._size.copy(v); }
         /**
          * 与最小最大锚点形成的边框的left、right、top、bottom距离。当 anchorMin.x != anchorMax.x 时对 layout.x layout.y 赋值生效，当 anchorMin.y != anchorMax.y 时对 layout.z layout.w 赋值生效，否则赋值无效，自动被覆盖。
          */
-        get layout() {
-            return this._layout;
-        }
-        set layout(v) {
-            if (!v)
-                return;
-            this._layout.copy(v);
-        }
+        get layout() { return this._layout; }
+        set layout(v) { this._layout.copy(v); }
         /**
          * 最小锚点，父Transform2D中左上角锚定的规范化位置。
          */
-        get anchorMin() {
-            return this._anchorMin;
-        }
-        set anchorMin(v) {
-            this._anchorMin.copy(v);
-        }
+        get anchorMin() { return this._anchorMin; }
+        set anchorMin(v) { this._anchorMin.copy(v); }
         /**
          * 最大锚点，父Transform2D中左上角锚定的规范化位置。
          */
-        get anchorMax() {
-            return this._anchorMax;
-        }
-        set anchorMax(v) {
-            this._anchorMax.copy(v);
-        }
+        get anchorMax() { return this._anchorMax; }
+        set anchorMax(v) { this._anchorMax.copy(v); }
         /**
          * The normalized position in this RectTransform that it rotates around.
          */
-        get pivot() {
-            return this._pivot;
-        }
-        set pivot(v) {
-            this._pivot.copy(v);
-        }
+        get pivot() { return this._pivot; }
+        set pivot(v) { this._pivot.copy(v); }
         /**
          * 旋转
          */
-        get rotation() {
-            return this._rotation;
-        }
-        set rotation(v) {
-            this._rotation = v;
-        }
+        get rotation() { return this._rotation; }
+        set rotation(v) { this._rotation = v; }
         /**
          * 缩放
          */
-        get scale() {
-            return this._scale;
-        }
+        get scale() { return this._scale; }
         set scale(v) { this._scale.copy(v); }
+        init() {
+            super.init();
+            // 处理依赖组件
+            var transformLayout = this.getComponent(feng3d.TransformLayout);
+            if (!transformLayout) {
+                transformLayout = this.gameObject.addComponent(feng3d.TransformLayout);
+            }
+            this.transformLayout = transformLayout;
+            feng3d.watcher.bind(this.transform.rotation, "z", this, "rotation");
+            feng3d.watcher.bind(this.transform.scale, "x", this.scale, "x");
+            feng3d.watcher.bind(this.transform.scale, "y", this.scale, "y");
+            this.on("addComponent", this._onAddComponent, this);
+            this.on("removeComponent", this._onRemovedComponent, this);
+        }
+        _onAddComponent(event) {
+            if (event.data.gameobject != this.gameObject)
+                return;
+            var component = event.data.component;
+            if (component instanceof feng3d.TransformLayout) {
+                this.transformLayout = component;
+            }
+        }
+        _onRemovedComponent(event) {
+            if (event.data.gameobject != this.gameObject)
+                return;
+            var component = event.data.component;
+            if (component instanceof feng3d.TransformLayout) {
+                this.transformLayout = null;
+            }
+        }
+        _onTransformLayoutChanged(object, property, oldvalue) {
+            var watcher = feng3d.watcher;
+            if (oldvalue) {
+                watcher.unbind(oldvalue.position, "x", this.position, "x");
+                watcher.unbind(oldvalue.position, "y", this.position, "y");
+                watcher.unbind(oldvalue.anchorMin, "x", this.anchorMin, "x");
+                watcher.unbind(oldvalue.anchorMin, "y", this.anchorMin, "y");
+                watcher.unbind(oldvalue.anchorMax, "x", this.anchorMax, "x");
+                watcher.unbind(oldvalue.anchorMax, "y", this.anchorMax, "y");
+                //
+                watcher.unbind(oldvalue.leftTop, "x", this.layout, "x");
+                watcher.unbind(oldvalue.rightBottom, "x", this.layout, "y");
+                watcher.unbind(oldvalue.leftTop, "y", this.layout, "z");
+                watcher.unbind(oldvalue.rightBottom, "y", this.layout, "w");
+                //
+                watcher.unbind(oldvalue.size, "x", this.size, "x");
+                watcher.unbind(oldvalue.size, "y", this.size, "y");
+                watcher.unbind(oldvalue.pivot, "x", this.pivot, "x");
+                watcher.unbind(oldvalue.pivot, "y", this.pivot, "y");
+            }
+            var newValue = object[property];
+            if (newValue) {
+                watcher.bind(newValue.position, "x", this.position, "x");
+                watcher.bind(newValue.position, "y", this.position, "y");
+                watcher.bind(newValue.anchorMin, "x", this.anchorMin, "x");
+                watcher.bind(newValue.anchorMin, "y", this.anchorMin, "y");
+                watcher.bind(newValue.anchorMax, "x", this.anchorMax, "x");
+                watcher.bind(newValue.anchorMax, "y", this.anchorMax, "y");
+                //
+                watcher.bind(newValue.leftTop, "x", this.layout, "x");
+                watcher.bind(newValue.rightBottom, "x", this.layout, "y");
+                watcher.bind(newValue.leftTop, "y", this.layout, "z");
+                watcher.bind(newValue.rightBottom, "y", this.layout, "w");
+                //
+                watcher.bind(newValue.size, "x", this.size, "x");
+                watcher.bind(newValue.size, "y", this.size, "y");
+                watcher.bind(newValue.pivot, "x", this.pivot, "x");
+                watcher.bind(newValue.pivot, "y", this.pivot, "y");
+            }
+        }
         beforeRender(renderAtomic, scene, camera) {
             renderAtomic.uniforms.u_rect = this.rect;
-        }
-        _updateLayout() {
-            var position = this._position.clone();
-            var anchorMin = this._anchorMin.clone();
-            var anchorMax = this._anchorMax.clone();
-            var layout = this._layout.clone();
-            var size = this._size.clone();
-            var pivot = this._pivot.clone();
-            var rotation = this.rotation;
-            var scale = this._scale.clone();
-            //
-            var transformLayout = this.transformLayout;
-            if (!transformLayout)
-                return;
-            transformLayout.position.x = position.x;
-            transformLayout.position.y = position.y;
-            transformLayout.anchorMin.x = anchorMin.x;
-            transformLayout.anchorMin.y = anchorMin.y;
-            transformLayout.anchorMax.x = anchorMax.x;
-            transformLayout.anchorMax.y = anchorMax.y;
-            transformLayout.size.x = size.x;
-            transformLayout.size.y = size.y;
-            transformLayout.pivot.x = pivot.x;
-            transformLayout.pivot.y = pivot.y;
-            //
-            transformLayout.leftTop.x = layout.x;
-            transformLayout.leftTop.y = layout.z;
-            transformLayout.rightBottom.x = layout.y;
-            transformLayout.rightBottom.y = layout.w;
-            //
-            this.transform.rz = rotation;
-            this.transform.scale.x = scale.x;
-            this.transform.scale.y = scale.y;
-            feng3d.ticker.offframe(this._updateLayout, this);
-        }
-        _invalidateLayout() {
-            feng3d.ticker.onframe(this._updateLayout, this);
         }
     };
     __decorate([
@@ -389,6 +368,7 @@ var feng2d;
         layout(width, height) {
             this.transform2D.size.x = width;
             this.transform2D.size.y = height;
+            this.transform2D.pivot.init(0, 0);
             this.transform.x = 0;
             this.transform.y = 0;
             this.transform.z = 0;

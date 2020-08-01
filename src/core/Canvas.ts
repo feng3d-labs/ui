@@ -43,6 +43,8 @@ namespace feng2d
             this.transform2D.size.x = width;
             this.transform2D.size.y = height;
 
+            this.transform2D.pivot.init(0, 0);
+
             this.transform.x = 0;
             this.transform.y = 0;
             this.transform.z = 0;

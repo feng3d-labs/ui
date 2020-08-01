@@ -40,8 +40,7 @@ declare namespace feng2d {
      */
     class Transform2D extends feng3d.Component {
         get single(): boolean;
-        get transformLayout(): feng3d.TransformLayout;
-        private _transformLayout;
+        transformLayout: feng3d.TransformLayout;
         /**
          * 描述了2D对象在未经过变换前的位置与尺寸
          */
@@ -99,9 +98,11 @@ declare namespace feng2d {
          * 创建一个实体，该类为虚类
          */
         constructor();
+        init(): void;
+        private _onAddComponent;
+        private _onRemovedComponent;
+        private _onTransformLayoutChanged;
         beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
-        private _updateLayout;
-        private _invalidateLayout;
     }
 }
 declare namespace feng3d {
