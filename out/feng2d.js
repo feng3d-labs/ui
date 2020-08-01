@@ -354,7 +354,8 @@ var feng2d;
             this.transform.worldToLocalMatrix.transformVector(worldRay.position, localRay.position);
             this.transform.worldToLocalMatrix.deltaTransformVector(worldRay.direction, localRay.direction);
             var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
-            localRay.position.divide(size);
+            var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
+            localRay.position.divide(size).add(pivot);
             localRay.direction.divide(size).normalize();
             //检测射线与边界的碰撞
             var rayEntryDistance = this.selfLocalBounds.rayIntersection(localRay.position, localRay.direction, localNormal);
