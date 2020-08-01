@@ -124,8 +124,8 @@ namespace feng3d
     {
         var transform2D = g.addComponent(feng2d.Transform2D);
 
-        transform2D.width = 160;
-        transform2D.height = 30;
+        transform2D.size.x = 160;
+        transform2D.size.y = 30;
         g.addComponent(feng2d.Button)
     });
 

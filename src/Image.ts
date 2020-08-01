@@ -33,8 +33,8 @@ namespace feng2d
         setNativeSize()
         {
             var imagesize = this.image.getSize();
-            this.transform2D.width = imagesize.x;
-            this.transform2D.height = imagesize.y;
+            this.transform2D.size.x = imagesize.x;
+            this.transform2D.size.y = imagesize.y;
         }
 
         beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
@@ -54,8 +54,8 @@ namespace feng3d
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
 
-        transform2D.width = 100;
-        transform2D.height = 100;
+        transform2D.size.x = 100;
+        transform2D.size.y = 100;
         g.addComponent(feng2d.Image)
     });
 

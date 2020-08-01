@@ -40,8 +40,8 @@ namespace feng2d
          */
         layout(width: number, height: number)
         {
-            this.transform2D.width = width;
-            this.transform2D.height = height;
+            this.transform2D.size.x = width;
+            this.transform2D.size.y = height;
 
             this.transform.x = 0;
             this.transform.y = 0;

@@ -51,7 +51,7 @@ var feng2d;
             this._rect = new feng3d.Vector4(0, 0, 100, 100);
             this._position = new feng3d.Vector2();
             this._size = new feng3d.Vector2(1, 1);
-            this._layout = { left: 0, right: 0, top: 0, bottom: 0 };
+            this._layout = new feng3d.Vector4();
             /**
              * 最小锚点，父Transform2D中左上角锚定的规范化位置。
              */
@@ -76,16 +76,19 @@ var feng2d;
             this._layoutInvalid = true;
             feng3d.watcher.watch(this._position, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this._position, "y", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._size, "x", this._invalidateSize, this);
-            feng3d.watcher.watch(this._size, "y", this._invalidateSize, this);
             feng3d.watcher.watch(this.anchorMin, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMin, "y", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMax, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMax, "y", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._layout, "left", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._layout, "right", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._layout, "top", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._layout, "bottom", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "x", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "z", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "w", this._invalidateLayout, this);
+            //
+            feng3d.watcher.watch(this._size, "x", this._invalidateSize, this);
+            feng3d.watcher.watch(this._size, "y", this._invalidateSize, this);
+            feng3d.watcher.watch(this.pivot, "x", this._invalidatePivot, this);
+            feng3d.watcher.watch(this.pivot, "y", this._invalidatePivot, this);
             //
             feng3d.watcher.watch(this, "rotation", this._rotationChanged, this);
             feng3d.watcher.watch(this._scale, "x", this._scaleChanged, this);
@@ -108,20 +111,13 @@ var feng2d;
         }
         _onAdded(event) {
             event.data.parent.on("sizeChanged", this._invalidateLayout, this);
+            event.data.parent.on("pivotChanged", this._invalidateLayout, this);
+            this._invalidateLayout();
         }
         _onRemoved(event) {
             event.data.parent.off("sizeChanged", this._invalidateLayout, this);
+            event.data.parent.off("pivotChanged", this._invalidateLayout, this);
         }
-        /**
-         * X轴坐标。
-         */
-        get x() { return this._position.x; }
-        set x(v) { this._position.x = v; }
-        /**
-         * Y轴坐标。
-         */
-        get y() { return this._position.y; }
-        set y(v) { this._position.y = v; }
         /**
          * 位移
          */
@@ -131,16 +127,6 @@ var feng2d;
         }
         set position(v) { this._position.copy(v); }
         /**
-         * 宽度，不会影响到缩放值。
-         */
-        get width() { return this._size.x; }
-        set width(v) { this._size.x = v; }
-        /**
-         * 高度，不会影响到缩放值。
-         */
-        get height() { return this._size.y; }
-        set height(v) { this._size.y = v; }
-        /**
          * 尺寸，宽高。
          */
         get size() {
@@ -149,41 +135,8 @@ var feng2d;
         }
         set size(v) { this._size.copy(v); }
         /**
-         * 距离最小锚点应在位置的x轴正向偏移
+         * 与最小最大锚点形成的边框的left、right、top、bottom距离。当 anchorMin.x != anchorMax.x 时对 layout.x layout.y 赋值生效，当 anchorMin.y != anchorMax.y 时对 layout.z layout.w 赋值生效，否则赋值无效，自动被覆盖。
          */
-        get left() {
-            return this.layout.left;
-        }
-        set left(v) {
-            this.layout.left = v;
-        }
-        /**
-         * 距离最大锚点应在位置的x轴负向偏移
-         */
-        get right() {
-            return this.layout.right;
-        }
-        set right(v) {
-            this.layout.right = v;
-        }
-        /**
-         * 距离最小锚点应在位置的y轴正向偏移
-         */
-        get top() {
-            return this.layout.top;
-        }
-        set top(v) {
-            this.layout.top = v;
-        }
-        /**
-         * 距离最大锚点应在位置的y轴负向偏移
-         */
-        get bottom() {
-            return this.layout.bottom;
-        }
-        set bottom(v) {
-            this.layout.bottom = v;
-        }
         get layout() {
             this._updateLayout();
             return this._layout;
@@ -191,10 +144,10 @@ var feng2d;
         set layout(v) {
             if (!v)
                 return;
-            this._layout.left = v.left;
-            this._layout.right = v.right;
-            this._layout.top = v.top;
-            this._layout.bottom = v.bottom;
+            this._layout.x = v.x;
+            this._layout.y = v.y;
+            this._layout.z = v.z;
+            this._layout.w = v.w;
         }
         /**
          * X轴缩放。
@@ -232,55 +185,54 @@ var feng2d;
             var parentTransform2D = (_b = (_a = this.gameObject) === null || _a === void 0 ? void 0 : _a.parent) === null || _b === void 0 ? void 0 : _b.transform2D;
             if (!parentTransform2D)
                 return;
-            // 3d 坐标，中心点基于父容器左上角的坐标
-            var position3 = this.transform.position;
             // 中心点基于anchorMin的坐标
             var position = this._position;
             // 尺寸
             var size = this._size;
-            var leftRightTopBottom = this._layout;
+            var layout = this._layout;
             // 最小锚点
-            var anchorMin = this.anchorMin;
+            var anchorMin = this.anchorMin.clone();
             // 最大锚点
-            var anchorMax = this.anchorMax;
-            var pivot = this.pivot;
+            var anchorMax = this.anchorMax.clone();
+            var pivot = this.pivot.clone();
             // 父对象显示区域宽高
-            var parentWidth = parentTransform2D.width, parentHeight = parentTransform2D.height;
+            var parentSize = parentTransform2D.size;
+            var parentPivot = parentTransform2D.pivot;
             // 锚点在父Transform2D中锚定的 leftRightTopBottom 位置。
             var anchorLayout = {
-                left: anchorMin.x * parentWidth,
-                top: anchorMin.y * parentHeight,
-                right: anchorMax.x * parentWidth,
-                bottom: anchorMax.y * parentHeight,
+                left: anchorMin.x * parentSize.x - parentTransform2D.pivot.x * parentSize.x,
+                top: anchorMin.y * parentSize.y - parentTransform2D.pivot.y * parentSize.y,
+                right: anchorMax.x * parentSize.x - parentTransform2D.pivot.x * parentSize.x,
+                bottom: anchorMax.y * parentSize.y - parentTransform2D.pivot.y * parentSize.y,
             };
             // 使用 x 与 width 计算
             if (anchorMin.x == anchorMax.x) {
                 // 根据 x 与 width 计算 left 与 right
-                leftRightTopBottom.left = (-pivot.x * size.x + position.x) - anchorLayout.left;
-                leftRightTopBottom.right = anchorLayout.right - (size.x - pivot.x * size.x + position.x);
+                layout.x = (-pivot.x * size.x + position.x) - anchorLayout.left;
+                layout.y = anchorLayout.right - (size.x - pivot.x * size.x + position.x);
             }
             else // 使用 left 与 right 计算
              {
                 // 计算 x 与 width
-                size.x = (anchorLayout.right - leftRightTopBottom.right) - (anchorLayout.left + leftRightTopBottom.left);
+                size.x = (anchorLayout.right - layout.y) - (anchorLayout.left + layout.x);
                 //
-                position.x = leftRightTopBottom.left + pivot.x * size.x;
+                position.x = layout.x + pivot.x * size.x;
             }
             // 使用 y 与 height 计算
             if (anchorMin.y == anchorMax.y) {
                 // 计算相对锚点的 ILayout
-                leftRightTopBottom.top = (-pivot.y * size.y + position.y) - anchorLayout.top;
-                leftRightTopBottom.bottom = anchorLayout.bottom - (size.y - pivot.y * size.y + position.y);
+                layout.z = (-pivot.y * size.y + position.y) - anchorLayout.top;
+                layout.w = anchorLayout.bottom - (size.y - pivot.y * size.y + position.y);
             }
             else // 使用 top 与 bottom 计算
              {
-                size.y = (anchorLayout.bottom - leftRightTopBottom.bottom) - (anchorLayout.top + leftRightTopBottom.top);
+                size.y = (anchorLayout.bottom - layout.w) - (anchorLayout.top + layout.z);
                 // 计算 x 与 width
-                position.y = leftRightTopBottom.top + pivot.y * size.y;
+                position.y = layout.z + pivot.y * size.y;
             }
             //
-            position3.x = anchorLayout.left + position.x;
-            position3.y = anchorLayout.top + position.y;
+            this.transform.position.x = anchorLayout.left + position.x;
+            this.transform.position.y = anchorLayout.top + position.y;
             //
             this._layoutInvalid = false;
             feng3d.ticker.offframe(this._updateLayout, this);
@@ -292,6 +244,10 @@ var feng2d;
         _invalidateSize() {
             this._invalidateLayout();
             this.dispatch("sizeChanged", this);
+        }
+        _invalidatePivot() {
+            this._invalidateLayout();
+            this.dispatch("pivotChanged", this);
         }
         _rotationChanged(object, property, oldvalue) {
             if (!Math.equals(object[property], oldvalue)) {
@@ -313,29 +269,15 @@ var feng2d;
         }
     };
     __decorate([
-        feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
+        feng3d.oav({ tooltip: "当anchorMin.x == anchorMax.x时对position.x赋值生效，当 anchorMin.y == anchorMax.y 时对position.y赋值生效，否则赋值无效，自动被覆盖。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
         feng3d.serialize
     ], Transform2D.prototype, "position", null);
     __decorate([
-        feng3d.oav({ tooltip: "尺寸，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
+        feng3d.oav({ tooltip: "宽度，不会影响到缩放值。当 anchorMin.x == anchorMax.x 时对 size.x 赋值生效，当anchorMin.y == anchorMax.y时对 size.y 赋值生效，否则赋值无效，自动被覆盖。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
         feng3d.serialize
     ], Transform2D.prototype, "size", null);
     __decorate([
-        feng3d.oav(),
-        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-    ], Transform2D.prototype, "left", null);
-    __decorate([
-        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-    ], Transform2D.prototype, "right", null);
-    __decorate([
-        feng3d.oav(),
-        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-    ], Transform2D.prototype, "top", null);
-    __decorate([
-        feng3d.oav(),
-        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
-    ], Transform2D.prototype, "bottom", null);
-    __decorate([
+        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
         feng3d.serialize
     ], Transform2D.prototype, "layout", null);
     __decorate([
@@ -524,8 +466,8 @@ var feng2d;
          * @param height 画布高度
          */
         layout(width, height) {
-            this.transform2D.width = width;
-            this.transform2D.height = height;
+            this.transform2D.size.x = width;
+            this.transform2D.size.y = height;
             this.transform.x = 0;
             this.transform.y = 0;
             this.transform.z = 0;
@@ -624,7 +566,7 @@ var feng2d;
     
     `,
         cls: UIUniforms,
-        renderParams: { enableBlend: true },
+        renderParams: { enableBlend: true, depthtest: false },
     };
     feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
 })(feng2d || (feng2d = {}));
@@ -672,8 +614,8 @@ var feng3d;
     feng3d.GameObject.registerPrimitive("Rect", (g) => {
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
-        transform2D.width = 100;
-        transform2D.height = 100;
+        transform2D.size.x = 100;
+        transform2D.size.y = 100;
         g.addComponent(feng2d.Rect);
     });
 })(feng3d || (feng3d = {}));
@@ -705,8 +647,8 @@ var feng2d;
          */
         setNativeSize() {
             var imagesize = this.image.getSize();
-            this.transform2D.width = imagesize.x;
-            this.transform2D.height = imagesize.y;
+            this.transform2D.size.x = imagesize.x;
+            this.transform2D.size.y = imagesize.y;
         }
         beforeRender(renderAtomic, scene, camera) {
             super.beforeRender(renderAtomic, scene, camera);
@@ -735,8 +677,8 @@ var feng3d;
     feng3d.GameObject.registerPrimitive("Image", (g) => {
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
-        transform2D.width = 100;
-        transform2D.height = 100;
+        transform2D.size.x = 100;
+        transform2D.size.y = 100;
         g.addComponent(feng2d.Image);
     });
 })(feng3d || (feng3d = {}));
@@ -860,8 +802,8 @@ var feng3d;
 (function (feng3d) {
     feng3d.GameObject.registerPrimitive("Button", (g) => {
         var transform2D = g.addComponent(feng2d.Transform2D);
-        transform2D.width = 160;
-        transform2D.height = 30;
+        transform2D.size.x = 160;
+        transform2D.size.y = 30;
         g.addComponent(feng2d.Button);
     });
 })(feng3d || (feng3d = {}));
@@ -2124,12 +2066,12 @@ var feng2d;
                 this._invalid = false;
             }
             if (this.autoSize) {
-                this.transform2D.width = canvas.width;
-                this.transform2D.height = canvas.height;
+                this.transform2D.size.x = canvas.width;
+                this.transform2D.size.y = canvas.height;
             }
             // 调整缩放使得更改尺寸时文字不被缩放。
-            this._uvRect.z = this.transform2D.width / canvas.width;
-            this._uvRect.w = this.transform2D.height / canvas.height;
+            this._uvRect.z = this.transform2D.size.x / canvas.width;
+            this._uvRect.w = this.transform2D.size.y / canvas.height;
             //
             renderAtomic.uniforms.s_texture = this._image;
             renderAtomic.uniforms.u_uvRect = this._uvRect;
@@ -2168,8 +2110,8 @@ var feng3d;
     feng3d.GameObject.registerPrimitive("Text", (g) => {
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
-        transform2D.width = 160;
-        transform2D.height = 30;
+        transform2D.size.x = 160;
+        transform2D.size.y = 30;
         g.addComponent(feng2d.Text);
     });
 })(feng3d || (feng3d = {}));

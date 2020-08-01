@@ -31,8 +31,8 @@ namespace feng3d
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
 
-        transform2D.width = 100;
-        transform2D.height = 100;
+        transform2D.size.x = 100;
+        transform2D.size.y = 100;
         g.addComponent(feng2d.Rect)
     });
 

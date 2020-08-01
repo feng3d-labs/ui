@@ -28,9 +28,13 @@ declare namespace feng2d {
 declare namespace feng3d {
     interface GameObjectEventMap {
         /**
-         * 尺寸变化
+         * 尺寸变化事件
          */
         sizeChanged: feng2d.Transform2D;
+        /**
+         * 中心点变化事件
+         */
+        pivotChanged: feng2d.Transform2D;
     }
     interface ComponentMap {
         Transfrom2D: feng2d.Transform2D;
@@ -59,31 +63,11 @@ declare namespace feng2d {
         private _onAdded;
         private _onRemoved;
         /**
-         * X轴坐标。
-         */
-        get x(): number;
-        set x(v: number);
-        /**
-         * Y轴坐标。
-         */
-        get y(): number;
-        set y(v: number);
-        /**
          * 位移
          */
         get position(): feng3d.Vector2;
         set position(v: feng3d.Vector2);
         private readonly _position;
-        /**
-         * 宽度，不会影响到缩放值。
-         */
-        get width(): number;
-        set width(v: number);
-        /**
-         * 高度，不会影响到缩放值。
-         */
-        get height(): number;
-        set height(v: number);
         /**
          * 尺寸，宽高。
          */
@@ -91,37 +75,10 @@ declare namespace feng2d {
         set size(v: feng3d.Vector2);
         private _size;
         /**
-         * 距离最小锚点应在位置的x轴正向偏移
+         * 与最小最大锚点形成的边框的left、right、top、bottom距离。当 anchorMin.x != anchorMax.x 时对 layout.x layout.y 赋值生效，当 anchorMin.y != anchorMax.y 时对 layout.z layout.w 赋值生效，否则赋值无效，自动被覆盖。
          */
-        get left(): number;
-        set left(v: number);
-        /**
-         * 距离最大锚点应在位置的x轴负向偏移
-         */
-        get right(): number;
-        set right(v: number);
-        /**
-         * 距离最小锚点应在位置的y轴正向偏移
-         */
-        get top(): number;
-        set top(v: number);
-        /**
-         * 距离最大锚点应在位置的y轴负向偏移
-         */
-        get bottom(): number;
-        set bottom(v: number);
-        get layout(): {
-            left: number;
-            right: number;
-            top: number;
-            bottom: number;
-        };
-        set layout(v: {
-            left: number;
-            right: number;
-            top: number;
-            bottom: number;
-        });
+        get layout(): feng3d.Vector4;
+        set layout(v: feng3d.Vector4);
         private _layout;
         /**
          * 最小锚点，父Transform2D中左上角锚定的规范化位置。
@@ -169,6 +126,7 @@ declare namespace feng2d {
         private _layoutInvalid;
         private _invalidateLayout;
         private _invalidateSize;
+        private _invalidatePivot;
         private _rotationChanged;
         private _scaleChanged;
         private _onTransformChanged;

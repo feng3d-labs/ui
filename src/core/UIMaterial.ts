@@ -67,7 +67,7 @@ namespace feng2d
     
     `,
         cls: UIUniforms,
-        renderParams: { enableBlend: true },
+        renderParams: { enableBlend: true, depthtest: false },
     };
 
     feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });

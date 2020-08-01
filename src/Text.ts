@@ -46,20 +46,20 @@ namespace feng2d
             if (!this._canvas || this._invalid)
             {
                 canvas = this._canvas = drawText(this._canvas, this.text, this.style);
-                this._image["_pixels"] = canvas;this._image.wrapS
+                this._image["_pixels"] = canvas; this._image.wrapS
                 this._image.invalidate();
                 this._invalid = false;
             }
 
             if (this.autoSize)
             {
-                this.transform2D.width = canvas.width;
-                this.transform2D.height = canvas.height;
+                this.transform2D.size.x = canvas.width;
+                this.transform2D.size.y = canvas.height;
             }
 
             // 调整缩放使得更改尺寸时文字不被缩放。
-            this._uvRect.z = this.transform2D.width / canvas.width;
-            this._uvRect.w = this.transform2D.height / canvas.height;
+            this._uvRect.z = this.transform2D.size.x / canvas.width;
+            this._uvRect.w = this.transform2D.size.y / canvas.height;
 
             //
             renderAtomic.uniforms.s_texture = this._image;
@@ -87,8 +87,8 @@ namespace feng3d
         var transform2D = g.addComponent(feng2d.Transform2D);
         g.addComponent(feng2d.CanvasRenderer);
 
-        transform2D.width = 160;
-        transform2D.height = 30;
+        transform2D.size.x = 160;
+        transform2D.size.y = 30;
         g.addComponent(feng2d.Text)
     });
 
