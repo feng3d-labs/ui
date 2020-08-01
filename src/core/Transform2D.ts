@@ -1,18 +1,5 @@
 namespace feng3d
 {
-    // export interface GameObjectEventMap
-    // {
-    //     /**
-    //      * 尺寸变化事件
-    //      */
-    //     sizeChanged: any;
-
-    //     /**
-    //      * 中心点变化事件
-    //      */
-    //     pivotChanged: any;
-    // }
-
     export interface ComponentMap { Transfrom2D: feng2d.Transform2D; }
 }
 
