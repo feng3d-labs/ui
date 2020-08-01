@@ -129,10 +129,7 @@ namespace feng2d
         set layout(v)
         {
             if (!v) return;
-            this._layout.x = v.x;
-            this._layout.y = v.y;
-            this._layout.z = v.z;
-            this._layout.w = v.w;
+            this._layout.copy(v);
         }
         private _layout = new feng3d.Vector4();
 
