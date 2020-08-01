@@ -1,3 +1,16 @@
+namespace feng3d
+{
+    export interface GameObjectEventMap
+    {
+        /**
+         * 尺寸变化
+         */
+        sizeChanged: feng2d.Transform2D;
+    }
+
+    export interface ComponentMap { Transfrom2D: feng2d.Transform2D; }
+}
+
 namespace feng2d
 {
     /**
@@ -31,8 +44,8 @@ namespace feng2d
 
             feng3d.watcher.watch(this._position, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this._position, "y", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._size, "x", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._size, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._size, "x", this._invalidateSize, this);
+            feng3d.watcher.watch(this._size, "y", this._invalidateSize, this);
             feng3d.watcher.watch(this.anchorMin, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMin, "y", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMax, "x", this._invalidateLayout, this);
@@ -45,12 +58,25 @@ namespace feng2d
             feng3d.watcher.watch(this, "rotation", this._rotationChanged, this);
             feng3d.watcher.watch(this._scale, "x", this._scaleChanged, this);
             feng3d.watcher.watch(this._scale, "y", this._scaleChanged, this);
+            //
+            this.on("added", this._onAdded, this);
+            this.on("removed", this._onRemoved, this);
         }
 
         init()
         {
             this.on("transformChanged", this._onTransformChanged, this);
             this._onTransformChanged();
+        }
+
+        private _onAdded(event: feng3d.Event<{ parent: feng3d.GameObject; }>)
+        {
+            event.data.parent.on("sizeChanged", this._invalidateLayout, this);
+        }
+
+        private _onRemoved(event: feng3d.Event<{ parent: feng3d.GameObject; }>)
+        {
+            event.data.parent.off("sizeChanged", this._invalidateLayout, this);
         }
 
         /**
@@ -317,6 +343,12 @@ namespace feng2d
         {
             this._layoutInvalid = true;
             feng3d.ticker.onframe(this._updateLayout, this);
+        }
+
+        private _invalidateSize()
+        {
+            this._invalidateLayout();
+            this.dispatch("sizeChanged", this);
         }
 
         private _rotationChanged(object: Transform2D, property: string, oldvalue: number)

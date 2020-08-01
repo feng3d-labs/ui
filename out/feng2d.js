@@ -76,8 +76,8 @@ var feng2d;
             this._layoutInvalid = true;
             feng3d.watcher.watch(this._position, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this._position, "y", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._size, "x", this._invalidateLayout, this);
-            feng3d.watcher.watch(this._size, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._size, "x", this._invalidateSize, this);
+            feng3d.watcher.watch(this._size, "y", this._invalidateSize, this);
             feng3d.watcher.watch(this.anchorMin, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMin, "y", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMax, "x", this._invalidateLayout, this);
@@ -90,6 +90,9 @@ var feng2d;
             feng3d.watcher.watch(this, "rotation", this._rotationChanged, this);
             feng3d.watcher.watch(this._scale, "x", this._scaleChanged, this);
             feng3d.watcher.watch(this._scale, "y", this._scaleChanged, this);
+            //
+            this.on("added", this._onAdded, this);
+            this.on("removed", this._onRemoved, this);
         }
         get single() { return true; }
         /**
@@ -102,6 +105,12 @@ var feng2d;
         init() {
             this.on("transformChanged", this._onTransformChanged, this);
             this._onTransformChanged();
+        }
+        _onAdded(event) {
+            event.data.parent.on("sizeChanged", this._invalidateLayout, this);
+        }
+        _onRemoved(event) {
+            event.data.parent.off("sizeChanged", this._invalidateLayout, this);
         }
         /**
          * X轴坐标。
@@ -279,6 +288,10 @@ var feng2d;
         _invalidateLayout() {
             this._layoutInvalid = true;
             feng3d.ticker.onframe(this._updateLayout, this);
+        }
+        _invalidateSize() {
+            this._invalidateLayout();
+            this.dispatch("sizeChanged", this);
         }
         _rotationChanged(object, property, oldvalue) {
             if (!Math.equals(object[property], oldvalue)) {

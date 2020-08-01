@@ -25,6 +25,17 @@ declare namespace feng2d {
         WorldSpace = 2
     }
 }
+declare namespace feng3d {
+    interface GameObjectEventMap {
+        /**
+         * 尺寸变化
+         */
+        sizeChanged: feng2d.Transform2D;
+    }
+    interface ComponentMap {
+        Transfrom2D: feng2d.Transform2D;
+    }
+}
 declare namespace feng2d {
     /**
      * 2D变换
@@ -45,6 +56,8 @@ declare namespace feng2d {
          */
         constructor();
         init(): void;
+        private _onAdded;
+        private _onRemoved;
         /**
          * X轴坐标。
          */
@@ -155,6 +168,7 @@ declare namespace feng2d {
          */
         private _layoutInvalid;
         private _invalidateLayout;
+        private _invalidateSize;
         private _rotationChanged;
         private _scaleChanged;
         private _onTransformChanged;
