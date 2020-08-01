@@ -5,7 +5,7 @@ namespace feng2d
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
     @feng3d.AddComponentMenu("Rendering/CanvasRenderer")
-    export class CanvasRenderer extends feng3d.RayCastable
+    export class CanvasRenderer extends feng3d.Renderer
     {
         readonly renderAtomic = new feng3d.RenderAtomic();
 
@@ -15,38 +15,14 @@ namespace feng2d
         material = feng3d.Material.getDefault("Default-UIMaterial");
 
         /**
-         * 渲染前执行函数
-         * 
-         * 可用于渲染前收集渲染数据，或者更新显示效果等
-         * 
-         * @param gl 
-         * @param renderAtomic 
-         * @param scene 
-         * @param camera 
-         */
-        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera)
-        {
-            //
-            this.geometry.beforeRender(renderAtomic);
-            this.material.beforeRender(renderAtomic);
-
-            this.gameObject.components.forEach(element =>
-            {
-                if (element != this)
-                    element.beforeRender(renderAtomic, scene, camera);
-            });
-        }
-
-        /**
           * 判断射线是否穿过对象
           * @param ray3D
           * @return
           */
-        isIntersectingRay(view: feng3d.View)
+        isIntersectingRay(ray3D: feng3d.Ray3)
         {
             var canvas = this.getComponentsInParents(Canvas)[0];
             var worldRay = canvas.mouseRay;
-
             var localNormal = new feng3d.Vector3();
 
             //转换到当前实体坐标系空间
@@ -75,7 +51,6 @@ namespace feng2d
                 geometry: this.geometry,
                 cullFace: feng3d.CullFace.NONE,
             };
-
             return pickingCollisionVO;
         }
 

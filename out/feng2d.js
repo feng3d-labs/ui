@@ -333,7 +333,7 @@ var feng2d;
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    let CanvasRenderer = CanvasRenderer_1 = class CanvasRenderer extends feng3d.RayCastable {
+    let CanvasRenderer = CanvasRenderer_1 = class CanvasRenderer extends feng3d.Renderer {
         constructor() {
             super(...arguments);
             this.renderAtomic = new feng3d.RenderAtomic();
@@ -341,30 +341,11 @@ var feng2d;
             this.material = feng3d.Material.getDefault("Default-UIMaterial");
         }
         /**
-         * 渲染前执行函数
-         *
-         * 可用于渲染前收集渲染数据，或者更新显示效果等
-         *
-         * @param gl
-         * @param renderAtomic
-         * @param scene
-         * @param camera
-         */
-        beforeRender(renderAtomic, scene, camera) {
-            //
-            this.geometry.beforeRender(renderAtomic);
-            this.material.beforeRender(renderAtomic);
-            this.gameObject.components.forEach(element => {
-                if (element != this)
-                    element.beforeRender(renderAtomic, scene, camera);
-            });
-        }
-        /**
           * 判断射线是否穿过对象
           * @param ray3D
           * @return
           */
-        isIntersectingRay(view) {
+        isIntersectingRay(ray3D) {
             var canvas = this.getComponentsInParents(feng2d.Canvas)[0];
             var worldRay = canvas.mouseRay;
             var localNormal = new feng3d.Vector3();

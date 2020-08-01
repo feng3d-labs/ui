@@ -167,27 +167,16 @@ declare namespace feng2d {
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    class CanvasRenderer extends feng3d.RayCastable {
+    class CanvasRenderer extends feng3d.Renderer {
         readonly renderAtomic: feng3d.RenderAtomic;
         geometry: UIGeometry;
         material: feng3d.Material;
-        /**
-         * 渲染前执行函数
-         *
-         * 可用于渲染前收集渲染数据，或者更新显示效果等
-         *
-         * @param gl
-         * @param renderAtomic
-         * @param scene
-         * @param camera
-         */
-        beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
         /**
           * 判断射线是否穿过对象
           * @param ray3D
           * @return
           */
-        isIntersectingRay(view: feng3d.View): feng3d.PickingCollisionVO;
+        isIntersectingRay(ray3D: feng3d.Ray3): feng3d.PickingCollisionVO;
         protected _updateBounds(): void;
         /**
          * 渲染
