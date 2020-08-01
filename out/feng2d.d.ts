@@ -26,16 +26,6 @@ declare namespace feng2d {
     }
 }
 declare namespace feng3d {
-    interface GameObjectEventMap {
-        /**
-         * 尺寸变化事件
-         */
-        sizeChanged: feng2d.Transform2D;
-        /**
-         * 中心点变化事件
-         */
-        pivotChanged: feng2d.Transform2D;
-    }
     interface ComponentMap {
         Transfrom2D: feng2d.Transform2D;
     }
@@ -50,18 +40,13 @@ declare namespace feng2d {
      */
     class Transform2D extends feng3d.Component {
         get single(): boolean;
+        get transformLayout(): feng3d.TransformLayout;
+        private _transformLayout;
         /**
          * 描述了2D对象在未经过变换前的位置与尺寸
          */
         get rect(): feng3d.Vector4;
         private _rect;
-        /**
-         * 创建一个实体，该类为虚类
-         */
-        constructor();
-        init(): void;
-        private _onAdded;
-        private _onRemoved;
         /**
          * 位移
          */
@@ -83,29 +68,27 @@ declare namespace feng2d {
         /**
          * 最小锚点，父Transform2D中左上角锚定的规范化位置。
          */
-        anchorMin: feng3d.Vector2;
+        get anchorMin(): feng3d.Vector2;
+        set anchorMin(v: feng3d.Vector2);
+        private _anchorMin;
         /**
          * 最大锚点，父Transform2D中左上角锚定的规范化位置。
          */
-        anchorMax: feng3d.Vector2;
+        get anchorMax(): feng3d.Vector2;
+        set anchorMax(v: feng3d.Vector2);
+        private _anchorMax;
         /**
          * The normalized position in this RectTransform that it rotates around.
          */
-        pivot: feng3d.Vector2;
+        get pivot(): feng3d.Vector2;
+        set pivot(v: feng3d.Vector2);
+        private _pivot;
         /**
          * 旋转
          */
-        rotation: number;
-        /**
-         * X轴缩放。
-         */
-        get sx(): number;
-        set sx(v: number);
-        /**
-         * Y轴缩放。
-         */
-        get sy(): number;
-        set sy(v: number);
+        get rotation(): number;
+        set rotation(v: number);
+        private _rotation;
         /**
          * 缩放
          */
@@ -113,23 +96,12 @@ declare namespace feng2d {
         set scale(v: feng3d.Vector2);
         private readonly _scale;
         /**
-         * 本地变换矩阵
+         * 创建一个实体，该类为虚类
          */
-        get matrix(): feng3d.Matrix3x3;
-        set matrix(v: feng3d.Matrix3x3);
+        constructor();
         beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
-        protected readonly _matrix: feng3d.Matrix3x3;
         private _updateLayout;
-        /**
-         * 布局是否失效
-         */
-        private _layoutInvalid;
         private _invalidateLayout;
-        private _invalidateSize;
-        private _invalidatePivot;
-        private _rotationChanged;
-        private _scaleChanged;
-        private _onTransformChanged;
     }
 }
 declare namespace feng3d {

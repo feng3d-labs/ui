@@ -21,8 +21,12 @@ namespace feng2d
           */
         isIntersectingRay(ray3D: feng3d.Ray3)
         {
+            var worldRay = ray3D;
+
             var canvas = this.getComponentsInParents(Canvas)[0];
-            var worldRay = canvas.mouseRay;
+            if (canvas)
+                worldRay = canvas.mouseRay;
+
             var localNormal = new feng3d.Vector3();
 
             //转换到当前实体坐标系空间
@@ -31,10 +35,13 @@ namespace feng2d
             this.transform.worldToLocalMatrix.transformVector(worldRay.position, localRay.position);
             this.transform.worldToLocalMatrix.deltaTransformVector(worldRay.direction, localRay.direction);
 
-            var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
-            var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
-            localRay.position.divide(size).add(pivot);
-            localRay.direction.divide(size).normalize();
+            if (this.transform2D)
+            {
+                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
+                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
+                localRay.position.divide(size).add(pivot);
+                localRay.direction.divide(size).normalize();
+            }
 
             //检测射线与边界的碰撞
             var rayEntryDistance = this.selfLocalBounds.rayIntersection(localRay.position, localRay.direction, localNormal);
