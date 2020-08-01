@@ -81,18 +81,22 @@ declare namespace feng2d {
          * 距离最小锚点应在位置的x轴正向偏移
          */
         get left(): number;
+        set left(v: number);
         /**
          * 距离最大锚点应在位置的x轴负向偏移
          */
         get right(): number;
+        set right(v: number);
         /**
          * 距离最小锚点应在位置的y轴正向偏移
          */
         get top(): number;
+        set top(v: number);
         /**
          * 距离最大锚点应在位置的y轴负向偏移
          */
         get bottom(): number;
+        set bottom(v: number);
         get layout(): {
             left: number;
             right: number;

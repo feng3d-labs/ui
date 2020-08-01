@@ -82,6 +82,10 @@ var feng2d;
             feng3d.watcher.watch(this.anchorMin, "y", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMax, "x", this._invalidateLayout, this);
             feng3d.watcher.watch(this.anchorMax, "y", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "left", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "right", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "top", this._invalidateLayout, this);
+            feng3d.watcher.watch(this._layout, "bottom", this._invalidateLayout, this);
             //
             feng3d.watcher.watch(this, "rotation", this._rotationChanged, this);
             feng3d.watcher.watch(this._scale, "x", this._scaleChanged, this);
@@ -112,7 +116,10 @@ var feng2d;
         /**
          * 位移
          */
-        get position() { return this._position; }
+        get position() {
+            this._updateLayout();
+            return this._position;
+        }
         set position(v) { this._position.copy(v); }
         /**
          * 宽度，不会影响到缩放值。
@@ -127,7 +134,10 @@ var feng2d;
         /**
          * 尺寸，宽高。
          */
-        get size() { return this._size; }
+        get size() {
+            this._updateLayout();
+            return this._size;
+        }
         set size(v) { this._size.copy(v); }
         /**
          * 距离最小锚点应在位置的x轴正向偏移
@@ -135,11 +145,17 @@ var feng2d;
         get left() {
             return this.layout.left;
         }
+        set left(v) {
+            this.layout.left = v;
+        }
         /**
          * 距离最大锚点应在位置的x轴负向偏移
          */
         get right() {
             return this.layout.right;
+        }
+        set right(v) {
+            this.layout.right = v;
         }
         /**
          * 距离最小锚点应在位置的y轴正向偏移
@@ -147,17 +163,20 @@ var feng2d;
         get top() {
             return this.layout.top;
         }
+        set top(v) {
+            this.layout.top = v;
+        }
         /**
          * 距离最大锚点应在位置的y轴负向偏移
          */
         get bottom() {
             return this.layout.bottom;
         }
+        set bottom(v) {
+            this.layout.bottom = v;
+        }
         get layout() {
-            if (this._layoutInvalid) {
-                this._updateLayout();
-                this._layoutInvalid = false;
-            }
+            this._updateLayout();
             return this._layout;
         }
         set layout(v) {
@@ -199,61 +218,60 @@ var feng2d;
         }
         _updateLayout() {
             var _a, _b;
+            if (!this._layoutInvalid)
+                return;
             var parentTransform2D = (_b = (_a = this.gameObject) === null || _a === void 0 ? void 0 : _a.parent) === null || _b === void 0 ? void 0 : _b.transform2D;
             if (!parentTransform2D)
                 return;
-            // 3d 坐标
+            // 3d 坐标，中心点基于父容器左上角的坐标
             var position3 = this.transform.position;
+            // 中心点基于anchorMin的坐标
             var position = this._position;
+            // 尺寸
             var size = this._size;
             var leftRightTopBottom = this._layout;
+            // 最小锚点
             var anchorMin = this.anchorMin;
+            // 最大锚点
             var anchorMax = this.anchorMax;
             var pivot = this.pivot;
-            // 自身在父对象中的Layout
-            var selfLayout = {
-                left: -pivot.x * size.x,
-                right: -pivot.x * size.x + size.x,
-                top: -pivot.y * size.y,
-                bottom: -pivot.y * size.y + size.y,
-            };
             // 父对象显示区域宽高
             var parentWidth = parentTransform2D.width, parentHeight = parentTransform2D.height;
             // 锚点在父Transform2D中锚定的 leftRightTopBottom 位置。
             var anchorLayout = {
                 left: anchorMin.x * parentWidth,
-                right: anchorMax.x * parentWidth,
                 top: anchorMin.y * parentHeight,
+                right: anchorMax.x * parentWidth,
                 bottom: anchorMax.y * parentHeight,
             };
             // 使用 x 与 width 计算
             if (anchorMin.x == anchorMax.x) {
-                position3.x = parentWidth * anchorMin.x + position.x;
                 // 根据 x 与 width 计算 left 与 right
-                leftRightTopBottom.left = selfLayout.left + position.x - anchorLayout.left;
-                leftRightTopBottom.right = -(selfLayout.right + position.x - anchorLayout.right);
+                leftRightTopBottom.left = (-pivot.x * size.x + position.x) - anchorLayout.left;
+                leftRightTopBottom.right = anchorLayout.right - (size.x - pivot.x * size.x + position.x);
             }
             else // 使用 left 与 right 计算
              {
-                position3.x = anchorLayout.left + leftRightTopBottom.left - selfLayout.left;
                 // 计算 x 与 width
-                position.x = anchorLayout.left + leftRightTopBottom.left;
-                size.x = anchorLayout.right - leftRightTopBottom.right - position.x;
+                size.x = (anchorLayout.right - leftRightTopBottom.right) - (anchorLayout.left + leftRightTopBottom.left);
+                //
+                position.x = leftRightTopBottom.left + pivot.x * size.x;
             }
             // 使用 y 与 height 计算
             if (anchorMin.y == anchorMax.y) {
-                position3.y = parentHeight * anchorMin.y + position.y;
                 // 计算相对锚点的 ILayout
-                leftRightTopBottom.top = selfLayout.top + position.y - anchorLayout.top;
-                leftRightTopBottom.bottom = -(selfLayout.bottom + position.y - anchorLayout.bottom);
+                leftRightTopBottom.top = (-pivot.y * size.y + position.y) - anchorLayout.top;
+                leftRightTopBottom.bottom = anchorLayout.bottom - (size.y - pivot.y * size.y + position.y);
             }
             else // 使用 top 与 bottom 计算
              {
-                position3.y = anchorLayout.top - leftRightTopBottom.top - selfLayout.top;
+                size.y = (anchorLayout.bottom - leftRightTopBottom.bottom) - (anchorLayout.top + leftRightTopBottom.top);
                 // 计算 x 与 width
-                position.y = anchorLayout.top - leftRightTopBottom.top;
-                size.y = anchorLayout.bottom - leftRightTopBottom.bottom - position.y;
+                position.y = leftRightTopBottom.top + pivot.y * size.y;
             }
+            //
+            position3.x = anchorLayout.left + position.x;
+            position3.y = anchorLayout.top + position.y;
             //
             this._layoutInvalid = false;
             feng3d.ticker.offframe(this._updateLayout, this);
@@ -282,7 +300,8 @@ var feng2d;
         }
     };
     __decorate([
-        feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+        feng3d.oav({ tooltip: "位移", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
+        feng3d.serialize
     ], Transform2D.prototype, "position", null);
     __decorate([
         feng3d.oav({ tooltip: "尺寸，不会影响到缩放值。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
@@ -290,6 +309,20 @@ var feng2d;
     ], Transform2D.prototype, "size", null);
     __decorate([
         feng3d.oav(),
+        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+    ], Transform2D.prototype, "left", null);
+    __decorate([
+        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+    ], Transform2D.prototype, "right", null);
+    __decorate([
+        feng3d.oav(),
+        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+    ], Transform2D.prototype, "top", null);
+    __decorate([
+        feng3d.oav(),
+        feng3d.oav({ componentParam: { step: 1, stepScale: 1, stepDownup: 1 } })
+    ], Transform2D.prototype, "bottom", null);
+    __decorate([
         feng3d.serialize
     ], Transform2D.prototype, "layout", null);
     __decorate([
