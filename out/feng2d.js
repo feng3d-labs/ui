@@ -139,25 +139,25 @@ var feng2d;
                 this.transformLayout = null;
             }
         }
-        _onTransformLayoutChanged(object, property, oldvalue) {
+        _onTransformLayoutChanged(newValue, oldValue, object, property) {
             var watcher = feng3d.watcher;
-            if (oldvalue) {
-                watcher.unbind(oldvalue.position, "x", this.position, "x");
-                watcher.unbind(oldvalue.position, "y", this.position, "y");
-                watcher.unbind(oldvalue.anchorMin, "x", this.anchorMin, "x");
-                watcher.unbind(oldvalue.anchorMin, "y", this.anchorMin, "y");
-                watcher.unbind(oldvalue.anchorMax, "x", this.anchorMax, "x");
-                watcher.unbind(oldvalue.anchorMax, "y", this.anchorMax, "y");
+            if (oldValue) {
+                watcher.unbind(oldValue.position, "x", this.position, "x");
+                watcher.unbind(oldValue.position, "y", this.position, "y");
+                watcher.unbind(oldValue.anchorMin, "x", this.anchorMin, "x");
+                watcher.unbind(oldValue.anchorMin, "y", this.anchorMin, "y");
+                watcher.unbind(oldValue.anchorMax, "x", this.anchorMax, "x");
+                watcher.unbind(oldValue.anchorMax, "y", this.anchorMax, "y");
                 //
-                watcher.unbind(oldvalue.leftTop, "x", this.layout, "x");
-                watcher.unbind(oldvalue.rightBottom, "x", this.layout, "y");
-                watcher.unbind(oldvalue.leftTop, "y", this.layout, "z");
-                watcher.unbind(oldvalue.rightBottom, "y", this.layout, "w");
+                watcher.unbind(oldValue.leftTop, "x", this.layout, "x");
+                watcher.unbind(oldValue.rightBottom, "x", this.layout, "y");
+                watcher.unbind(oldValue.leftTop, "y", this.layout, "z");
+                watcher.unbind(oldValue.rightBottom, "y", this.layout, "w");
                 //
-                watcher.unbind(oldvalue.size, "x", this.size, "x");
-                watcher.unbind(oldvalue.size, "y", this.size, "y");
-                watcher.unbind(oldvalue.pivot, "x", this.pivot, "x");
-                watcher.unbind(oldvalue.pivot, "y", this.pivot, "y");
+                watcher.unbind(oldValue.size, "x", this.size, "x");
+                watcher.unbind(oldValue.size, "y", this.size, "y");
+                watcher.unbind(oldValue.pivot, "x", this.pivot, "x");
+                watcher.unbind(oldValue.pivot, "y", this.pivot, "y");
             }
             var newValue = object[property];
             if (newValue) {
