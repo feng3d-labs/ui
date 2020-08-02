@@ -127,6 +127,7 @@ var feng2d;
                 return;
             var component = event.data.component;
             if (component instanceof feng3d.TransformLayout) {
+                component.hideFlags = component.hideFlags | feng3d.HideFlags.HideInInspector;
                 this.transformLayout = component;
             }
         }
