@@ -64,7 +64,13 @@ namespace feng2d
 
         protected _updateBounds()
         {
-            this._selfLocalBounds = this.geometry.bounding;
+            var bounding = this.geometry.bounding.clone();
+            var transformLayout = this.getComponent(feng3d.TransformLayout);
+            if (transformLayout != null)
+            {
+                bounding.scale(transformLayout.size);
+            }
+            this._selfLocalBounds = bounding;
         }
 
         /**
