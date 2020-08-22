@@ -152,10 +152,12 @@ declare namespace feng2d {
         geometry: UIGeometry;
         material: feng3d.Material;
         /**
-          * 判断射线是否穿过对象
-          * @param worldRay
-          * @return
-          */
+         * 与世界空间射线相交
+         *
+         * @param worldRay 世界空间射线
+         *
+         * @return 相交信息
+         */
         worldRayIntersection(worldRay: feng3d.Ray3): feng3d.PickingCollisionVO;
         protected _updateBounds(): void;
         /**

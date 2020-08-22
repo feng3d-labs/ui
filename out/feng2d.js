@@ -275,10 +275,12 @@ var feng2d;
             this.material = feng3d.Material.getDefault("Default-UIMaterial");
         }
         /**
-          * 判断射线是否穿过对象
-          * @param worldRay
-          * @return
-          */
+         * 与世界空间射线相交
+         *
+         * @param worldRay 世界空间射线
+         *
+         * @return 相交信息
+         */
         worldRayIntersection(worldRay) {
             var canvas = this.getComponentsInParents(feng2d.Canvas)[0];
             if (canvas)

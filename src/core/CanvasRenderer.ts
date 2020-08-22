@@ -15,10 +15,12 @@ namespace feng2d
         material = feng3d.Material.getDefault("Default-UIMaterial");
 
         /**
-          * 判断射线是否穿过对象
-          * @param worldRay
-          * @return
-          */
+         * 与世界空间射线相交
+         * 
+         * @param worldRay 世界空间射线
+         * 
+         * @return 相交信息
+         */
         worldRayIntersection(worldRay: feng3d.Ray3)
         {
             var canvas = this.getComponentsInParents(Canvas)[0];
