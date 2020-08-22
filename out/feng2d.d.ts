@@ -140,7 +140,7 @@ declare namespace feng2d {
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    class CanvasRenderer extends feng3d.Renderer {
+    class CanvasRenderer extends feng3d.Renderable {
         readonly renderAtomic: feng3d.RenderAtomic;
         geometry: UIGeometry;
         material: feng3d.Material;

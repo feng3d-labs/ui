@@ -251,7 +251,7 @@ var feng2d;
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    let CanvasRenderer = CanvasRenderer_1 = class CanvasRenderer extends feng3d.Renderer {
+    let CanvasRenderer = CanvasRenderer_1 = class CanvasRenderer extends feng3d.Renderable {
         constructor() {
             super(...arguments);
             this.renderAtomic = new feng3d.RenderAtomic();
