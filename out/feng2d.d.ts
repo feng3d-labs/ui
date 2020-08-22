@@ -103,6 +103,13 @@ declare namespace feng2d {
         private _onRemovedComponent;
         private _onTransformLayoutChanged;
         beforeRender(renderAtomic: feng3d.RenderAtomic, scene: feng3d.Scene, camera: feng3d.Camera): void;
+        /**
+         * 将 Ray3 从世界空间转换为局部空间。
+         *
+         * @param worldRay 世界空间射线。
+         * @param localRay 局部空间射线。
+         */
+        rayWorldToLocal(worldRay: feng3d.Ray3, localRay?: feng3d.Ray3): feng3d.Ray3;
     }
 }
 declare namespace feng3d {
@@ -146,10 +153,10 @@ declare namespace feng2d {
         material: feng3d.Material;
         /**
           * 判断射线是否穿过对象
-          * @param ray3D
+          * @param worldRay
           * @return
           */
-        isIntersectingRay(ray3D: feng3d.Ray3): feng3d.PickingCollisionVO;
+        worldRayIntersection(worldRay: feng3d.Ray3): feng3d.PickingCollisionVO;
         protected _updateBounds(): void;
         /**
          * 渲染

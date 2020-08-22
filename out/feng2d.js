@@ -182,6 +182,22 @@ var feng2d;
         beforeRender(renderAtomic, scene, camera) {
             renderAtomic.uniforms.u_rect = this.rect;
         }
+        /**
+         * 将 Ray3 从世界空间转换为局部空间。
+         *
+         * @param worldRay 世界空间射线。
+         * @param localRay 局部空间射线。
+         */
+        rayWorldToLocal(worldRay, localRay = new feng3d.Ray3()) {
+            this.transform.rayWorldToLocal(worldRay, localRay);
+            if (this.transform2D) {
+                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
+                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
+                localRay.position.divide(size).add(pivot);
+                localRay.direction.divide(size).normalize();
+            }
+            return localRay;
+        }
     };
     __decorate([
         feng3d.oav({ tooltip: "当anchorMin.x == anchorMax.x时对position.x赋值生效，当 anchorMin.y == anchorMax.y 时对position.y赋值生效，否则赋值无效，自动被覆盖。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
@@ -260,40 +276,17 @@ var feng2d;
         }
         /**
           * 判断射线是否穿过对象
-          * @param ray3D
+          * @param worldRay
           * @return
           */
-        isIntersectingRay(ray3D) {
-            var worldRay = ray3D;
+        worldRayIntersection(worldRay) {
             var canvas = this.getComponentsInParents(feng2d.Canvas)[0];
             if (canvas)
                 worldRay = canvas.mouseRay;
-            var localNormal = new feng3d.Vector3();
-            //转换到当前实体坐标系空间
-            var localRay = new feng3d.Ray3();
-            this.transform.worldToLocalMatrix.transformVector(worldRay.position, localRay.position);
-            this.transform.worldToLocalMatrix.deltaTransformVector(worldRay.direction, localRay.direction);
-            if (this.transform2D) {
-                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
-                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
-                localRay.position.divide(size).add(pivot);
-                localRay.direction.divide(size).normalize();
-            }
-            //检测射线与边界的碰撞
-            var rayEntryDistance = this.selfLocalBounds.rayIntersection(localRay.position, localRay.direction, localNormal);
-            if (rayEntryDistance < 0)
-                return null;
-            //保存碰撞数据
-            var pickingCollisionVO = {
-                gameObject: this.gameObject,
-                localNormal: localNormal,
-                localRay: localRay,
-                rayEntryDistance: rayEntryDistance,
-                ray3D: worldRay,
-                rayOriginIsInsideBounds: rayEntryDistance == 0,
-                geometry: this.geometry,
-                cullFace: feng3d.CullFace.NONE,
-            };
+            var localRay = this.transform2D.rayWorldToLocal(worldRay);
+            var pickingCollisionVO = this.localRayIntersection(localRay);
+            if (pickingCollisionVO)
+                pickingCollisionVO.cullFace = feng3d.CullFace.NONE;
             return pickingCollisionVO;
         }
         _updateBounds() {

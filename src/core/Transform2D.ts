@@ -199,6 +199,26 @@ namespace feng2d
         {
             renderAtomic.uniforms.u_rect = this.rect;
         }
+
+        /**
+         * 将 Ray3 从世界空间转换为局部空间。
+         * 
+         * @param worldRay 世界空间射线。
+         * @param localRay 局部空间射线。
+         */
+        rayWorldToLocal(worldRay: feng3d.Ray3, localRay = new feng3d.Ray3())
+        {
+            this.transform.rayWorldToLocal(worldRay, localRay);
+
+            if (this.transform2D)
+            {
+                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
+                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
+                localRay.position.divide(size).add(pivot);
+                localRay.direction.divide(size).normalize();
+            }
+            return localRay;
+        }
     }
 }
 

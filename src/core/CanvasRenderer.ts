@@ -16,49 +16,19 @@ namespace feng2d
 
         /**
           * 判断射线是否穿过对象
-          * @param ray3D
+          * @param worldRay
           * @return
           */
-        isIntersectingRay(ray3D: feng3d.Ray3)
+        worldRayIntersection(worldRay: feng3d.Ray3)
         {
-            var worldRay = ray3D;
-
             var canvas = this.getComponentsInParents(Canvas)[0];
             if (canvas)
                 worldRay = canvas.mouseRay;
+            var localRay = this.transform2D.rayWorldToLocal(worldRay);
 
-            var localNormal = new feng3d.Vector3();
-
-            //转换到当前实体坐标系空间
-            var localRay = new feng3d.Ray3();
-
-            this.transform.worldToLocalMatrix.transformVector(worldRay.position, localRay.position);
-            this.transform.worldToLocalMatrix.deltaTransformVector(worldRay.direction, localRay.direction);
-
-            if (this.transform2D)
-            {
-                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
-                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
-                localRay.position.divide(size).add(pivot);
-                localRay.direction.divide(size).normalize();
-            }
-
-            //检测射线与边界的碰撞
-            var rayEntryDistance = this.selfLocalBounds.rayIntersection(localRay.position, localRay.direction, localNormal);
-            if (rayEntryDistance < 0)
-                return null;
-
-            //保存碰撞数据
-            var pickingCollisionVO: feng3d.PickingCollisionVO = {
-                gameObject: this.gameObject,
-                localNormal: localNormal,
-                localRay: localRay,
-                rayEntryDistance: rayEntryDistance,
-                ray3D: worldRay,
-                rayOriginIsInsideBounds: rayEntryDistance == 0,
-                geometry: this.geometry,
-                cullFace: feng3d.CullFace.NONE,
-            };
+            var pickingCollisionVO = this.localRayIntersection(localRay);
+            if (pickingCollisionVO)
+                pickingCollisionVO.cullFace = feng3d.CullFace.NONE;
             return pickingCollisionVO;
         }
 
