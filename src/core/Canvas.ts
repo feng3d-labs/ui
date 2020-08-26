@@ -67,7 +67,7 @@ namespace feng2d
          */
         calcMouseRay3D(view: feng3d.View)
         {
-            this.mouseRay.position.set(view.mousePos.x, view.mousePos.y, 0);
+            this.mouseRay.origin.set(view.mousePos.x, view.mousePos.y, 0);
         }
     }
 }

@@ -193,7 +193,7 @@ var feng2d;
             if (this.transform2D) {
                 var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
                 var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
-                localRay.position.divide(size).add(pivot);
+                localRay.origin.divide(size).add(pivot);
                 localRay.direction.divide(size).normalize();
             }
             return localRay;
@@ -387,7 +387,7 @@ var feng2d;
          * @param view
          */
         calcMouseRay3D(view) {
-            this.mouseRay.position.set(view.mousePos.x, view.mousePos.y, 0);
+            this.mouseRay.origin.set(view.mousePos.x, view.mousePos.y, 0);
         }
     }
     feng2d.Canvas = Canvas;

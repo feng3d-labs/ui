@@ -214,7 +214,7 @@ namespace feng2d
             {
                 var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
                 var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
-                localRay.position.divide(size).add(pivot);
+                localRay.origin.divide(size).add(pivot);
                 localRay.direction.divide(size).normalize();
             }
             return localRay;
