@@ -26,6 +26,21 @@ namespace feng2d
          */
         projection = new feng3d.Matrix4x4();
 
+
+		/**
+		 * 最近距离
+		 */
+        @feng3d.serialize
+        @feng3d.oav()
+        near = -1000;
+
+		/**
+		 * 最远距离
+		 */
+        @feng3d.serialize
+        @feng3d.oav()
+        far = 10000;
+
         init()
         {
             // this.transform.hideFlags = this.transform.hideFlags | HideFlags.Hide;
@@ -57,7 +72,9 @@ namespace feng2d
             this.transform.sy = 1;
             this.transform.sz = 1;
 
-            this.projection.identity().appendScale(2 / width, -2 / height, 1).appendTranslation(-1, 1, 0);
+            var near = this.near;
+            var far = this.far;
+            this.projection.identity().appendTranslation(0, 0, -(far + near) / 2).appendScale(2 / width, -2 / height, 2 / (far - near)).appendTranslation(-1, 1, 0);
         }
 
         /**

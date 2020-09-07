@@ -355,6 +355,14 @@ var feng2d;
              * 渲染前自动更新
              */
             this.projection = new feng3d.Matrix4x4();
+            /**
+             * 最近距离
+             */
+            this.near = -1000;
+            /**
+             * 最远距离
+             */
+            this.far = 10000;
         }
         init() {
             // this.transform.hideFlags = this.transform.hideFlags | HideFlags.Hide;
@@ -379,7 +387,9 @@ var feng2d;
             this.transform.sx = 1;
             this.transform.sy = 1;
             this.transform.sz = 1;
-            this.projection.identity().appendScale(2 / width, -2 / height, 1).appendTranslation(-1, 1, 0);
+            var near = this.near;
+            var far = this.far;
+            this.projection.identity().appendTranslation(0, 0, -(far + near) / 2).appendScale(2 / width, -2 / height, 2 / (far - near)).appendTranslation(-1, 1, 0);
         }
         /**
          * 计算鼠标射线
@@ -390,6 +400,14 @@ var feng2d;
             this.mouseRay.origin.set(view.mousePos.x, view.mousePos.y, 0);
         }
     }
+    __decorate([
+        feng3d.serialize,
+        feng3d.oav()
+    ], Canvas.prototype, "near", void 0);
+    __decorate([
+        feng3d.serialize,
+        feng3d.oav()
+    ], Canvas.prototype, "far", void 0);
     feng2d.Canvas = Canvas;
 })(feng2d || (feng2d = {}));
 var feng3d;

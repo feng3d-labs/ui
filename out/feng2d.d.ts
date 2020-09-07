@@ -189,6 +189,14 @@ declare namespace feng2d {
          * 渲染前自动更新
          */
         projection: feng3d.Matrix4x4;
+        /**
+         * 最近距离
+         */
+        near: number;
+        /**
+         * 最远距离
+         */
+        far: number;
         init(): void;
         /**
          * 更新布局
