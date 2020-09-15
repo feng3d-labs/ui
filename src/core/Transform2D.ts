@@ -13,6 +13,7 @@ namespace feng2d
      * 通过修改Transform的数值实现
      */
     @feng3d.AddComponentMenu("Layout/Transform2D")
+    @feng3d.RegisterComponent()
     export class Transform2D extends feng3d.Component
     {
         get single() { return true; }

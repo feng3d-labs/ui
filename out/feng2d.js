@@ -230,7 +230,8 @@ var feng2d;
         feng3d.oav({ tooltip: "缩放", componentParam: { step: 0.01, stepScale: 1, stepDownup: 1 } })
     ], Transform2D.prototype, "scale", null);
     Transform2D = __decorate([
-        feng3d.AddComponentMenu("Layout/Transform2D")
+        feng3d.AddComponentMenu("Layout/Transform2D"),
+        feng3d.RegisterComponent()
     ], Transform2D);
     feng2d.Transform2D = Transform2D;
 })(feng2d || (feng2d = {}));
