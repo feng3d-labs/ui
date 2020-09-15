@@ -1,3 +1,5 @@
+namespace feng3d { export interface ComponentMap { Image: feng2d.Image } }
+
 namespace feng2d
 {
     /**
@@ -6,6 +8,7 @@ namespace feng2d
      * 用于显示图片
      */
     @feng3d.AddComponentMenu("UI/Image")
+    @feng3d.RegisterComponent()
     export class Image extends feng3d.Component
     {
         /**
@@ -51,12 +54,12 @@ namespace feng3d
 {
     GameObject.registerPrimitive("Image", (g) =>
     {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent("Transform2D");
+        g.addComponent("CanvasRenderer");
 
         transform2D.size.x = 100;
         transform2D.size.y = 100;
-        g.addComponent(feng2d.Image)
+        g.addComponent("Image")
     });
 
     export interface PrimitiveGameObject

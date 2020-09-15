@@ -1,3 +1,8 @@
+namespace feng3d
+{
+    export interface ComponentMap { CanvasRenderer: feng2d.CanvasRenderer; }
+}
+
 namespace feng2d
 {
 
@@ -5,6 +10,7 @@ namespace feng2d
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
     @feng3d.AddComponentMenu("Rendering/CanvasRenderer")
+    @feng3d.RegisterComponent()
     export class CanvasRenderer extends feng3d.Renderable
     {
         readonly renderAtomic = new feng3d.RenderAtomic();
@@ -23,7 +29,7 @@ namespace feng2d
          */
         worldRayIntersection(worldRay: feng3d.Ray3)
         {
-            var canvas = this.getComponentsInParents(Canvas)[0];
+            var canvas = this.getComponentsInParents("Canvas")[0];
             if (canvas)
                 worldRay = canvas.mouseRay;
             var localRay = this.transform2D.rayWorldToLocal(worldRay);
@@ -37,7 +43,7 @@ namespace feng2d
         protected _updateBounds()
         {
             var bounding = this.geometry.bounding.clone();
-            var transformLayout = this.getComponent(feng3d.TransformLayout);
+            var transformLayout = this.getComponent("TransformLayout");
             if (transformLayout != null)
             {
                 bounding.scale(transformLayout.size);
@@ -53,7 +59,7 @@ namespace feng2d
             var gl = view.gl;
             var scene = view.scene;
 
-            var canvasList = scene.getComponentsInChildren(Canvas).filter(v => v.isVisibleAndEnabled);
+            var canvasList = scene.getComponentsInChildren("Canvas").filter(v => v.isVisibleAndEnabled);
             canvasList.forEach(canvas =>
             {
                 canvas.layout(gl.canvas.width, gl.canvas.height);
@@ -61,7 +67,7 @@ namespace feng2d
                 // 更新鼠标射线
                 canvas.calcMouseRay3D(view);
 
-                var renderables = canvas.getComponentsInChildren(CanvasRenderer).filter(v => v.isVisibleAndEnabled);
+                var renderables = canvas.getComponentsInChildren("CanvasRenderer").filter(v => v.isVisibleAndEnabled);
                 renderables.forEach(renderable =>
                 {
                     //绘制

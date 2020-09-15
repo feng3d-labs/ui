@@ -1,3 +1,8 @@
+namespace feng3d
+{
+    export interface ComponentMap { Text: feng2d.Text; }
+}
+
 namespace feng2d
 {
     /**
@@ -6,6 +11,7 @@ namespace feng2d
      * 用于显示文字。
      */
     @feng3d.AddComponentMenu("UI/Text")
+    @feng3d.RegisterComponent()
     export class Text extends feng3d.Component
     {
         /**
@@ -84,12 +90,12 @@ namespace feng3d
 
     GameObject.registerPrimitive("Text", (g) =>
     {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent("Transform2D");
+        g.addComponent("CanvasRenderer");
 
         transform2D.size.x = 160;
         transform2D.size.y = 30;
-        g.addComponent(feng2d.Text)
+        g.addComponent("Text")
     });
 
     export interface PrimitiveGameObject

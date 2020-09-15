@@ -27,7 +27,7 @@ declare namespace feng2d {
 }
 declare namespace feng3d {
     interface ComponentMap {
-        Transfrom2D: feng2d.Transform2D;
+        Transform2D: feng2d.Transform2D;
     }
 }
 declare namespace feng2d {
@@ -143,6 +143,11 @@ declare namespace feng3d {
         "Default-UIGeometry": feng2d.UIGeometry;
     }
 }
+declare namespace feng3d {
+    interface ComponentMap {
+        CanvasRenderer: feng2d.CanvasRenderer;
+    }
+}
 declare namespace feng2d {
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
@@ -164,6 +169,11 @@ declare namespace feng2d {
          * 渲染
          */
         static draw(view: feng3d.View): void;
+    }
+}
+declare namespace feng3d {
+    interface ComponentMap {
+        Canvas: feng2d.Canvas;
     }
 }
 declare namespace feng2d {
@@ -253,6 +263,11 @@ declare namespace feng3d {
 }
 declare namespace feng3d {
 }
+declare namespace feng3d {
+    interface ComponentMap {
+        Rect: feng2d.Rect;
+    }
+}
 declare namespace feng2d {
     /**
      * 矩形纯色组件
@@ -270,6 +285,11 @@ declare namespace feng2d {
 declare namespace feng3d {
     interface PrimitiveGameObject {
         Rect: GameObject;
+    }
+}
+declare namespace feng3d {
+    interface ComponentMap {
+        Image: feng2d.Image;
     }
 }
 declare namespace feng2d {
@@ -301,6 +321,11 @@ declare namespace feng2d {
 declare namespace feng3d {
     interface PrimitiveGameObject {
         Image: GameObject;
+    }
+}
+declare namespace feng3d {
+    interface ComponentMap {
+        Button: feng2d.Button;
     }
 }
 declare namespace feng2d {
@@ -880,6 +905,11 @@ declare namespace feng2d {
         fontSize: number;
     }
     export {};
+}
+declare namespace feng3d {
+    interface ComponentMap {
+        Text: feng2d.Text;
+    }
 }
 declare namespace feng2d {
     /**

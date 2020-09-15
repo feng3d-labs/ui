@@ -1,3 +1,5 @@
+namespace feng3d { export interface ComponentMap { Canvas: feng2d.Canvas } }
+
 namespace feng2d
 {
     /**
@@ -5,6 +7,7 @@ namespace feng2d
      * 
      * 能够被用于屏幕渲染的元素
      */
+    @feng3d.RegisterComponent()
     export class Canvas extends feng3d.Behaviour
     {
         /**
@@ -93,8 +96,8 @@ namespace feng3d
 {
     GameObject.registerPrimitive("Canvas", (g) =>
     {
-        g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.Canvas)
+        g.addComponent("Transform2D");
+        g.addComponent("Canvas")
     });
 
     export interface PrimitiveGameObject

@@ -1,6 +1,6 @@
 namespace feng3d
 {
-    export interface ComponentMap { Transfrom2D: feng2d.Transform2D; }
+    export interface ComponentMap { Transform2D: feng2d.Transform2D; }
 }
 
 namespace feng2d
@@ -116,10 +116,10 @@ namespace feng2d
             super.init();
 
             // 处理依赖组件
-            var transformLayout = this.getComponent(feng3d.TransformLayout);
+            var transformLayout = this.getComponent("TransformLayout");
             if (!transformLayout)
             {
-                transformLayout = this.gameObject.addComponent(feng3d.TransformLayout);
+                transformLayout = this.gameObject.addComponent("TransformLayout");
             }
             this.transformLayout = transformLayout;
 
@@ -236,7 +236,7 @@ namespace feng3d
 
     Object.defineProperty(GameObject.prototype, "transform2D",
         {
-            get: function () { return this.getComponent(feng2d.Transform2D); },
+            get: function () { return this.getComponent("Transform2D"); },
         });
 
     export interface Component

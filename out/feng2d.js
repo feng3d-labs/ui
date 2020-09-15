@@ -111,9 +111,9 @@ var feng2d;
         init() {
             super.init();
             // 处理依赖组件
-            var transformLayout = this.getComponent(feng3d.TransformLayout);
+            var transformLayout = this.getComponent("TransformLayout");
             if (!transformLayout) {
-                transformLayout = this.gameObject.addComponent(feng3d.TransformLayout);
+                transformLayout = this.gameObject.addComponent("TransformLayout");
             }
             this.transformLayout = transformLayout;
             feng3d.watcher.bind(this.transform.rotation, "z", this, "rotation");
@@ -238,7 +238,7 @@ var feng2d;
 var feng3d;
 (function (feng3d) {
     Object.defineProperty(feng3d.GameObject.prototype, "transform2D", {
-        get: function () { return this.getComponent(feng2d.Transform2D); },
+        get: function () { return this.getComponent("Transform2D"); },
     });
     Object.defineProperty(feng3d.Component.prototype, "transform2D", {
         get: function () { return this._gameObject && this._gameObject.transform2D; },
@@ -264,11 +264,10 @@ var feng2d;
 })(feng2d || (feng2d = {}));
 var feng2d;
 (function (feng2d) {
-    var CanvasRenderer_1;
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。
      */
-    let CanvasRenderer = CanvasRenderer_1 = class CanvasRenderer extends feng3d.Renderable {
+    let CanvasRenderer = class CanvasRenderer extends feng3d.Renderable {
         constructor() {
             super(...arguments);
             this.renderAtomic = new feng3d.RenderAtomic();
@@ -283,7 +282,7 @@ var feng2d;
          * @return 相交信息
          */
         worldRayIntersection(worldRay) {
-            var canvas = this.getComponentsInParents(feng2d.Canvas)[0];
+            var canvas = this.getComponentsInParents("Canvas")[0];
             if (canvas)
                 worldRay = canvas.mouseRay;
             var localRay = this.transform2D.rayWorldToLocal(worldRay);
@@ -294,7 +293,7 @@ var feng2d;
         }
         _updateBounds() {
             var bounding = this.geometry.bounding.clone();
-            var transformLayout = this.getComponent(feng3d.TransformLayout);
+            var transformLayout = this.getComponent("TransformLayout");
             if (transformLayout != null) {
                 bounding.scale(transformLayout.size);
             }
@@ -306,12 +305,12 @@ var feng2d;
         static draw(view) {
             var gl = view.gl;
             var scene = view.scene;
-            var canvasList = scene.getComponentsInChildren(feng2d.Canvas).filter(v => v.isVisibleAndEnabled);
+            var canvasList = scene.getComponentsInChildren("Canvas").filter(v => v.isVisibleAndEnabled);
             canvasList.forEach(canvas => {
                 canvas.layout(gl.canvas.width, gl.canvas.height);
                 // 更新鼠标射线
                 canvas.calcMouseRay3D(view);
-                var renderables = canvas.getComponentsInChildren(CanvasRenderer_1).filter(v => v.isVisibleAndEnabled);
+                var renderables = canvas.getComponentsInChildren("CanvasRenderer").filter(v => v.isVisibleAndEnabled);
                 renderables.forEach(renderable => {
                     //绘制
                     var renderAtomic = renderable.renderAtomic;
@@ -325,8 +324,9 @@ var feng2d;
     __decorate([
         feng3d.oav()
     ], CanvasRenderer.prototype, "material", void 0);
-    CanvasRenderer = CanvasRenderer_1 = __decorate([
-        feng3d.AddComponentMenu("Rendering/CanvasRenderer")
+    CanvasRenderer = __decorate([
+        feng3d.AddComponentMenu("Rendering/CanvasRenderer"),
+        feng3d.RegisterComponent()
     ], CanvasRenderer);
     feng2d.CanvasRenderer = CanvasRenderer;
 })(feng2d || (feng2d = {}));
@@ -337,7 +337,7 @@ var feng2d;
      *
      * 能够被用于屏幕渲染的元素
      */
-    class Canvas extends feng3d.Behaviour {
+    let Canvas = class Canvas extends feng3d.Behaviour {
         constructor() {
             super(...arguments);
             /**
@@ -400,7 +400,7 @@ var feng2d;
         calcMouseRay3D(view) {
             this.mouseRay.origin.set(view.mousePos.x, view.mousePos.y, 0);
         }
-    }
+    };
     __decorate([
         feng3d.serialize,
         feng3d.oav()
@@ -409,13 +409,16 @@ var feng2d;
         feng3d.serialize,
         feng3d.oav()
     ], Canvas.prototype, "far", void 0);
+    Canvas = __decorate([
+        feng3d.RegisterComponent()
+    ], Canvas);
     feng2d.Canvas = Canvas;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
     feng3d.GameObject.registerPrimitive("Canvas", (g) => {
-        g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.Canvas);
+        g.addComponent("Transform2D");
+        g.addComponent("Canvas");
     });
 })(feng3d || (feng3d = {}));
 var feng2d;
@@ -526,18 +529,19 @@ var feng2d;
         feng3d.serialize
     ], Rect.prototype, "color", void 0);
     Rect = __decorate([
-        feng3d.AddComponentMenu("UI/Rect")
+        feng3d.AddComponentMenu("UI/Rect"),
+        feng3d.RegisterComponent()
     ], Rect);
     feng2d.Rect = Rect;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
     feng3d.GameObject.registerPrimitive("Rect", (g) => {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent("Transform2D");
+        g.addComponent("CanvasRenderer");
         transform2D.size.x = 100;
         transform2D.size.y = 100;
-        g.addComponent(feng2d.Rect);
+        g.addComponent("Rect");
     });
 })(feng3d || (feng3d = {}));
 var feng2d;
@@ -589,18 +593,19 @@ var feng2d;
         feng3d.oav({ tooltip: "使图片显示实际尺寸", componentParam: { label: "ReSize" } })
     ], Image.prototype, "setNativeSize", null);
     Image = __decorate([
-        feng3d.AddComponentMenu("UI/Image")
+        feng3d.AddComponentMenu("UI/Image"),
+        feng3d.RegisterComponent()
     ], Image);
     feng2d.Image = Image;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
     feng3d.GameObject.registerPrimitive("Image", (g) => {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent("Transform2D");
+        g.addComponent("CanvasRenderer");
         transform2D.size.x = 100;
         transform2D.size.y = 100;
-        g.addComponent(feng2d.Image);
+        g.addComponent("Image");
     });
 })(feng3d || (feng3d = {}));
 var feng2d;
@@ -715,17 +720,18 @@ var feng2d;
         feng3d.oav()
     ], Button.prototype, "saveState", null);
     Button = __decorate([
-        feng3d.AddComponentMenu("UI/Button")
+        feng3d.AddComponentMenu("UI/Button"),
+        feng3d.RegisterComponent()
     ], Button);
     feng2d.Button = Button;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
     feng3d.GameObject.registerPrimitive("Button", (g) => {
-        var transform2D = g.addComponent(feng2d.Transform2D);
+        var transform2D = g.addComponent("Transform2D");
         transform2D.size.x = 160;
         transform2D.size.y = 30;
-        g.addComponent(feng2d.Button);
+        g.addComponent("Button");
     });
 })(feng3d || (feng3d = {}));
 var feng2d;
@@ -2022,18 +2028,19 @@ var feng2d;
         feng3d.watch("_styleChanged")
     ], Text.prototype, "style", void 0);
     Text = __decorate([
-        feng3d.AddComponentMenu("UI/Text")
+        feng3d.AddComponentMenu("UI/Text"),
+        feng3d.RegisterComponent()
     ], Text);
     feng2d.Text = Text;
 })(feng2d || (feng2d = {}));
 var feng3d;
 (function (feng3d) {
     feng3d.GameObject.registerPrimitive("Text", (g) => {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent("Transform2D");
+        g.addComponent("CanvasRenderer");
         transform2D.size.x = 160;
         transform2D.size.y = 30;
-        g.addComponent(feng2d.Text);
+        g.addComponent("Text");
     });
 })(feng3d || (feng3d = {}));
 //# sourceMappingURL=feng2d.js.map

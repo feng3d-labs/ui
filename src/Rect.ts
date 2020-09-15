@@ -1,3 +1,9 @@
+namespace feng3d
+{
+    export interface ComponentMap { Rect: feng2d.Rect; }
+}
+
+
 namespace feng2d
 {
     /**
@@ -6,6 +12,7 @@ namespace feng2d
      * 用于填充UI中背景等颜色。
      */
     @feng3d.AddComponentMenu("UI/Rect")
+    @feng3d.RegisterComponent()
     export class Rect extends feng3d.Component
     {
         /**
@@ -28,12 +35,12 @@ namespace feng3d
 {
     GameObject.registerPrimitive("Rect", (g) =>
     {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent("Transform2D");
+        g.addComponent("CanvasRenderer");
 
         transform2D.size.x = 100;
         transform2D.size.y = 100;
-        g.addComponent(feng2d.Rect)
+        g.addComponent("Rect")
     });
 
     export interface PrimitiveGameObject
