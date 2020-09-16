@@ -32,7 +32,15 @@ namespace feng2d
             var canvas = this.getComponentsInParents("Canvas")[0];
             if (canvas)
                 worldRay = canvas.mouseRay;
-            var localRay = this.transform2D.rayWorldToLocal(worldRay);
+
+            var localRay = this.transform.rayWorldToLocal(worldRay, localRay);
+            if (this.transform2D)
+            {
+                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
+                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
+                localRay.origin.divide(size).add(pivot);
+                localRay.direction.divide(size).normalize();
+            }
 
             var pickingCollisionVO = this.localRayIntersection(localRay);
             if (pickingCollisionVO)

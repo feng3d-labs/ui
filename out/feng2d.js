@@ -237,23 +237,6 @@ var feng2d;
         Transform2D.prototype.beforeRender = function (renderAtomic, scene, camera) {
             renderAtomic.uniforms.u_rect = this.rect;
         };
-        /**
-         * 将 Ray3 从世界空间转换为局部空间。
-         *
-         * @param worldRay 世界空间射线。
-         * @param localRay 局部空间射线。
-         */
-        Transform2D.prototype.rayWorldToLocal = function (worldRay, localRay) {
-            if (localRay === void 0) { localRay = new feng3d.Ray3(); }
-            this.transform.rayWorldToLocal(worldRay, localRay);
-            if (this.transform2D) {
-                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
-                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
-                localRay.origin.divide(size).add(pivot);
-                localRay.direction.divide(size).normalize();
-            }
-            return localRay;
-        };
         __decorate([
             feng3d.oav({ tooltip: "当anchorMin.x == anchorMax.x时对position.x赋值生效，当 anchorMin.y == anchorMax.y 时对position.y赋值生效，否则赋值无效，自动被覆盖。", componentParam: { step: 1, stepScale: 1, stepDownup: 1 } }),
             feng3d.serialize
@@ -347,7 +330,13 @@ var feng2d;
             var canvas = this.getComponentsInParents("Canvas")[0];
             if (canvas)
                 worldRay = canvas.mouseRay;
-            var localRay = this.transform2D.rayWorldToLocal(worldRay);
+            var localRay = this.transform.rayWorldToLocal(worldRay, localRay);
+            if (this.transform2D) {
+                var size = new feng3d.Vector3(this.transform2D.size.x, this.transform2D.size.y, 1);
+                var pivot = new feng3d.Vector3(this.transform2D.pivot.x, this.transform2D.pivot.y, 0);
+                localRay.origin.divide(size).add(pivot);
+                localRay.direction.divide(size).normalize();
+            }
             var pickingCollisionVO = this.localRayIntersection(localRay);
             if (pickingCollisionVO)
                 pickingCollisionVO.cullFace = feng3d.CullFace.NONE;
