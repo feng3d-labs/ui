@@ -432,7 +432,7 @@ var feng2d;
         Canvas.prototype.layout = function (width, height) {
             this.transform2D.size.x = width;
             this.transform2D.size.y = height;
-            this.transform2D.pivot.init(0, 0);
+            this.transform2D.pivot.set(0, 0);
             this.transform.x = 0;
             this.transform.y = 0;
             this.transform.z = 0;
