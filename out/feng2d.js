@@ -456,6 +456,10 @@ var feng2d;
         };
         __decorate([
             feng3d.serialize,
+            feng3d.oav({ component: "OAVEnum", tooltip: "画布是在世界或覆盖模式", componentParam: { enumClass: feng2d.UIRenderMode } })
+        ], Canvas.prototype, "renderMode", void 0);
+        __decorate([
+            feng3d.serialize,
             feng3d.oav()
         ], Canvas.prototype, "near", void 0);
         __decorate([

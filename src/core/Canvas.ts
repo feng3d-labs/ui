@@ -15,6 +15,8 @@ namespace feng2d
          * 
          * 画布是在世界或覆盖模式?
          */
+        @feng3d.serialize
+        @feng3d.oav({ component: "OAVEnum", tooltip: "画布是在世界或覆盖模式", componentParam: { enumClass: UIRenderMode } })
         renderMode = UIRenderMode.ScreenSpaceOverlay;
 
         /**
@@ -28,7 +30,6 @@ namespace feng2d
          * 渲染前自动更新
          */
         projection = new feng3d.Matrix4x4();
-
 
 		/**
 		 * 最近距离
