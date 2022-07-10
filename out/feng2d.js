@@ -354,7 +354,7 @@ var feng2d;
          * 渲染
          */
         CanvasRenderer.draw = function (view) {
-            var gl = view.gl;
+            var gl = view.gl.gl;
             var scene = view.scene;
             var canvasList = scene.getComponentsInChildren("Canvas").filter(function (v) { return v.isVisibleAndEnabled; });
             canvasList.forEach(function (canvas) {
@@ -367,7 +367,7 @@ var feng2d;
                     var renderAtomic = renderable.renderAtomic;
                     renderAtomic.uniforms.u_viewProjection = canvas.projection;
                     renderable.beforeRender(renderAtomic, null, null);
-                    gl.render(renderAtomic);
+                    view.gl.render(renderAtomic);
                 });
             });
         };
