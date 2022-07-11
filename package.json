@@ -14,7 +14,7 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://gitlab.com/feng3d/feng2d.git"
+    "url": "https://gitlab.com/feng3d/feng2d.git"
   },
   "keywords": [
     "feng3d",
