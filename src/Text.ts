@@ -102,4 +102,17 @@ namespace feng3d
     {
         Text: GameObject;
     }
+
+    // 在 Hierarchy 界面新增右键菜单项
+    createNodeMenu.push(
+        {
+            path: "UI/文本",
+            priority: -2,
+            click: () =>
+            {
+                return GameObject.createPrimitive("Text");
+            }
+        }
+    );
+
 }
