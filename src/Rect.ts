@@ -47,4 +47,17 @@ namespace feng3d
     {
         Rect: GameObject;
     }
+
+    // 在 Hierarchy 界面新增右键菜单项
+    createNodeMenu.push(
+        {
+            path: "UI/矩形",
+            priority: -2,
+            click: () =>
+            {
+                return GameObject.createPrimitive("Rect");
+            }
+        }
+    );
+
 }
