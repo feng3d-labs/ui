@@ -16,11 +16,35 @@
     },
     "references": [
         {
-            "path": "../feng3d",
+            "path": "../event"
+        },
+        {
+            "path": "../polyfill"
+        },
+        {
+            "path": "../objectview"
+        },
+        {
+            "path": "../watcher"
+        },
+        {
+            "path": "../serialization"
+        },
+        {
+            "path": "../math"
+        },
+        {
+            "path": "../filesystem"
+        },
+        {
+            "path": "../renderer"
+        },
+        {
+            "path": "../core"
         },
     ],
     "files": [
-        // 事件模块
+        //
         "src/enums/UIRenderMode.ts",
         //
         "src/core/Transform2D.ts",

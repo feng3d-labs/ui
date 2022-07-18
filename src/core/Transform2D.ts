@@ -26,7 +26,7 @@ namespace feng2d
         get rect()
         {
             var transformLayout = this.transformLayout;
-            this._rect.init(-transformLayout.pivot.x * transformLayout.size.x, -transformLayout.pivot.y * transformLayout.size.y, transformLayout.size.x, transformLayout.size.y);
+            this._rect.set(-transformLayout.pivot.x * transformLayout.size.x, -transformLayout.pivot.y * transformLayout.size.y, transformLayout.size.x, transformLayout.size.y);
             return this._rect;
         }
         private _rect = new feng3d.Vector4(0, 0, 100, 100);
@@ -101,9 +101,9 @@ namespace feng2d
         set scale(v) { this._scale.copy(v); }
         private readonly _scale = new feng3d.Vector2(1, 1);
 
-		/**
-		 * 创建一个实体，该类为虚类
-		 */
+        /**
+         * 创建一个实体，该类为虚类
+         */
         constructor()
         {
             super();
@@ -116,10 +116,10 @@ namespace feng2d
             super.init();
 
             // 处理依赖组件
-            var transformLayout = this.getComponent("TransformLayout");
+            var transformLayout = this.getComponent(feng3d.TransformLayout);
             if (!transformLayout)
             {
-                transformLayout = this.gameObject.addComponent("TransformLayout");
+                transformLayout = this.gameObject.addComponent(feng3d.TransformLayout);
             }
             this.transformLayout = transformLayout;
 
@@ -131,7 +131,7 @@ namespace feng2d
             this.on("removeComponent", this._onRemovedComponent, this);
         }
 
-        private _onAddComponent(event: feng3d.Event<{ gameobject: feng3d.GameObject; component: feng3d.Component; }>)
+        private _onAddComponent(event: feng3d.IEvent<{ gameobject: feng3d.GameObject; component: feng3d.Component; }>)
         {
             if (event.data.gameobject != this.gameObject) return;
             var component = event.data.component;
@@ -142,7 +142,7 @@ namespace feng2d
             }
         }
 
-        private _onRemovedComponent(event: feng3d.Event<{ gameobject: feng3d.GameObject; component: feng3d.Component; }>)
+        private _onRemovedComponent(event: feng3d.IEvent<{ gameobject: feng3d.GameObject; component: feng3d.Component; }>)
         {
             if (event.data.gameobject != this.gameObject) return;
             var component = event.data.component;
@@ -216,7 +216,7 @@ namespace feng3d
 
     Object.defineProperty(GameObject.prototype, "transform2D",
         {
-            get: function () { return this.getComponent("Transform2D"); },
+            get: function (this: GameObject) { return this.getComponent(feng2d.Transform2D); },
         });
 
     export interface Component

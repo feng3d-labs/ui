@@ -90,12 +90,12 @@ namespace feng3d
 
     GameObject.registerPrimitive("Text", (g) =>
     {
-        var transform2D = g.addComponent("Transform2D");
-        g.addComponent("CanvasRenderer");
+        var transform2D = g.addComponent(feng2d.Transform2D);
+        g.addComponent(feng2d.CanvasRenderer);
 
         transform2D.size.x = 160;
         transform2D.size.y = 30;
-        g.addComponent("Text")
+        g.addComponent(feng2d.Text)
     });
 
     export interface PrimitiveGameObject
@@ -106,7 +106,7 @@ namespace feng3d
     // 在 Hierarchy 界面新增右键菜单项
     createNodeMenu.push(
         {
-            path: "UI/文本",
+            path: "UI/Text",
             priority: -2,
             click: () =>
             {

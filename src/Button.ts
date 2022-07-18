@@ -76,7 +76,7 @@ namespace feng2d
             for (const childname in childMap)
             {
                 var jsonObj = feng3d.serialization.serialize(childMap[childname]);
-                feng3d.serialization.deleteCLASS_KEY(jsonObj);
+                feng3d.serialization.deleteClassKey(jsonObj);
                 stateData[childname] = jsonObj;
             }
             this.allStateData[this.state] = stateData;
@@ -125,11 +125,11 @@ namespace feng3d
 {
     GameObject.registerPrimitive("Button", (g) =>
     {
-        var transform2D = g.addComponent("Transform2D");
+        var transform2D = g.addComponent(feng2d.Transform2D);
 
         transform2D.size.x = 160;
         transform2D.size.y = 30;
-        g.addComponent("Button")
+        g.addComponent(feng2d.Button)
     });
 
     export interface PrimitiveGameObject
@@ -139,7 +139,7 @@ namespace feng3d
     // 在 Hierarchy 界面新增右键菜单项
     createNodeMenu.push(
         {
-            path: "UI/按钮",
+            path: "UI/Button",
             priority: -2,
             click: () =>
             {
