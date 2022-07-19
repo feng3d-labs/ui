@@ -1,7 +1,10 @@
-namespace feng3d { export interface ComponentMap { Button: feng2d.Button; } }
-
-namespace feng2d
+namespace feng3d
 {
+    export interface ComponentMap
+    {
+        Button: Button;
+    }
+
     /**
      * 按钮状态
      */
@@ -119,17 +122,14 @@ namespace feng2d
         }
 
     }
-}
 
-namespace feng3d
-{
     GameObject.registerPrimitive("Button", (g) =>
     {
-        var transform2D = g.addComponent(feng2d.Transform2D);
+        var transform2D = g.addComponent(Transform2D);
 
         transform2D.size.x = 160;
         transform2D.size.y = 30;
-        g.addComponent(feng2d.Button)
+        g.addComponent(Button)
     });
 
     export interface PrimitiveGameObject

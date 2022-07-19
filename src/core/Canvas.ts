@@ -1,7 +1,10 @@
-namespace feng3d { export interface ComponentMap { Canvas: feng2d.Canvas } }
-
-namespace feng2d
+namespace feng3d
 {
+    export interface ComponentMap
+    {
+        Canvas: Canvas
+    }
+
     /**
      * Element that can be used for screen rendering.
      * 
@@ -91,14 +94,12 @@ namespace feng2d
             this.mouseRay.origin.set(view.mousePos.x, view.mousePos.y, 0);
         }
     }
-}
 
-namespace feng3d
-{
+
     GameObject.registerPrimitive("Canvas", (g) =>
     {
-        g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.Canvas);
+        g.addComponent(Transform2D);
+        g.addComponent(Canvas);
     });
 
     export interface PrimitiveGameObject

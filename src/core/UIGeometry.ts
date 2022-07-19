@@ -1,4 +1,4 @@
-namespace feng2d
+namespace feng3d
 {
 
     /**
@@ -6,7 +6,7 @@ namespace feng2d
      */
     export class UIGeometry extends feng3d.Geometry
     {
-        __class__: "feng2d.UIGeometry";
+        __class__: "UIGeometry";
 
         constructor()
         {
@@ -22,14 +22,11 @@ namespace feng2d
     }
 
     feng3d.Geometry.setDefault("Default-UIGeometry", new UIGeometry());
-}
 
-namespace feng3d
-{
-    export interface GeometryTypes { UIGeometry: feng2d.UIGeometry }
+    export interface GeometryTypes { UIGeometry: UIGeometry }
 
     export interface DefaultGeometry
     {
-        "Default-UIGeometry": feng2d.UIGeometry;
+        "Default-UIGeometry": UIGeometry;
     }
 }

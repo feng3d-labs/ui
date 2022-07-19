@@ -1,9 +1,9 @@
 {
-  "name": "feng2d",
+  "name": "@feng3d/ui",
   "version": "0.0.1",
   "description": "feng3d引擎的2d（UI）库",
-  "main": "out/feng2d.js",
-  "types": "out/feng2d.d.ts",
+  "main": "dist/ui.js",
+  "types": "dist/ui.d.ts",
   "scripts": {
     "build": "tsc",
     "watch": "tsc -w"
@@ -14,20 +14,19 @@
   ],
   "repository": {
     "type": "git",
-    "url": "https://gitlab.com/feng3d/feng2d.git"
+    "url": "https://gitlab.com/feng3d/ui.git"
   },
   "keywords": [
     "feng3d",
-    "feng2d",
     "webgl",
     "UI"
   ],
   "author": "feng",
   "license": "ISC",
   "bugs": {
-    "url": "https://gitlab.com/feng3d/feng2d/issues"
+    "url": "https://gitlab.com/feng3d/ui/issues"
   },
-  "homepage": "https://gitlab.com/feng3d/feng2d#readme",
+  "homepage": "https://gitlab.com/feng3d/ui#readme",
   "devDependencies": {
     "typescript": "^4.7.4"
   }

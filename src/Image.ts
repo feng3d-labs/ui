@@ -1,7 +1,6 @@
-namespace feng3d { export interface ComponentMap { Image: feng2d.Image } }
-
-namespace feng2d
+namespace feng3d
 {
+    export interface ComponentMap { Image: Image }
     /**
      * 图片组件
      * 
@@ -48,18 +47,15 @@ namespace feng2d
             renderAtomic.uniforms.u_color = this.color;
         }
     }
-}
 
-namespace feng3d
-{
     GameObject.registerPrimitive("Image", (g) =>
     {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent(Transform2D);
+        g.addComponent(CanvasRenderer);
 
         transform2D.size.x = 100;
         transform2D.size.y = 100;
-        g.addComponent(feng2d.Image)
+        g.addComponent(Image)
     });
 
     export interface PrimitiveGameObject

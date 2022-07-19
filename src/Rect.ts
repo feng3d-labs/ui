@@ -1,11 +1,7 @@
 namespace feng3d
 {
-    export interface ComponentMap { Rect: feng2d.Rect; }
-}
+    export interface ComponentMap { Rect: Rect; }
 
-
-namespace feng2d
-{
     /**
      * 矩形纯色组件
      * 
@@ -29,18 +25,15 @@ namespace feng2d
             renderAtomic.uniforms.u_color = this.color;
         }
     }
-}
 
-namespace feng3d
-{
     GameObject.registerPrimitive("Rect", (g) =>
     {
-        var transform2D = g.addComponent(feng2d.Transform2D);
-        g.addComponent(feng2d.CanvasRenderer);
+        var transform2D = g.addComponent(Transform2D);
+        g.addComponent(CanvasRenderer);
 
         transform2D.size.x = 100;
         transform2D.size.y = 100;
-        g.addComponent(feng2d.Rect)
+        g.addComponent(Rect)
     });
 
     export interface PrimitiveGameObject

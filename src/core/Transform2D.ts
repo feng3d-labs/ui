@@ -1,10 +1,10 @@
 namespace feng3d
 {
-    export interface ComponentMap { Transform2D: feng2d.Transform2D; }
-}
+    export interface ComponentMap
+    {
+        Transform2D: Transform2D;
+    }
 
-namespace feng2d
-{
     /**
      * 2D变换
      * 
@@ -201,22 +201,18 @@ namespace feng2d
             renderAtomic.uniforms.u_rect = this.rect;
         }
     }
-}
-
-namespace feng3d
-{
 
     export interface GameObject
     {
         /**
          * 游戏对象上的2D变换。
          */
-        transform2D: feng2d.Transform2D;
+        transform2D: Transform2D;
     }
 
     Object.defineProperty(GameObject.prototype, "transform2D",
         {
-            get: function (this: GameObject) { return this.getComponent(feng2d.Transform2D); },
+            get: function (this: GameObject) { return this.getComponent(Transform2D); },
         });
 
     export interface Component
@@ -224,7 +220,7 @@ namespace feng3d
         /**
          * 游戏对象上的2D变换。
          */
-        transform2D: feng2d.Transform2D;
+        transform2D: Transform2D;
     }
 
     Object.defineProperty(Component.prototype, "transform2D",

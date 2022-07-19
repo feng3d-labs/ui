@@ -1,10 +1,9 @@
 namespace feng3d
 {
-    export interface ComponentMap { CanvasRenderer: feng2d.CanvasRenderer; }
-}
-
-namespace feng2d
-{
+    export interface ComponentMap
+    {
+        CanvasRenderer: CanvasRenderer;
+    }
 
     /**
      * 可在画布上渲染组件，使得拥有该组件的GameObject可以在画布上渲染。

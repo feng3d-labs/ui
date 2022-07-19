@@ -1,8 +1,8 @@
-namespace feng2d
+namespace feng3d
 {
     export class UIUniforms
     {
-        __class__: "feng2d.ImageUniforms";
+        __class__: "feng3d.ImageUniforms";
 
         /**
          * UI几何体尺寸，在shader中进行对几何体缩放。
@@ -71,13 +71,11 @@ namespace feng2d
     };
 
     feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
-}
 
-namespace feng3d
-{
-    export interface UniformsTypes { ui: feng2d.UIUniforms }
 
-    export interface Uniforms extends feng2d.UIUniforms
+    export interface UniformsTypes { ui: UIUniforms }
+
+    export interface Uniforms extends UIUniforms
     {
     }
 
