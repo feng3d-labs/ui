@@ -16,9 +16,6 @@
     },
     "references": [
         {
-            "path": "../objectview"
-        },
-        {
             "path": "../watcher"
         },
         {
@@ -41,6 +38,7 @@
         //
         "../event/index.d.ts",
         "../polyfill/index.d.ts",
+        "../objectview/index.d.ts",
         //
         "src/enums/UIRenderMode.ts",
         //
