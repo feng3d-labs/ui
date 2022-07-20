@@ -16,9 +16,6 @@
     },
     "references": [
         {
-            "path": "../polyfill"
-        },
-        {
             "path": "../objectview"
         },
         {
@@ -43,6 +40,7 @@
     "files": [
         //
         "../event/index.d.ts",
+        "../polyfill/index.d.ts",
         //
         "src/enums/UIRenderMode.ts",
         //
