@@ -16,9 +16,6 @@
     },
     "references": [
         {
-            "path": "../math"
-        },
-        {
             "path": "../filesystem"
         },
         {
@@ -35,6 +32,7 @@
         "../objectview/index.d.ts",
         "../watcher/index.d.ts",
         "../serialization/index.d.ts",
+        "../math/index.d.ts",
         //
         "src/enums/UIRenderMode.ts",
         //
