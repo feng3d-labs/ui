@@ -16,9 +16,6 @@
     },
     "references": [
         {
-            "path": "../serialization"
-        },
-        {
             "path": "../math"
         },
         {
@@ -37,6 +34,7 @@
         "../polyfill/index.d.ts",
         "../objectview/index.d.ts",
         "../watcher/index.d.ts",
+        "../serialization/index.d.ts",
         //
         "src/enums/UIRenderMode.ts",
         //
