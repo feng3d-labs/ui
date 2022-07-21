@@ -1,7 +1,9 @@
-namespace feng3d
+import { functionwrap, View } from '@feng3d/core';
+import { CanvasRenderer } from '../core/CanvasRenderer';
+
+export { };
+
+functionwrap.extendFunction(View.prototype, 'render', function (_r, _interval)
 {
-    functionwrap.extendFunction(View.prototype, "render", function (r, interval)
-    {
-        CanvasRenderer.draw(this);
-    });
-}
+    CanvasRenderer.draw(this);
+});

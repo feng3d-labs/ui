@@ -1,36 +1,57 @@
-namespace feng3d
+import { Material, Texture2D } from '@feng3d/core';
+import { Color4, Vector4 } from '@feng3d/math';
+import { oav } from '@feng3d/objectview';
+import { shaderConfig } from '@feng3d/renderer';
+import { serialize } from '@feng3d/serialization';
+
+declare global
 {
-    export class UIUniforms
+    export interface MixinsUniformsTypes
     {
-        __class__: "feng3d.ImageUniforms";
-
-        /**
-         * UI几何体尺寸，在shader中进行对几何体缩放。
-         */
-        u_rect = new feng3d.Vector4(0, 0, 100, 100);
-
-        /** 
-         * 颜色
-         */
-        @feng3d.serialize
-        @feng3d.oav()
-        u_color = new feng3d.Color4();
-
-        /**
-         * 纹理数据
-         */
-        @feng3d.oav()
-        @feng3d.serialize
-        s_texture = feng3d.Texture2D.default;
-
-        /**
-         * 控制图片的显示区域。
-         */
-        u_uvRect = new feng3d.Vector4(0, 0, 1, 1);
+        ui: UIUniforms
     }
 
-    feng3d.shaderConfig.shaders["ui"] = {
-        vertex: `
+    export interface MixinsUniforms extends UIUniforms
+    {
+    }
+
+    export interface MixinsDefaultMaterial
+    {
+        'Default-UIMaterial': Material;
+    }
+}
+
+export class UIUniforms
+{
+    __class__: 'UIUniforms';
+
+    /**
+     * UI几何体尺寸，在shader中进行对几何体缩放。
+     */
+    u_rect = new Vector4(0, 0, 100, 100);
+
+    /**
+     * 颜色
+     */
+    @serialize
+    @oav()
+    u_color = new Color4();
+
+    /**
+     * 纹理数据
+     */
+    @oav()
+    @serialize
+    s_texture = Texture2D.default;
+
+    /**
+     * 控制图片的显示区域。
+     */
+    u_uvRect = new Vector4(0, 0, 1, 1);
+}
+
+shaderConfig.shaders['ui'] = {
+    vertex: `
     attribute vec2 a_position;
     attribute vec2 a_uv;
     
@@ -50,7 +71,7 @@ namespace feng3d
         v_position = position.xy;
     }
     `,
-        fragment: `
+    fragment: `
     precision mediump float;
 
     uniform sampler2D s_texture;
@@ -66,21 +87,8 @@ namespace feng3d
     }
     
     `,
-        cls: UIUniforms,
-        renderParams: { enableBlend: true, depthtest: false },
-    };
+    cls: UIUniforms,
+    renderParams: { enableBlend: true, depthtest: false },
+};
 
-    feng3d.Material.setDefault("Default-UIMaterial", { shaderName: "ui" });
-
-
-    export interface UniformsTypes { ui: UIUniforms }
-
-    export interface Uniforms extends UIUniforms
-    {
-    }
-
-    export interface DefaultMaterial
-    {
-        "Default-UIMaterial": Material;
-    }
-}
+Material.setDefault('Default-UIMaterial', { shaderName: 'ui' });
