@@ -1,49 +1,25 @@
 {
     "compilerOptions": {
         "target": "ES5",
+        "module": "CommonJS",
         "noImplicitAny": false,
         "sourceMap": true,
         "declarationMap": true,
         "declaration": true,
-        "composite": true,
-        // "strict": true,
         "experimentalDecorators": true,
-        "outFile": "dist/index.js",
         "lib": [
             "ES2015",
             "DOM",
         ],
+        "outDir": "lib"
     },
-    "files": [
-        //
-        "../event/index.d.ts",
-        "../polyfill/index.d.ts",
-        "../objectview/index.d.ts",
-        "../watcher/index.d.ts",
-        "../serialization/index.d.ts",
-        "../math/index.d.ts",
-        "../filesystem/index.d.ts",
-        "../renderer/index.d.ts",
-        "../core/index.d.ts",
-        //
-        "src/enums/UIRenderMode.ts",
-        //
-        "src/core/Transform2D.ts",
-        "src/core/UIGeometry.ts",
-        "src/core/CanvasRenderer.ts",
-        "src/core/Canvas.ts",
-        "src/core/UIMaterial.ts",
-        //
-        "src/polyfill/View.ts",
-        //
-        "src/Rect.ts",
-        "src/Image.ts",
-        "src/Button.ts",
-        //
-        "src/text/drawText.ts",
-        "src/text/TextStyle.ts",
-        "src/text/TextMetrics.ts",
-        "src/Text.ts",
-        //
+    "include": [
+        "src/**/*.ts"
     ],
+    "ts-node": {
+        "files": true,
+        "compilerOptions": {
+            "esModuleInterop": true
+        }
+    }
 }
