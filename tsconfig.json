@@ -1,45 +1,25 @@
 {
     "compilerOptions": {
         "target": "ES5",
+        "module": "CommonJS",
         "noImplicitAny": false,
         "sourceMap": true,
         "declarationMap": true,
         "declaration": true,
-        "composite": true,
-        // "strict": true,
         "experimentalDecorators": true,
-        "outFile": "out/feng2d.js",
         "lib": [
             "ES2015",
             "DOM",
         ],
+        "outDir": "lib"
     },
-    "references": [
-        {
-            "path": "../feng3d",
-        },
+    "include": [
+        "src/**/*.ts"
     ],
-    "files": [
-        // 事件模块
-        "src/enums/UIRenderMode.ts",
-        //
-        "src/core/Transform2D.ts",
-        "src/core/UIGeometry.ts",
-        "src/core/CanvasRenderer.ts",
-        "src/core/Canvas.ts",
-        "src/core/UIMaterial.ts",
-        //
-        "src/polyfill/ClassUtils.ts",
-        "src/polyfill/View.ts",
-        //
-        "src/Rect.ts",
-        "src/Image.ts",
-        "src/Button.ts",
-        //
-        "src/text/drawText.ts",
-        "src/text/TextStyle.ts",
-        "src/text/TextMetrics.ts",
-        "src/Text.ts",
-        //
-    ],
+    "ts-node": {
+        "files": true,
+        "compilerOptions": {
+            "esModuleInterop": true
+        }
+    }
 }
